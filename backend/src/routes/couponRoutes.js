@@ -3,7 +3,7 @@ import * as coupon from '../controllers/couponController.js';
 import { protect, authorize } from '../middleware/auth.js';
 
 const router = Router();
-router.use(protect, authorize('admin'));
+router.use(protect, authorize('admin', 'manager'));
 
 router.get('/', coupon.getCoupons);
 router.post('/', coupon.createCoupon);

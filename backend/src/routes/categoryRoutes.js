@@ -6,8 +6,8 @@ import { upload } from '../middleware/upload.js';
 const router = Router();
 
 router.get('/', cat.getCategories);
-router.post('/', protect, authorize('admin'), upload.single('image'), cat.createCategory);
-router.put('/:id', protect, authorize('admin'), upload.single('image'), cat.updateCategory);
-router.delete('/:id', protect, authorize('admin'), cat.deleteCategory);
+router.post('/', protect, authorize('admin', 'manager'), upload.single('image'), cat.createCategory);
+router.put('/:id', protect, authorize('admin', 'manager'), upload.single('image'), cat.updateCategory);
+router.delete('/:id', protect, authorize('admin', 'manager'), cat.deleteCategory);
 
 export default router;

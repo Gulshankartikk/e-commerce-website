@@ -61,14 +61,13 @@ export default function AdminOrders() {
                   </td>
                   <td className="p-4 font-semibold">{formatPrice(o.totalPrice)}</td>
                   <td className="p-4">
-                    {['cancelled', 'refunded'].includes(o.status) && o.status !== 'cancelled' ? (
+                    {['cancelled', 'refunded'].includes(o.status) ? (
                       <span className={`chip capitalize ${STATUS_COLORS[o.status]}`}>{o.status}</span>
                     ) : (
                       <select
                         value={o.status}
                         onChange={(e) => updateStatus(o, e.target.value)}
-                        disabled={['cancelled', 'refunded'].includes(o.status)}
-                        className={`rounded-lg border-0 px-2.5 py-1.5 text-xs font-semibold capitalize outline-none ${STATUS_COLORS[o.status]} bg-transparent disabled:opacity-60`}
+                        className={`rounded-lg border-0 px-2.5 py-1.5 text-xs font-semibold capitalize outline-none ${STATUS_COLORS[o.status]} bg-transparent`}
                         style={{ background: 'rgba(255,255,255,0.05)' }}
                         aria-label="Update status"
                       >

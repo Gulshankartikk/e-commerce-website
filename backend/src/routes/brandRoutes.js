@@ -6,8 +6,8 @@ import { upload } from '../middleware/upload.js';
 const router = Router();
 
 router.get('/', cat.getBrands);
-router.post('/', protect, authorize('admin'), upload.single('logo'), cat.createBrand);
-router.put('/:id', protect, authorize('admin'), upload.single('logo'), cat.updateBrand);
-router.delete('/:id', protect, authorize('admin'), cat.deleteBrand);
+router.post('/', protect, authorize('admin', 'manager'), upload.single('logo'), cat.createBrand);
+router.put('/:id', protect, authorize('admin', 'manager'), upload.single('logo'), cat.updateBrand);
+router.delete('/:id', protect, authorize('admin', 'manager'), cat.deleteBrand);
 
 export default router;

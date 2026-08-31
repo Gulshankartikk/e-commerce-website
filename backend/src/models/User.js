@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema(
     },
     password: { type: String, required: [true, 'Password is required'], minlength: 8, select: false },
     avatar: { url: String, publicId: String },
-    role: { type: String, enum: ['user', 'admin'], default: 'user' },
+    role: { type: String, enum: ['user', 'admin', 'seller', 'manager'], default: 'user' },
     isVerified: { type: Boolean, default: false },
     isBlocked: { type: Boolean, default: false },
     addresses: [addressSchema],

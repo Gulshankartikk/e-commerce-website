@@ -7,10 +7,10 @@ router.use(protect);
 
 router.post('/', order.createCodOrder); // COD checkout
 router.get('/my', order.getMyOrders);
-router.get('/', authorize('admin'), order.getAllOrders);
+router.get('/', authorize('admin', 'manager'), order.getAllOrders);
 router.get('/:id', order.getOrder);
 router.get('/:id/invoice', order.downloadInvoice);
 router.put('/:id/cancel', order.cancelMyOrder);
-router.put('/:id/status', authorize('admin'), order.updateOrderStatus);
+router.put('/:id/status', authorize('admin', 'manager'), order.updateOrderStatus);
 
 export default router;

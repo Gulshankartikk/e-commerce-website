@@ -119,11 +119,11 @@ export const getMyOrders = catchAsync(async (req, res) => {
   res.json({ success: true, orders, total, pages: Math.ceil(total / limit) });
 });
 
-/** GET /orders/:id — owner or admin. */
+/** GET /orders/:id — owner or admin/manager. */
 export const getOrder = catchAsync(async (req, res, next) => {
   const order = await Order.findById(req.params.id).populate('user', 'name email');
   if (!order) return next(new AppError('Order not found', 404));
-  if (String(order.user._id) !== String(req.user._id) && req.user.role !== 'admin') {
+  if (String(order.user?._id || order.user) !== String(req.user._id) && !['admin', 'manager'].includes(req.user.role)) {
     return next(new AppError('You do not have access to this order', 403));
   }
   res.json({ success: true, order });
@@ -133,7 +133,7 @@ export const getOrder = catchAsync(async (req, res, next) => {
 export const downloadInvoice = catchAsync(async (req, res, next) => {
   const order = await Order.findById(req.params.id);
   if (!order) return next(new AppError('Order not found', 404));
-  if (String(order.user) !== String(req.user._id) && req.user.role !== 'admin') {
+  if (String(order.user) !== String(req.user._id) && !['admin', 'manager'].includes(req.user.role)) {
     return next(new AppError('You do not have access to this order', 403));
   }
   generateInvoicePDF(order, res);

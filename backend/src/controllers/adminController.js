@@ -13,7 +13,7 @@ export const getDashboardStats = catchAsync(async (req, res) => {
   const [revenueAgg, totalUsers, totalOrders, totalProducts, salesByDay, recentOrders, topProducts, statusBreakdown, lowStock] =
     await Promise.all([
       Order.aggregate([{ $match: paidMatch }, { $group: { _id: null, revenue: { $sum: '$totalPrice' } } }]),
-      User.countDocuments({ role: 'user' }),
+      User.countDocuments({ role: { $ne: 'admin' } }),
       Order.countDocuments(),
       Product.countDocuments(),
       Order.aggregate([
@@ -77,10 +77,10 @@ export const toggleBlockUser = catchAsync(async (req, res, next) => {
   res.json({ success: true, user });
 });
 
-/** PUT /admin/users/:id/role — promote/demote admin. */
+/** PUT /admin/users/:id/role — promote/demote user roles. */
 export const changeUserRole = catchAsync(async (req, res, next) => {
   const { role } = req.body;
-  if (!['user', 'admin'].includes(role)) return next(new AppError('Role must be user or admin', 400));
+  if (!['user', 'seller', 'manager', 'admin'].includes(role)) return next(new AppError('Role must be user, seller, manager or admin', 400));
   const user = await User.findById(req.params.id);
   if (!user) return next(new AppError('User not found', 404));
   if (String(user._id) === String(req.user._id)) return next(new AppError('You cannot change your own role', 400));

@@ -22,10 +22,10 @@ export default function Signup() {
     }
   }, [user, navigate]);
 
-  const onSubmit = ({ name, email, password }) => dispatch(registerUser({ name, email, password }));
+  const onSubmit = ({ name, email, password, role }) => dispatch(registerUser({ name, email, password, role }));
 
   return (
-    <div className="flex min-h-[80vh] items-center justify-center px-4 py-10">
+    <div className="flex min-h-[85vh] items-center justify-center px-4 py-10">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="glass w-full max-w-md rounded-3xl p-8">
         <h1 className="text-center font-display text-2xl font-bold">Create your account</h1>
         <p className="mt-1 text-center text-sm text-slate-400">Join LUXORA for exclusive deals</p>
@@ -33,6 +33,19 @@ export default function Signup() {
         {error && <p className="mt-4 rounded-xl bg-red-500/10 px-4 py-2.5 text-sm text-red-400">{error}</p>}
 
         <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4">
+          <div>
+            <label className="mb-1.5 block text-sm font-medium">Account Type</label>
+            <div className="grid grid-cols-2 gap-2">
+              <label className="flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-white/10 p-2.5 text-xs font-semibold transition-colors has-[:checked]:border-primary has-[:checked]:bg-primary/20 has-[:checked]:text-primary-300">
+                <input type="radio" value="user" defaultChecked {...register('role')} className="hidden" />
+                🛍️ Customer
+              </label>
+              <label className="flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-white/10 p-2.5 text-xs font-semibold transition-colors has-[:checked]:border-emerald-500 has-[:checked]:bg-emerald-500/20 has-[:checked]:text-emerald-300">
+                <input type="radio" value="seller" {...register('role')} className="hidden" />
+                🏪 Seller / Vendor
+              </label>
+            </div>
+          </div>
           <div>
             <label className="mb-1.5 block text-sm font-medium">Full name</label>
             <input placeholder="Your name" className="input-field"

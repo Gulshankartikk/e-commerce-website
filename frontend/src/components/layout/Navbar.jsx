@@ -177,13 +177,20 @@ export default function Navbar() {
                       className="glass absolute right-0 mt-2 w-52 overflow-hidden rounded-xl py-1 shadow-card"
                     >
                       <div className="border-b border-white/10 px-4 py-2.5">
-                        <p className="truncate text-sm font-semibold">{user.name}</p>
+                        <div className="flex items-center justify-between gap-1">
+                          <p className="truncate text-sm font-semibold">{user.name}</p>
+                          <span className={`chip text-[10px] uppercase font-bold ${user.role === 'admin' ? 'bg-amber-500/20 text-amber-300' : user.role === 'seller' ? 'bg-emerald-500/20 text-emerald-300' : user.role === 'manager' ? 'bg-cyan-500/20 text-cyan-300' : 'bg-primary/20 text-primary-300'}`}>
+                            {user.role}
+                          </span>
+                        </div>
                         <p className="truncate text-xs text-slate-400">{user.email}</p>
                       </div>
                       <Link to="/dashboard" onClick={() => setUserMenu(false)} className="flex items-center gap-2.5 px-4 py-2.5 text-sm transition-colors hover:bg-white/10"><FiUser /> My Account</Link>
                       <Link to="/dashboard/orders" onClick={() => setUserMenu(false)} className="flex items-center gap-2.5 px-4 py-2.5 text-sm transition-colors hover:bg-white/10"><FiPackage /> My Orders</Link>
-                      {user.role === 'admin' && (
-                        <Link to="/admin" onClick={() => setUserMenu(false)} className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-secondary-400 transition-colors hover:bg-white/10"><FiGrid /> Admin Panel</Link>
+                      {['admin', 'manager', 'seller'].includes(user.role) && (
+                        <Link to="/admin" onClick={() => setUserMenu(false)} className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-secondary-400 transition-colors hover:bg-white/10">
+                          <FiGrid /> {user.role === 'admin' ? 'Admin Panel' : user.role === 'seller' ? 'Seller Panel' : 'Manager Panel'}
+                        </Link>
                       )}
                       <button onClick={handleLogout} className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-red-400 transition-colors hover:bg-white/10"><FiLogOut /> Logout</button>
                     </motion.div>

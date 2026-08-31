@@ -8,12 +8,12 @@ const router = Router();
 router.get('/', product.getProducts);
 router.get('/suggestions', product.getSuggestions);
 router.get('/home', product.getHomeData);
-router.get('/admin/all', protect, authorize('admin'), product.getAdminProducts);
+router.get('/admin/all', protect, authorize('admin', 'manager', 'seller'), product.getAdminProducts);
 router.get('/:slug', optionalAuth, product.getProduct);
 
-router.post('/', protect, authorize('admin'), upload.array('images', 6), product.createProduct);
-router.put('/:id', protect, authorize('admin'), upload.array('images', 6), product.updateProduct);
-router.put('/:id/stock', protect, authorize('admin'), product.updateStock);
-router.delete('/:id', protect, authorize('admin'), product.deleteProduct);
+router.post('/', protect, authorize('admin', 'manager', 'seller'), upload.array('images', 6), product.createProduct);
+router.put('/:id', protect, authorize('admin', 'manager', 'seller'), upload.array('images', 6), product.updateProduct);
+router.put('/:id/stock', protect, authorize('admin', 'manager', 'seller'), product.updateStock);
+router.delete('/:id', protect, authorize('admin', 'manager'), product.deleteProduct);
 
 export default router;

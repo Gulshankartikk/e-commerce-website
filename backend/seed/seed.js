@@ -19,14 +19,16 @@ const run = async () => {
   console.log('Connected. Seeding…');
 
   await Promise.all([
-    User.deleteMany({ email: { $in: ['admin@luxora.shop', 'demo@luxora.shop'] } }),
+    User.deleteMany({ email: { $in: ['admin@luxora.shop', 'demo@luxora.shop', 'seller@luxora.shop', 'manager@luxora.shop'] } }),
     Category.deleteMany({}), Brand.deleteMany({}), Product.deleteMany({}), Banner.deleteMany({}), Coupon.deleteMany({}),
   ]);
 
   // Users (password hashing happens in the pre-save hook)
-  const [admin, demo] = await User.create([
-    { name: 'Admin', email: 'admin@luxora.shop', password: 'Admin@12345', role: 'admin', isVerified: true },
-    { name: 'Demo User', email: 'demo@luxora.shop', password: 'Demo@12345', role: 'user', isVerified: true },
+  const [admin, demo, seller, manager] = await User.create([
+    { name: 'Admin User', email: 'admin@luxora.shop', password: 'Admin@12345', role: 'admin', isVerified: true },
+    { name: 'Demo Customer', email: 'demo@luxora.shop', password: 'Demo@12345', role: 'user', isVerified: true },
+    { name: 'Official Seller', email: 'seller@luxora.shop', password: 'Seller@12345', role: 'seller', isVerified: true },
+    { name: 'Store Manager', email: 'manager@luxora.shop', password: 'Manager@12345', role: 'manager', isVerified: true },
   ]);
 
   const cats = await Category.create([
@@ -133,10 +135,12 @@ const run = async () => {
     expiresAt: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
   });
 
-  console.log('✅ Seed complete');
-  console.log('   Admin → admin@luxora.shop / Admin@12345');
-  console.log('   User  → demo@luxora.shop / Demo@12345');
-  console.log('   Coupon → WELCOME10');
+  console.log('✅ Seed complete with Multi-User Demo Accounts:');
+  console.log('   👑 Admin    → admin@luxora.shop   / Admin@12345');
+  console.log('   🛍️ Customer → demo@luxora.shop    / Demo@12345');
+  console.log('   🏪 Seller   → seller@luxora.shop  / Seller@12345');
+  console.log('   👔 Manager  → manager@luxora.shop / Manager@12345');
+  console.log('   🎟️ Coupon   → WELCOME10');
   await mongoose.disconnect();
 };
 

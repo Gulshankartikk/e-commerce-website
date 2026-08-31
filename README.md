@@ -33,12 +33,14 @@ npm run dev                 # starts app on http://localhost:5173
 
 The Vite dev server proxies `/api` and `/uploads` to the backend automatically.
 
-### Demo accounts (after `npm run seed`)
+### Demo accounts (after `npm run seed` or use 1-click login on `/login`)
 
-| Role  | Email             | Password    |
-|-------|-------------------|-------------|
-| Admin | admin@luxora.shop | Admin@12345 |
-| User  | demo@luxora.shop  | Demo@12345  |
+| Role | Email | Password | Permissions |
+|---|---|---|---|
+| **👑 Admin** | `admin@luxora.shop` | `Admin@12345` | Full system control, analytics, user roles, catalog, orders, coupons, reviews |
+| **🛍️ Customer / User** | `demo@luxora.shop` | `Demo@12345` | Storefront browsing, cart, checkout, order tracking, address book, wishlist |
+| **🏪 Seller / Vendor** | `seller@luxora.shop` | `Seller@12345` | Product management, stock & inventory management |
+| **👔 Manager / Staff** | `manager@luxora.shop` | `Manager@12345` | Dashboard metrics, catalog, order processing & updates, review moderation |
 
 Demo coupon: **WELCOME10** (10% off orders over ₹999, capped at ₹500).
 

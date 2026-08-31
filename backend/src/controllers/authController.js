@@ -7,11 +7,13 @@ import { sendEmail, emailTemplate } from '../utils/sendEmail.js';
 
 /** POST /auth/register — create account + send verification email. */
 export const register = catchAsync(async (req, res, next) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, role } = req.body;
   const existing = await User.findOne({ email });
   if (existing) return next(new AppError('An account with this email already exists', 409));
 
-  const user = await User.create({ name, email, password });
+  // Only allow self-registering as user or seller
+  const assignedRole = role === 'seller' ? 'seller' : 'user';
+  const user = await User.create({ name, email, password, role: assignedRole });
   const rawToken = user.createToken('emailVerify');
   await user.save({ validateBeforeSave: false });
 
