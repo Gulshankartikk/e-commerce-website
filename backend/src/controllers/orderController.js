@@ -84,6 +84,7 @@ export const finalizeOrder = async (order, cart) => {
 
 /** Email the order confirmation (best-effort). */
 export const sendOrderEmail = (order, email, name) => {
+  const clientBase = (process.env.FRONTEND_URL || process.env.CLIENT_URL || 'http://localhost:5173').replace(/\/+$/, '');
   const rows = order.items.map((i) => `<tr><td style="padding:6px 0">${i.name} × ${i.quantity}</td><td style="text-align:right">₹${(i.price * i.quantity).toLocaleString('en-IN')}</td></tr>`).join('');
   sendEmail({
     to: email,
@@ -92,7 +93,7 @@ export const sendOrderEmail = (order, email, name) => {
       'Order confirmed ✅',
       `Hi ${name}, your order is confirmed.<table style="width:100%;margin-top:12px">${rows}<tr><td style="padding-top:10px;font-weight:700">Total</td><td style="text-align:right;font-weight:700;padding-top:10px">₹${order.totalPrice.toLocaleString('en-IN')}</td></tr></table>`,
       'Track Order',
-      `${process.env.CLIENT_URL}/dashboard/orders/${order._id}`
+      `${clientBase}/dashboard/orders/${order._id}`
     ),
   }).catch((e) => console.warn('Order email failed:', e.message));
 };

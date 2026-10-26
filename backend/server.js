@@ -1,7 +1,9 @@
-import 'dotenv/config';
+import dotenv from 'dotenv';
+import path from 'path';
+dotenv.config();
+dotenv.config({ path: path.resolve('backend/.env') });
 import express from 'express';
 import http from 'http';
-import path from 'path';
 import cors from 'cors';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
@@ -34,8 +36,13 @@ const app = express();
 const server = http.createServer(app);
 
 /* ---------- CORS Configuration for Production (Vercel + Localhost) ---------- */
-const allowedOrigins = (process.env.CLIENT_URL || 'http://localhost:5173')
-  .split(',')
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  process.env.CLIENT_URL,
+  'http://localhost:5173',
+]
+  .filter(Boolean)
+  .flatMap((o) => o.split(','))
   .map((o) => o.trim().replace(/\/+$/, ''));
 
 const corsOriginDelegate = (origin, callback) => {
@@ -89,6 +96,16 @@ app.use('/api', rateLimit({
   message: { success: false, message: 'Too many requests. Please slow down' },
 }));
 
+/* ---------- Database connection guard for serverless/Vercel ---------- */
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
+
 /* ---------- Static: locally stored uploads (Cloudinary fallback) ---------- */
 app.use('/uploads', express.static(path.resolve('uploads'), { maxAge: '7d', immutable: true }));
 
@@ -121,7 +138,9 @@ const PORT = process.env.PORT || 5000;
 const start = async () => {
   configureCloudinary();
   await connectDB();
-  server.listen(PORT, () => console.log(`🚀 FlashShop API running on port ${PORT} (${process.env.NODE_ENV || 'development'})`));
+  if (!process.env.VERCEL) {
+    server.listen(PORT, () => console.log(`🚀 FlashShop API running on port ${PORT} (${process.env.NODE_ENV || 'development'})`));
+  }
 };
 start();
 

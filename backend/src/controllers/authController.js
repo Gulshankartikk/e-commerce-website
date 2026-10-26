@@ -5,6 +5,9 @@ import catchAsync from '../utils/catchAsync.js';
 import { sendToken } from '../utils/sendToken.js';
 import { sendEmail, emailTemplate } from '../utils/sendEmail.js';
 
+const getFrontendBaseUrl = () =>
+  (process.env.FRONTEND_URL || process.env.CLIENT_URL || 'http://localhost:5173').replace(/\/+$/, '');
+
 /** POST /auth/register — create account + send verification email. */
 export const register = catchAsync(async (req, res, next) => {
   const { name, email, password, role } = req.body;
@@ -17,11 +20,11 @@ export const register = catchAsync(async (req, res, next) => {
   const rawToken = user.createToken('emailVerify');
   await user.save({ validateBeforeSave: false });
 
-  const verifyUrl = `${process.env.CLIENT_URL}/verify-email/${rawToken}`;
+  const verifyUrl = `${getFrontendBaseUrl()}/verify-email/${rawToken}`;
   await sendEmail({
     to: user.email,
-    subject: 'Verify your LUXORA account',
-    html: emailTemplate('Welcome to LUXORA 🎉', `Hi ${user.name},<br/>Confirm your email address to activate your account.`, 'Verify Email', verifyUrl),
+    subject: 'Verify your FlashShop account',
+    html: emailTemplate('Welcome to FlashShop ⚡', `Hi ${user.name},<br/>Confirm your email address to activate your account.`, 'Verify Email', verifyUrl),
   }).catch((e) => console.warn('Verification email failed:', e.message));
 
   sendToken(user, 201, res);
@@ -71,10 +74,10 @@ export const resendVerification = catchAsync(async (req, res, next) => {
   if (user.isVerified) return next(new AppError('Email is already verified', 400));
   const rawToken = user.createToken('emailVerify');
   await user.save({ validateBeforeSave: false });
-  const verifyUrl = `${process.env.CLIENT_URL}/verify-email/${rawToken}`;
+  const verifyUrl = `${getFrontendBaseUrl()}/verify-email/${rawToken}`;
   await sendEmail({
     to: user.email,
-    subject: 'Verify your LUXORA account',
+    subject: 'Verify your FlashShop account',
     html: emailTemplate('Verify your email', `Hi ${user.name},<br/>Here is a fresh verification link.`, 'Verify Email', verifyUrl),
   });
   res.json({ success: true, message: 'Verification email sent' });
@@ -87,10 +90,10 @@ export const forgotPassword = catchAsync(async (req, res, next) => {
   if (user) {
     const rawToken = user.createToken('resetPassword');
     await user.save({ validateBeforeSave: false });
-    const resetUrl = `${process.env.CLIENT_URL}/reset-password/${rawToken}`;
+    const resetUrl = `${getFrontendBaseUrl()}/reset-password/${rawToken}`;
     await sendEmail({
       to: user.email,
-      subject: 'Reset your LUXORA password',
+      subject: 'Reset your FlashShop password',
       html: emailTemplate('Password reset', `Hi ${user.name},<br/>Click below to set a new password. This link expires in 1 hour.`, 'Reset Password', resetUrl),
     }).catch((e) => console.warn('Reset email failed:', e.message));
   }

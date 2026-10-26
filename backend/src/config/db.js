@@ -1,7 +1,10 @@
 import mongoose from 'mongoose';
 
-/** Connect to MongoDB. Supports MONGODB_URI or MONGO_URI for Atlas and local dev. */
+/** Connect to MongoDB. Supports MONGODB_URI or MONGO_URI for Atlas and local dev. Caches connection for serverless/Vercel. */
 export const connectDB = async () => {
+  if (mongoose.connection.readyState >= 1) {
+    return mongoose.connection;
+  }
   const uri = process.env.MONGODB_URI || process.env.MONGO_URI;
   if (!uri) {
     console.error('❌ MONGODB_URI (or MONGO_URI) is not set.');
