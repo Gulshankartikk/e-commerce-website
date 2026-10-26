@@ -41,6 +41,7 @@ const server = http.createServer(app);
 const allowedOrigins = [
   process.env.FRONTEND_URL,
   process.env.CLIENT_URL,
+  'https://e-commerce-website-seven-steel.vercel.app',
   'http://localhost:5173',
 ]
   .filter(Boolean)

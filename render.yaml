@@ -15,7 +15,7 @@ services:
       - key: JWT_SECRET
         generateValue: true
       - key: CLIENT_URL
-        sync: false
+        value: https://e-commerce-website-seven-steel.vercel.app
       - key: GEMINI_API_KEY
         sync: false
       - key: GEMINI_MODEL

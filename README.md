@@ -2,7 +2,31 @@
 
 A full-stack, production-ready MERN e-commerce store with an advanced **Google Gemini AI Shopping Copilot**, catalog-grounded visual product recommendations, review summarization, side-by-side spec comparison, modern adaptive UI, admin analytics panel, and verified checkout workflows.
 
-**Stack:** React 18 + Vite + Tailwind CSS + Redux Toolkit + Framer Motion · Node.js + Express + MongoDB (Mongoose) + **Google Gemini AI (2.5 Flash)** · Local Product Assets · JWT Auth · Razorpay / Stripe / COD · Socket.io · PDF Invoices
+**Stack:** React 18 + Vite + Tailwind CSS + Redux Toolkit + Framer Motion · Node.js + Express + MongoDB Atlas + **Google Gemini AI (2.5 Flash)** · Local Product Assets · JWT Auth · Razorpay / Stripe / COD · Socket.io · PDF Invoices
+
+---
+
+## 🔗 Live Production Deployments
+
+| Resource | Direct Link | Status |
+|---|---|---|
+| 🛍️ **Live Storefront (Vercel)** | [https://e-commerce-website-seven-steel.vercel.app](https://e-commerce-website-seven-steel.vercel.app) | 🟢 **Live & Operational** |
+| ⚙️ **Live REST API (Render)** | [https://e-commerce-website-4-zrlh.onrender.com](https://e-commerce-website-4-zrlh.onrender.com) | 🟢 **Live & Connected to MongoDB Atlas** |
+| 🩺 **API Health Check** | [https://e-commerce-website-4-zrlh.onrender.com/api/health](https://e-commerce-website-4-zrlh.onrender.com/api/health) | 🟢 **200 OK** |
+| 📦 **GitHub Repository** | [https://github.com/Gulshankartikk/e-commerce-website](https://github.com/Gulshankartikk/e-commerce-website) | 🟢 **Main Branch Synced** |
+
+---
+
+## 👥 Demo Accounts (Pre-Seeded & Ready)
+
+| Role | Email | Password | Permissions & Features |
+|---|---|---|---|
+| **🛍️ Customer** | `demo@flashshop.com` | `Demo@12345` | Storefront browsing, persistent cart, wishlist, checkout, **Grounded Gemini AI Copilot** |
+| **👑 Admin** | `admin@flashshop.com` | `Admin@12345` | Full system control, live sales metrics, inventory CRUD, coupon codes, order management |
+| **👔 Manager** | `manager@flashshop.com` | `Manager@12345` | Dashboard KPIs, catalog updates, order fulfillment, review moderation |
+| **🏪 Seller** | `seller@flashshop.com` | `Seller@12345` | Product catalog management, stock updates |
+
+Demo Coupon: **`WELCOME10`** (10% off orders over ₹999, max ₹500 discount).
 
 ---
 
@@ -29,98 +53,15 @@ A full-stack, production-ready MERN e-commerce store with an advanced **Google G
 
 ---
 
-## 🌐 Production Deployment Guide (Vercel + Render + MongoDB Atlas)
-
-FlashShop is architected for seamless cloud deployment with zero code changes required:
+## 🌐 Production Architecture
 
 ```mermaid
 flowchart LR
-    Browser["Client Browser / Mobile"] -->|"HTTPS / Static Assets"| Vercel["Frontend (Vercel)\nReact 18 + Vite\nSPA Rewrites (vercel.json)"]
-    Browser -->|"API Requests (Bearer / Cookie)"| Render["Backend (Render)\nExpress Node.js API\nDynamic CORS + Health Check"]
-    Render -->|"TLS Connection"| Atlas["Database (MongoDB Atlas)\nPersistent Products, Users,\nCarts, Orders & AI History"]
-    Render -->|"REST / TLS"| Gemini["Google Gemini AI\ngemini-2.5-flash Engine"]
+    Browser["Client Browser / Mobile"] -->|"HTTPS / Static Assets"| Vercel["Frontend (Vercel)\nReact 18 + Vite SPA\nAuto-Proxy & Catch-all"]
+    Browser -->|"Direct REST / HTTPS"| Render["Backend (Render)\nNode.js + Express API\nHealth Check + Dynamic CORS"]
+    Render -->|"TLS Mongoose Connection"| Atlas["Database (MongoDB Atlas)\nPersistent Products, Users,\nCarts, Orders & AI History"]
+    Render -->|"REST / HTTPS"| Gemini["Google Gemini AI\ngemini-2.5-flash Engine"]
 ```
-
-### 1. MongoDB Atlas Setup (Database)
-1. Log in to [MongoDB Atlas](https://cloud.mongodb.com/) and create a free **M0 Cluster**.
-2. **Database Access**: Create a database user (e.g., `flashshop_admin`) with password authentication and `readWriteAnyDatabase` privileges.
-3. **Network Access**: Add IP `0.0.0.0/0` (Allow access from anywhere). *Required for dynamic hosting IPs on Render.*
-4. **Connection String**: Click **Connect** → **Drivers** (Node.js) and copy the SRV URI:
-   ```env
-   mongodb+srv://flashshop_admin:<PASSWORD>@cluster0.xxxxx.mongodb.net/flashshop?retryWrites=true&w=majority
-   ```
-5. *(Optional)* Seed demo data into your remote Atlas cluster from your local terminal:
-   ```bash
-   # Temporarily set MONGODB_URI in backend/.env, then run:
-   npm run seed --prefix backend
-   ```
-
----
-
-### 2. Backend Deployment on Render
-
-1. Log in to [Render Dashboard](https://dashboard.render.com/) and click **New +** → **Web Service**.
-2. Connect your GitHub repository (`Gulshankartikk/e-commerce-website`).
-3. Set the following build and run parameters:
-
-| Setting | Value |
-|---|---|
-| **Name** | `flashshop-api` |
-| **Root Directory** | `backend` |
-| **Runtime** | `Node` |
-| **Build Command** | `npm install` |
-| **Start Command** | `node server.js` |
-| **Health Check Path** | `/api/health` |
-
-4. Add **Environment Variables** under Environment:
-
-| Environment Variable | Recommended Value | Note |
-|---|---|---|
-| `NODE_ENV` | `production` | Enables production security & cookies |
-| `MONGODB_URI` | `mongodb+srv://...` | Your MongoDB Atlas connection URI |
-| `JWT_SECRET` | *(64-char random string)* | Secret for signing auth tokens |
-| `JWT_EXPIRES_IN` | `7d` | Token expiry duration |
-| `CLIENT_URL` | `https://<your-vercel-app>.vercel.app` | Allowed CORS frontend origin |
-| `GEMINI_API_KEY` | *(Your Gemini API Key)* | Obtained from [Google AI Studio](https://aistudio.google.com/apikey) |
-| `GEMINI_MODEL` | `gemini-2.5-flash` | Gemini model identifier |
-
-5. Click **Create Web Service**. Once active, verify: `https://<your-render-url>/api/health`.
-
----
-
-### 3. Frontend Deployment on Vercel
-
-1. Log in to [Vercel](https://vercel.com/) and click **Add New...** → **Project**.
-2. Import your GitHub repository (`Gulshankartikk/e-commerce-website`).
-3. Configure the project:
-
-| Setting | Value |
-|---|---|
-| **Framework Preset** | `Vite` |
-| **Root Directory** | `frontend` |
-| **Build Command** | `vite build` |
-| **Output Directory** | `dist` |
-
-4. Add **Environment Variables**:
-
-| Variable | Value |
-|---|---|
-| `VITE_API_URL` | `https://<your-render-url>.onrender.com/api/v1` |
-
-5. Click **Deploy**. Vercel will build and serve your static React SPA with auto-configured client-side route rewrites.
-6. Copy your frontend URL (e.g., `https://flashshop.vercel.app`) and ensure it is set as `CLIENT_URL` in your Render backend settings.
-
----
-
-### 4. Post-Deployment Verification Checklist
-
-- [ ] **Health Endpoint**: `https://<render-url>/api/health` responds with `{ "success": true, "status": "ok" }`.
-- [ ] **Storefront Catalog**: `https://<vercel-url>/` displays all categories, banners, and sample products.
-- [ ] **Authentication**: Log in with demo credentials `demo@flashshop.com` / `Demo@12345`.
-- [ ] **AI Shopping Assistant**: Open drawer, test natural language query (e.g. *"Show wireless earbuds under 5000"*).
-- [ ] **Review Sentiment**: Open any product page and view the AI Customer Sentiment Synthesis card.
-- [ ] **Compare Matrix**: Open `/compare` and test the *"✨ Ask AI for Recommendation"* feature.
-- [ ] **Cart & Checkout**: Add an item to cart, apply coupon code `WELCOME10`, and place a COD order.
 
 ---
 
@@ -181,19 +122,6 @@ Tests 29 critical workflows including:
 10. **AI Review Summary with Evidence from Real Reviews**
 11. **AI Side-by-Side Comparison Matrix & Verdict**
 12. **AI Persistent Chat History**
-
----
-
-## 👥 Demo Accounts
-
-| Role | Email | Password | Permissions |
-|---|---|---|---|
-| **👑 Admin** | `admin@flashshop.com` *(or admin@luxora.shop)* | `Admin@12345` | Full system control, analytics, user roles, catalog, orders, coupons |
-| **👔 Manager** | `manager@flashshop.com` *(or manager@luxora.shop)* | `Manager@12345` | Dashboard metrics, catalog, order processing, review moderation |
-| **🏪 Seller** | `seller@flashshop.com` *(or seller@luxora.shop)* | `Seller@12345` | Product management, stock & inventory updates |
-| **🛍️ Customer** | `demo@flashshop.com` *(or demo@luxora.shop)* | `Demo@12345` | Storefront browsing, AI copilot, persistent cart, wishlist, checkout |
-
-Demo Coupon: **`WELCOME10`** (10% off orders over ₹999, max ₹500 discount).
 
 ---
 
