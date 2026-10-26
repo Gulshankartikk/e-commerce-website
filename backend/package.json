@@ -1,7 +1,7 @@
 {
-  "name": "luxora-backend",
+  "name": "flashshop-backend",
   "version": "1.0.0",
-  "description": "LUXORA E-Commerce REST API",
+  "description": "FlashShop AI E-Commerce REST API",
   "main": "server.js",
   "type": "module",
   "scripts": {

@@ -33,9 +33,28 @@ import aiRoutes from './src/routes/aiRoutes.js';
 const app = express();
 const server = http.createServer(app);
 
+/* ---------- CORS Configuration for Production (Vercel + Localhost) ---------- */
+const allowedOrigins = (process.env.CLIENT_URL || 'http://localhost:5173')
+  .split(',')
+  .map((o) => o.trim().replace(/\/+$/, ''));
+
+const corsOriginDelegate = (origin, callback) => {
+  if (!origin) return callback(null, true);
+  const normalized = origin.replace(/\/+$/, '');
+  if (
+    allowedOrigins.includes(normalized) ||
+    normalized.endsWith('.vercel.app') ||
+    normalized.endsWith('.onrender.com') ||
+    process.env.NODE_ENV !== 'production'
+  ) {
+    return callback(null, true);
+  }
+  return callback(new Error(`CORS policy blocked origin: ${origin}`));
+};
+
 /* ---------- Socket.io: real-time notifications ---------- */
 const io = new SocketServer(server, {
-  cors: { origin: process.env.CLIENT_URL || 'http://localhost:5173', credentials: true },
+  cors: { origin: corsOriginDelegate, credentials: true },
 });
 io.on('connection', (socket) => {
   // Clients join a private room keyed by their user id after login
@@ -49,7 +68,7 @@ app.set('io', io);
 /* ---------- Security & parsing middleware ---------- */
 app.set('trust proxy', 1);
 app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
-app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:5173', credentials: true }));
+app.use(cors({ origin: corsOriginDelegate, credentials: true }));
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 app.use(cookieParser());
@@ -102,7 +121,7 @@ const PORT = process.env.PORT || 5000;
 const start = async () => {
   configureCloudinary();
   await connectDB();
-  server.listen(PORT, () => console.log(`🚀 LUXORA API running on http://localhost:${PORT} (${process.env.NODE_ENV || 'development'})`));
+  server.listen(PORT, () => console.log(`🚀 FlashShop API running on port ${PORT} (${process.env.NODE_ENV || 'development'})`));
 };
 start();
 

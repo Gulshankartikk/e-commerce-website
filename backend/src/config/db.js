@@ -1,19 +1,20 @@
 import mongoose from 'mongoose';
 
-/** Connect to MongoDB. Exits the process on failure so the platform can restart it. */
+/** Connect to MongoDB. Supports MONGODB_URI or MONGO_URI for Atlas and local dev. */
 export const connectDB = async () => {
-  if (!process.env.MONGO_URI) {
-    console.error('❌ MONGO_URI is not set.');
-    console.error('   Create backend/.env (copy .env.example) and set MONGO_URI, e.g.:');
-    console.error('   MONGO_URI=mongodb://127.0.0.1:27017/luxora');
+  const uri = process.env.MONGODB_URI || process.env.MONGO_URI;
+  if (!uri) {
+    console.error('❌ MONGODB_URI (or MONGO_URI) is not set.');
+    console.error('   Please provide a connection string in environment settings or backend/.env, e.g.:');
+    console.error('   MONGODB_URI=mongodb+srv://<user>:<password>@cluster0.mongodb.net/flashshop?retryWrites=true&w=majority');
     process.exit(1);
   }
   try {
-    const conn = await mongoose.connect(process.env.MONGO_URI);
+    const conn = await mongoose.connect(uri);
     console.log(`✅ MongoDB connected: ${conn.connection.host}`);
   } catch (err) {
     console.error(`❌ MongoDB connection error: ${err.message}`);
-    console.error('   Is MongoDB running? Start it locally or point MONGO_URI at MongoDB Atlas.');
+    console.error('   Please verify MongoDB Atlas credentials, network IP whitelist (0.0.0.0/0), or local service.');
     process.exit(1);
   }
 };

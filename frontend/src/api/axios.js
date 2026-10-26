@@ -1,8 +1,18 @@
 import axios from 'axios';
 
+// Normalize API URL: handles bare domains, /api, /api/v1, trailing slashes, or default dev proxy
+const rawApiUrl = (import.meta.env.VITE_API_URL || '/api/v1').trim().replace(/\/+$/, '');
+const normalizedBaseURL = rawApiUrl.endsWith('/api/v1')
+  ? rawApiUrl
+  : rawApiUrl.endsWith('/api')
+  ? `${rawApiUrl}/v1`
+  : rawApiUrl.startsWith('http')
+  ? `${rawApiUrl}/api/v1`
+  : rawApiUrl;
+
 /** Pre-configured axios instance — cookies + JSON, base /api/v1 (proxied in dev). */
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api/v1',
+  baseURL: normalizedBaseURL,
   withCredentials: true,
   headers: { 'Content-Type': 'application/json' },
 });

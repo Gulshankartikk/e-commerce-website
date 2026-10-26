@@ -17,7 +17,12 @@ import AIChatSession from '../src/models/AIChat.js';
 const localImg = (relPath) => ({ url: relPath, publicId: '' });
 
 const run = async () => {
-  await mongoose.connect(process.env.MONGO_URI);
+  const uri = process.env.MONGODB_URI || process.env.MONGO_URI;
+  if (!uri) {
+    console.error('❌ MONGODB_URI or MONGO_URI is not set. Provide MongoDB connection string to seed.');
+    process.exit(1);
+  }
+  await mongoose.connect(uri);
   console.log('Connected. Seeding FlashShop demo catalog & images…');
 
   await Promise.all([
