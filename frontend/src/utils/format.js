@@ -7,8 +7,12 @@ export const formatDate = (d) =>
 export const formatDateTime = (d) =>
   new Date(d).toLocaleString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
 
-/** Resolve image URLs — local /uploads paths pass through the Vite proxy in dev. */
-export const imgUrl = (url) => url || 'https://picsum.photos/seed/placeholder/600/600';
+/** Resolve image URLs — local /images or /uploads paths pass through the Vite proxy in dev. */
+export const imgUrl = (url) => {
+  if (!url) return '/images/products/nova-airbeat-pro.jpg';
+  if (url.startsWith('http') || url.startsWith('/')) return url;
+  return `/uploads/${url}`;
+};
 
 export const ORDER_STATUS_STEPS = ['confirmed', 'processing', 'shipped', 'out-for-delivery', 'delivered'];
 

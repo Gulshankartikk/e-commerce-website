@@ -13,7 +13,7 @@ export default function OrderSuccess() {
   const { data } = useFetch(`/orders/${id}`);
   const order = data?.order;
 
-  useEffect(() => { document.title = 'Order confirmed — LUXORA'; }, []);
+  useEffect(() => { document.title = 'Order confirmed — FlashShop'; }, []);
 
   const downloadInvoice = async () => {
     try {
@@ -40,7 +40,7 @@ export default function OrderSuccess() {
         </motion.div>
         <h1 className="mt-5 text-2xl font-bold">Order confirmed! 🎉</h1>
         <p className="mt-2 text-sm text-slate-400">
-          Thanks for shopping with LUXORA. A confirmation email is on its way.
+          Thanks for shopping with FlashShop. A confirmation email is on its way.
         </p>
         {order && (
           <div className="mt-6 rounded-xl bg-night/60 p-4 text-left text-sm">

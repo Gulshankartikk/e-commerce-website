@@ -12,6 +12,8 @@ const uiSlice = createSlice({
     quickViewProduct: null, // product object shown in the QuickView modal
     compareItems: JSON.parse(localStorage.getItem('lx_compare') || '[]'), // product slugs (max 3)
     mobileMenuOpen: false,
+    aiDrawerOpen: false,
+    aiInitialQuery: '',
   },
   reducers: {
     toggleTheme: (state) => {
@@ -29,8 +31,29 @@ const uiSlice = createSlice({
     },
     clearCompare: (state) => { state.compareItems = []; localStorage.setItem('lx_compare', '[]'); },
     setMobileMenu: (state, action) => { state.mobileMenuOpen = action.payload; },
+    toggleAiDrawer: (state) => { state.aiDrawerOpen = !state.aiDrawerOpen; },
+    setAiDrawer: (state, action) => {
+      if (typeof action.payload === 'boolean') {
+        state.aiDrawerOpen = action.payload;
+      } else if (typeof action.payload === 'object') {
+        state.aiDrawerOpen = action.payload.open ?? true;
+        if (action.payload.query !== undefined) {
+          state.aiInitialQuery = action.payload.query;
+        }
+      }
+    },
+    clearAiInitialQuery: (state) => { state.aiInitialQuery = ''; },
   },
 });
 
-export const { toggleTheme, setQuickView, toggleCompare, clearCompare, setMobileMenu } = uiSlice.actions;
+export const {
+  toggleTheme,
+  setQuickView,
+  toggleCompare,
+  clearCompare,
+  setMobileMenu,
+  toggleAiDrawer,
+  setAiDrawer,
+  clearAiInitialQuery,
+} = uiSlice.actions;
 export default uiSlice.reducer;

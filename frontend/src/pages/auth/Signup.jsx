@@ -13,7 +13,7 @@ export default function Signup() {
   const { user, loading, error } = useSelector((s) => s.auth);
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
-  useEffect(() => { document.title = 'Create account — LUXORA'; dispatch(clearError()); }, [dispatch]);
+  useEffect(() => { document.title = 'Create account — FlashShop'; dispatch(clearError()); }, [dispatch]);
 
   useEffect(() => {
     if (user) {
@@ -28,7 +28,7 @@ export default function Signup() {
     <div className="flex min-h-[85vh] items-center justify-center px-4 py-10">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="glass w-full max-w-md rounded-3xl p-8">
         <h1 className="text-center font-display text-2xl font-bold">Create your account</h1>
-        <p className="mt-1 text-center text-sm text-slate-400">Join LUXORA for exclusive deals</p>
+        <p className="mt-1 text-center text-sm text-slate-400">Join FlashShop for exclusive deals</p>
 
         {error && <p className="mt-4 rounded-xl bg-red-500/10 px-4 py-2.5 text-sm text-red-400">{error}</p>}
 

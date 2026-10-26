@@ -1,132 +1,119 @@
-# LUXORA — Full-Stack E-Commerce Platform
+# FLASHSHOP — AI E-Commerce Shopping Assistant Platform
 
-A production-ready MERN e-commerce store with a premium dark UI, an admin panel, and Stripe / Razorpay / Cash-on-Delivery payments.
+A full-stack, production-ready MERN e-commerce store with an advanced **Google Gemini AI Shopping Copilot**, catalog-grounded visual product recommendations, review summarization, side-by-side spec comparison, modern adaptive UI, admin analytics panel, and verified checkout workflows.
 
-**Stack:** React 18 + Vite + Tailwind CSS + Redux Toolkit + Framer Motion + Swiper · Node.js + Express + MongoDB (Mongoose) · JWT auth · Cloudinary · Nodemailer · Socket.io · PDFKit invoices
+**Stack:** React 18 + Vite + Tailwind CSS + Redux Toolkit + Framer Motion · Node.js + Express + MongoDB (Mongoose) + **Google Gemini AI (2.5 Flash)** · Local Product Assets · JWT Auth · Razorpay / Stripe / COD · Socket.io · PDF Invoices
 
 ---
 
-## Quick start
+## 🌟 Key Features
+
+### 🤖 Grounded Google Gemini AI Assistant
+- **Conversational Shopping Concierge**: Natural language product discovery grounded strictly in real MongoDB catalog items (no hallucinated items, prices, or specs).
+- **Budget & Specification Filtering**: Enforces user constraints (e.g., *"ANC earbuds under ₹5,000"*, *"Running shoes with carbon plate"*).
+- **Side-by-Side Product Comparisons**: Executive matrix evaluating prices, specs, pros/cons, and tailored purchasing verdicts.
+- **AI Review Summaries**: Synthesizes verified customer reviews with sentiment scores, customer pros, and things to note.
+- **Polite Handling of Unsupported Queries**: Courteously informs users when an item isn't carried and guides them to available categories.
+- **Persistent Chat History**: Logged-in user sessions are saved in MongoDB (`AIChatSession`), with localStorage guest fallback.
+- **Zero-Downtime Catalog Fallback**: Fully functional even if offline or before configuring a Gemini API key.
+
+### 🛍️ Customer Storefront & Commerce
+- **Storefront**: Hero slider, flash sales with countdown timer, featured/best-seller carousels, voice search, live search suggestions, multi-facet filtering (category, brand, price, color, size, rating, stock).
+- **Product Details**: Multi-angle image zoom gallery, variant selector, live stock indicators, reviews with photo uploads, related items, quick view modal.
+- **Real Shopping Workflows**: MongoDB-backed cart synchronization, quantity limits, coupon engine, wishlist persistence, saved delivery addresses.
+- **Checkout & Orders**: Server-calculated totals (client totals are never trusted), COD, Razorpay HMAC verification, Stripe payment intents, order status timeline, PDF invoice generation.
+
+### 👑 Multi-User RBAC & Admin Dashboard
+- **Role-Based Access Control**: Pre-seeded accounts for **Admin**, **Manager**, **Seller**, and **Customer**.
+- **Admin Analytics**: Live metrics (revenue, orders, active users), sales revenue charts, order processing, catalog CRUD, coupon management, and review moderation.
+
+---
+
+## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 18+ and npm
-- MongoDB running locally (`mongodb://127.0.0.1:27017`) or a MongoDB Atlas URI
+- **Node.js 18+** and **npm**
+- **MongoDB** running locally (`mongodb://127.0.0.1:27017/luxora`) or a MongoDB Atlas URI
 
-### 1. Backend
-
+### 1. Configure Environment
+Copy `.env.example` in `backend/`:
 ```bash
-cd backend
-npm install
-cp .env.example .env        # then edit values (see below)
-npm run seed                # seeds demo data + accounts
-npm run dev                 # starts API on http://localhost:5000
+cp backend/.env.example backend/.env
+```
+Ensure `MONGO_URI` and `JWT_SECRET` are set.
+Add your Gemini API key (optional for basic fallback, required for live Gemini responses):
+```env
+GEMINI_API_KEY=your_gemini_api_key_here
+GEMINI_MODEL=gemini-2.5-flash
+```
+> Get an API key from [Google AI Studio](https://aistudio.google.com/apikey). Keep the key in `backend/.env` only.
+
+### 2. Install & Seed Catalog
+From the project root:
+```bash
+# Install root, backend and frontend dependencies
+npm run install:all
+
+# Seed catalog (8 sample products + verified reviews + demo users + coupons)
+npm run seed
 ```
 
-### 2. Frontend
-
+### 3. Run Both Servers Concurrently
 ```bash
-cd frontend
-npm install
-cp .env.example .env        # defaults work for local dev
-npm run dev                 # starts app on http://localhost:5173
+npm run dev
 ```
+- **Frontend Storefront**: [http://localhost:5173](http://localhost:5173)
+- **Backend API Health**: [http://localhost:5000/api/health](http://localhost:5000/api/health)
 
-The Vite dev server proxies `/api` and `/uploads` to the backend automatically.
+---
 
-### Demo accounts (after `npm run seed` or use 1-click login on `/login`)
+## 🧪 Automated Test Suite
+
+Run the full end-to-end integration and security test suite:
+```bash
+npm run test:api
+```
+Tests 29 critical workflows including:
+1. API Root Health Check (`/api/health` and `/api/v1/health`)
+2. Multi-user authentication & role guards (`admin`, `manager`, `seller`, `user`)
+3. RBAC security boundaries (403 forbidden checks)
+4. Storefront catalog listing, text search, suggestions & category filters
+5. Cart operations, coupon calculation (`WELCOME10`), address creation & COD checkout
+6. Order status lifecycle & admin user role management
+7. **AI Natural Language Shopping Chat** with grounded recommendations
+8. **AI Budget Enforcement** (verifies all recommended items are $\le$ budget)
+9. **AI Unsupported Product Handling**
+10. **AI Review Summary with Evidence from Real Reviews**
+11. **AI Side-by-Side Comparison Matrix & Verdict**
+12. **AI Persistent Chat History**
+
+---
+
+## 👥 Demo Accounts
 
 | Role | Email | Password | Permissions |
 |---|---|---|---|
-| **👑 Admin** | `admin@luxora.shop` | `Admin@12345` | Full system control, analytics, user roles, catalog, orders, coupons, reviews |
-| **🛍️ Customer / User** | `demo@luxora.shop` | `Demo@12345` | Storefront browsing, cart, checkout, order tracking, address book, wishlist |
-| **🏪 Seller / Vendor** | `seller@luxora.shop` | `Seller@12345` | Product management, stock & inventory management |
-| **👔 Manager / Staff** | `manager@luxora.shop` | `Manager@12345` | Dashboard metrics, catalog, order processing & updates, review moderation |
+| **👑 Admin** | `admin@flashshop.com` *(or admin@luxora.shop)* | `Admin@12345` | Full system control, analytics, user roles, catalog, orders, coupons |
+| **👔 Manager** | `manager@flashshop.com` *(or manager@luxora.shop)* | `Manager@12345` | Dashboard metrics, catalog, order processing, review moderation |
+| **🏪 Seller** | `seller@flashshop.com` *(or seller@luxora.shop)* | `Seller@12345` | Product management, stock & inventory updates |
+| **🛍️ Customer** | `demo@flashshop.com` *(or demo@luxora.shop)* | `Demo@12345` | Storefront browsing, AI copilot, persistent cart, wishlist, checkout |
 
-Demo coupon: **WELCOME10** (10% off orders over ₹999, capped at ₹500).
-
----
-
-## Environment variables (backend/.env)
-
-| Variable | Purpose | Required |
-|---|---|---|
-| `PORT` | API port (default 5000) | no |
-| `MONGO_URI` | MongoDB connection string | **yes** |
-| `CLIENT_URL` | Frontend origin for CORS + email links | **yes** |
-| `JWT_SECRET` | Long random string for signing tokens | **yes** |
-| `CLOUDINARY_*` | Image hosting. If empty, images are stored on local disk under `backend/uploads/` and served at `/uploads` | no |
-| `SMTP_*` | Nodemailer credentials. If empty, emails are logged to the console (dev mode) | no |
-| `STRIPE_SECRET_KEY` | Stripe test/live secret key. Left as placeholder → Stripe hidden at checkout | no |
-| `RAZORPAY_KEY_ID` / `RAZORPAY_KEY_SECRET` | Razorpay keys. Left as placeholder → Razorpay hidden at checkout | no |
-
-Cash on Delivery always works, so the store is fully usable with just `MONGO_URI` + `JWT_SECRET`.
-
-## Frontend env (frontend/.env)
-
-`VITE_API_URL` (default `/api/v1`), `VITE_RAZORPAY_KEY_ID` (optional; the checkout also receives the key from the server).
+Demo Coupon: **`WELCOME10`** (10% off orders over ₹999, max ₹500 discount).
 
 ---
 
-## Features
+## 🔌 API Endpoints Reference
 
-**Storefront** — hero banner slider, flash sale with live countdown, featured/best-seller/new-arrival/trending carousels, category grid, brand marquee, testimonials, newsletter. Product listing with live search + suggestions, voice search, multi-facet filters (category, brand, color, size, price, rating, stock), 5 sort orders, pagination. Product page with image gallery + hover zoom, variants (color/size with per-variant stock), reviews with photos, related products, recently viewed, share, quick view, compare (up to 3).
+### AI Shopping Assistant (`/api/v1/ai`)
+- `POST /api/v1/ai/chat` — Conversational shopping concierge grounded in MongoDB inventory
+- `POST /api/v1/ai/compare` — Side-by-side product comparison matrix and purchasing verdict
+- `GET /api/v1/ai/review-summary/:productId` — AI-generated customer sentiment & pros/cons summary
+- `GET /api/v1/ai/history` — Returns authenticated user's persistent chat sessions
+- `DELETE /api/v1/ai/history` — Clears user's chat history
 
-**Commerce** — cart with quantity limits, save-for-later, coupons, free-shipping threshold, GST calculation; checkout with address book, standard/express delivery, Stripe, Razorpay and COD; order confirmation emails; PDF invoice download; order tracking timeline; self-service cancellation with restocking.
-
-**Accounts** — signup/login (JWT in httpOnly cookie + bearer fallback), email verification, forgot/reset password, profile, change password, notification center, wishlist.
-
-**Admin panel** (`/admin`) — analytics dashboard (revenue, orders, users, sales area chart, status pie, top sellers, low-stock alerts), product CRUD with multi-image upload, category & brand management, order status management with customer notifications, user management (block/promote/delete), coupon CRUD, banner CRUD, review moderation.
-
-**Security** — bcrypt password hashing, role-based route guards, rate limiting (tighter on auth endpoints), Helmet, CORS allow-list, NoSQL-injection sanitization, XSS input scrubbing, server-side price/stock/coupon validation (client totals are never trusted), Razorpay HMAC signature verification, Stripe server-side intent verification.
-
-**Performance & UX** — route-level code splitting with vendor chunking, lazy images, loading skeletons everywhere, dark/light theme, PWA manifest, SEO meta tags, responsive from mobile to desktop, reduced-motion support.
-
----
-
-## Project structure
-
-```
-backend/
-  server.js               # Express app + Socket.io + security middleware
-  seed/seed.js            # demo data seeder
-  src/
-    config/               # db, cloudinary
-    models/               # User, Product, Category, Brand, Cart, Wishlist,
-                          # Order (+OrderItem), Review, Coupon, Banner, Notification
-    middleware/           # auth, upload, validation, error handler
-    controllers/          # one per resource
-    routes/               # one per resource, mounted at /api/v1/*
-    utils/                # ApiFeatures, JWT, email, PDF invoice
-frontend/
-  src/
-    api/                  # axios instance with interceptors
-    app/store.js          # Redux store
-    features/             # auth / cart / wishlist / ui slices
-    hooks/                # useFetch, useDebounce
-    components/           # layout, ui, product, home
-    pages/                # storefront, auth, user dashboard, admin panel
-    utils/format.js       # INR formatting, status colors
-```
-
-## API overview
-
-Base URL: `/api/v1`
-
-- `POST /auth/register|login|logout`, `GET /auth/me`, `GET /auth/verify-email/:token`, `POST /auth/forgot-password`, `POST /auth/reset-password/:token`, `PUT /auth/change-password|profile`
-- `GET /products` (keyword, category, brand, color, size, rating, minPrice, maxPrice, inStock, flashSale, featured, sort, page), `GET /products/suggestions`, `GET /products/home`, `GET /products/:slug` · admin: `POST/PUT/DELETE /products`, `PUT /products/:id/stock`
-- `GET|POST /categories`, `GET|POST /brands` (+ PUT/DELETE, admin)
-- `GET|POST|PUT|DELETE /cart`, `POST|DELETE /cart/coupon`, `PUT /cart/:itemId/save-for-later`
-- `GET /wishlist`, `POST /wishlist/:productId` (toggle)
-- `POST /orders` (COD), `GET /orders/my`, `GET /orders/:id`, `GET /orders/:id/invoice` (PDF), `PUT /orders/:id/cancel` · admin: `GET /orders`, `PUT /orders/:id/status`
-- `GET /payments/config`, `POST /payments/stripe/create-intent|confirm`, `POST /payments/razorpay/create-order|verify`
-- `GET|POST|PUT|DELETE /reviews`, `PUT /reviews/:id/approve` (admin)
-- `GET|POST|PUT|DELETE /coupons` (admin), `/banners`, `/addresses`, `/notifications`
-- `GET /admin/dashboard`, `GET /admin/users`, `PUT /admin/users/:id/block|role`, `DELETE /admin/users/:id`
-
-## Deployment notes
-
-- **Backend**: deploy to Render/Railway/Fly/EC2. Set `NODE_ENV=production` and all env vars; cookies switch to `secure; SameSite=None` automatically. Point `CLIENT_URL` at your deployed frontend origin.
-- **Frontend**: `npm run build` → deploy `dist/` to Vercel/Netlify/S3. Set `VITE_API_URL` to your API origin (e.g. `https://api.example.com/api/v1`).
-- **Images**: add Cloudinary credentials in production (local-disk fallback is for development).
-- **Stripe**: the included flow verifies the PaymentIntent server-side. For live card entry, mount Stripe Elements with the returned `clientSecret` in `Checkout.jsx` (marked with a comment).
-# e-commerce-website
+### Health & Commerce
+- `GET /api/health` & `GET /api/v1/health` — System status and server uptime
+- `GET /api/v1/products` — Filtered catalog with pagination & text search
+- `POST /api/v1/cart` — MongoDB-synchronized cart item management
+- `POST /api/v1/orders` — Verified order placement with server-side pricing
+- `GET /api/v1/admin/dashboard` — Revenue, sales charts, and platform KPIs

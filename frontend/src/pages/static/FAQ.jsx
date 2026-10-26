@@ -17,7 +17,7 @@ const FAQS = [
 /** FAQ accordion. */
 export default function FAQ() {
   const [open, setOpen] = useState(0);
-  useEffect(() => { document.title = 'FAQ — LUXORA'; }, []);
+  useEffect(() => { document.title = 'FAQ — FlashShop'; }, []);
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-10">

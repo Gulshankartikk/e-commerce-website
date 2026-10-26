@@ -7,7 +7,7 @@ import Breadcrumbs from '../../components/ui/Breadcrumbs.jsx';
 /** Contact page with a validated form (front-end only submission acknowledgment). */
 export default function Contact() {
   const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm();
-  useEffect(() => { document.title = 'Contact — LUXORA'; }, []);
+  useEffect(() => { document.title = 'Contact — FlashShop'; }, []);
 
   const onSubmit = async () => {
     // Simulate a short send; hooks into a support-ticket API when one is configured
@@ -17,7 +17,7 @@ export default function Contact() {
   };
 
   const channels = [
-    { icon: FiMail, label: 'Email', value: 'support@luxora.shop', sub: 'Replies within 24 hours' },
+    { icon: FiMail, label: 'Email', value: 'support@flashshop.com', sub: 'Replies within 24 hours' },
     { icon: FiPhone, label: 'Phone', value: '1800-120-4567', sub: 'Mon–Sat, 9am–7pm IST' },
     { icon: FiMessageCircle, label: 'Chat', value: 'Live chat', sub: 'From the Help widget, 24×7' },
     { icon: FiMapPin, label: 'Office', value: 'HSR Layout, Bengaluru 560102', sub: 'Karnataka, India' },

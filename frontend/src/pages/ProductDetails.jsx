@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { FiHeart, FiShare2, FiShoppingCart, FiCheck, FiTruck, FiShield, FiRotateCcw, FiEdit2, FiTrash2 } from 'react-icons/fi';
 import { FaHeart } from 'react-icons/fa';
+import { BsStars } from 'react-icons/bs';
 import toast from 'react-hot-toast';
 import useFetch from '../hooks/useFetch.js';
 import api from '../api/axios.js';
@@ -13,6 +14,7 @@ import ProductRow from '../components/product/ProductRow.jsx';
 import { DetailSkeleton } from '../components/ui/Skeletons.jsx';
 import { addToCart } from '../features/cartSlice.js';
 import { toggleWishlist, selectWishlistIds } from '../features/wishlistSlice.js';
+import { setAiDrawer } from '../features/uiSlice.js';
 import { formatPrice, formatDate, imgUrl } from '../utils/format.js';
 
 /** Product detail page: gallery + zoom, variants, reviews, related products. */
@@ -39,9 +41,31 @@ export default function ProductDetails() {
   const [editingReview, setEditingReview] = useState(null);
   const [submitting, setSubmitting] = useState(false);
 
+  // AI Review Summary state
+  const [aiSummary, setAiSummary] = useState(null);
+  const [aiSummaryLoading, setAiSummaryLoading] = useState(false);
+
+  const fetchAiReviewSummary = async () => {
+    if (!product?._id) return;
+    setAiSummaryLoading(true);
+    try {
+      const { data: resData } = await api.get(`/ai/review-summary/${product._id}`);
+      setAiSummary(resData.summary);
+      toast.success('AI review synthesis updated');
+    } catch (err) {
+      toast.error('Could not load AI summary');
+    } finally {
+      setAiSummaryLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    setAiSummary(null);
+  }, [slug]);
+
   useEffect(() => {
     if (product) {
-      document.title = `${product.name} — LUXORA`;
+      document.title = `${product.name} — FlashShop`;
       setActiveImage(0);
       setColor(product.colors?.[0] || '');
       setSize('');
@@ -278,6 +302,15 @@ export default function ProductDetails() {
               {inWishlist ? <FaHeart className="text-accent" /> : <FiHeart />}
             </button>
             <button onClick={handleShare} aria-label="Share product" className="btn-outline !px-3.5 !py-3"><FiShare2 /></button>
+            <button
+              onClick={() => dispatch(setAiDrawer({ open: true, query: `Tell me about the highlights, sizing, and features of ${product.name}` }))}
+              aria-label="Ask AI about this product"
+              className="btn-outline !py-3 flex items-center gap-1.5 border-rose-500/40 text-rose-300 hover:bg-rose-500/10 hover:border-rose-400"
+              title="Ask AI Concierge about this product"
+            >
+              <BsStars className="text-amber-400" />
+              <span className="text-xs font-semibold">Ask AI</span>
+            </button>
           </div>
 
           {/* Trust badges */}
@@ -348,6 +381,88 @@ export default function ProductDetails() {
 
           {/* Review list */}
           <div className="space-y-4 lg:col-span-2">
+            {/* AI Review Summary Box */}
+            {data?.reviews?.length > 0 && (
+              <div className="rounded-2xl border border-rose-500/30 bg-gradient-to-br from-slate-900/90 via-slate-850 to-slate-900 p-5 shadow-lg">
+                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-750 pb-3">
+                  <div className="flex items-center gap-2.5">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-tr from-amber-400 to-rose-500 text-white shadow-sm">
+                      <BsStars className="text-base" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-white text-sm">✨ AI Customer Sentiment Synthesis</h4>
+                      <p className="text-[11px] text-slate-400">Distilled from verified buyer reviews with Google Gemini</p>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={fetchAiReviewSummary}
+                    disabled={aiSummaryLoading}
+                    className="flex items-center gap-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 px-3 py-1.5 text-xs font-semibold text-white transition-colors disabled:opacity-50"
+                  >
+                    <BsStars className={aiSummaryLoading ? 'animate-spin' : ''} />
+                    {aiSummaryLoading ? 'Analyzing...' : aiSummary ? 'Refresh AI Summary' : 'Generate AI Summary'}
+                  </button>
+                </div>
+
+                {aiSummary ? (
+                  <div className="mt-4 space-y-3.5 text-sm">
+                    <div className="flex items-center justify-between rounded-xl bg-slate-800/60 p-3 border border-slate-700/50">
+                      <div>
+                        <span className="text-xs text-slate-400">Buyer Sentiment:</span>
+                        <p className="font-bold text-amber-300">{aiSummary.sentiment}</p>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-xs text-slate-400">Positive Consensus</span>
+                        <p className="font-bold text-emerald-400">{aiSummary.sentimentScore}%</p>
+                      </div>
+                    </div>
+
+                    <p className="text-slate-300 italic leading-relaxed bg-slate-950/40 p-3 rounded-lg border-l-2 border-rose-500 text-xs">
+                      "{aiSummary.verdict}"
+                    </p>
+
+                    <div className="grid sm:grid-cols-2 gap-3 pt-1">
+                      {aiSummary.pros?.length > 0 && (
+                        <div className="rounded-xl bg-emerald-950/20 border border-emerald-500/20 p-3">
+                          <p className="text-xs font-bold text-emerald-400 mb-1.5 flex items-center gap-1">
+                            <FiCheck className="text-sm" /> What Customers Love
+                          </p>
+                          <ul className="space-y-1 text-xs text-slate-300">
+                            {aiSummary.pros.map((pro, i) => (
+                              <li key={i} className="flex items-start gap-1.5">
+                                <span className="text-emerald-400 mt-0.5">•</span>
+                                <span>{pro}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      {aiSummary.cons?.length > 0 && (
+                        <div className="rounded-xl bg-amber-950/20 border border-amber-500/20 p-3">
+                          <p className="text-xs font-bold text-amber-400 mb-1.5 flex items-center gap-1">
+                            ⚠️ Things to Note
+                          </p>
+                          <ul className="space-y-1 text-xs text-slate-300">
+                            {aiSummary.cons.map((con, i) => (
+                              <li key={i} className="flex items-start gap-1.5">
+                                <span className="text-amber-400 mt-0.5">•</span>
+                                <span>{con}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  <p className="mt-3 text-xs text-slate-400">
+                    Click "Generate AI Summary" to let Gemini analyze all customer reviews and extract top pros, cons, and buyer satisfaction consensus.
+                  </p>
+                )}
+              </div>
+            )}
             {data?.reviews?.length ? (
               data.reviews.map((r) => (
                 <article key={r._id} className="card-surface p-5">

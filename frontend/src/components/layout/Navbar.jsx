@@ -2,12 +2,13 @@ import { useState, useRef, useEffect } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { FiSearch, FiHeart, FiShoppingCart, FiUser, FiSun, FiMoon, FiMenu, FiX, FiLogOut, FiGrid, FiPackage, FiMic } from 'react-icons/fi';
+import { BsStars } from 'react-icons/bs';
 import { AnimatePresence, motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { logoutUser } from '../../features/authSlice.js';
 import { resetCart, selectCartCount } from '../../features/cartSlice.js';
 import { resetWishlist } from '../../features/wishlistSlice.js';
-import { toggleTheme, setMobileMenu } from '../../features/uiSlice.js';
+import { toggleTheme, setMobileMenu, toggleAiDrawer } from '../../features/uiSlice.js';
 import useDebounce from '../../hooks/useDebounce.js';
 import api from '../../api/axios.js';
 import { formatPrice, imgUrl } from '../../utils/format.js';
@@ -97,8 +98,13 @@ export default function Navbar() {
         </button>
 
         {/* Logo */}
-        <Link to="/" className="font-display text-xl font-bold tracking-tight">
-          <span className="gradient-text">LUX</span>ORA
+        <Link to="/" className="flex items-center gap-2 font-display text-xl font-bold tracking-tight">
+          <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-tr from-purple-600 to-rose-500 text-white shadow-md shadow-purple-900/30">
+            ⚡
+          </span>
+          <span className="tracking-tight text-white font-extrabold">
+            <span className="bg-gradient-to-r from-purple-400 via-rose-400 to-amber-300 bg-clip-text text-transparent">FLASH</span>SHOP
+          </span>
         </Link>
 
         {/* Desktop nav */}
@@ -151,6 +157,15 @@ export default function Navbar() {
 
         {/* Actions */}
         <div className="flex items-center gap-1.5">
+          <button
+            onClick={() => dispatch(toggleAiDrawer())}
+            aria-label="Open AI Shopping Assistant"
+            className="flex items-center gap-1.5 rounded-full bg-gradient-to-r from-amber-500/20 via-rose-500/20 to-purple-500/20 border border-rose-500/30 px-3 py-1.5 text-xs font-semibold text-rose-300 hover:text-white hover:border-rose-400 transition-all shadow-sm"
+          >
+            <BsStars className="text-sm text-amber-400 animate-spin-slow" />
+            <span className="hidden sm:inline">Ask AI</span>
+          </button>
+
           <button onClick={() => dispatch(toggleTheme())} aria-label="Toggle theme" className="rounded-full p-2.5 transition-colors hover:bg-white/10">
             {theme === 'dark' ? <FiSun /> : <FiMoon />}
           </button>
@@ -212,6 +227,16 @@ export default function Navbar() {
             className="overflow-hidden border-t border-white/10 md:hidden"
           >
             <div className="space-y-1 px-4 py-3">
+              <button
+                onClick={() => {
+                  dispatch(setMobileMenu(false));
+                  dispatch(toggleAiDrawer());
+                }}
+                className="flex w-full items-center gap-2 rounded-lg bg-gradient-to-r from-rose-500/20 to-amber-500/20 border border-rose-500/30 px-3 py-2.5 text-sm font-semibold text-rose-300"
+              >
+                <BsStars className="text-amber-400" />
+                Ask AI Shopping Assistant
+              </button>
               <form onSubmit={(e) => { submitSearch(e); dispatch(setMobileMenu(false)); }} className="relative mb-2 sm:hidden">
                 <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search products…" className="input-field !rounded-full !py-2 pl-10" />

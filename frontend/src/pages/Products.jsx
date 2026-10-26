@@ -47,7 +47,7 @@ export default function Products() {
   const { data: catData } = useFetch('/categories');
   const { data: brandData } = useFetch('/brands');
 
-  useEffect(() => { document.title = 'Shop — LUXORA'; }, []);
+  useEffect(() => { document.title = 'Shop — FlashShop'; }, []);
 
   /** Update one query param (resets to page 1). */
   const setFilter = (key, value) => {

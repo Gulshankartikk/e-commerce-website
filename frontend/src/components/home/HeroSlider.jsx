@@ -40,7 +40,7 @@ export default function HeroSlider({ banners, loading }) {
                     transition={{ duration: 0.6, delay: 0.15 }}
                     className="max-w-xl"
                   >
-                    <span className="chip glass mb-4 text-secondary-400">✦ LUXORA EXCLUSIVE</span>
+                    <span className="chip glass mb-4 text-secondary-400">⚡ FLASHSHOP EXCLUSIVE</span>
                     <h1 className="text-4xl font-bold leading-tight tracking-tight md:text-6xl">{b.title}</h1>
                     {b.subtitle && <p className="mt-4 text-base text-slate-300 md:text-lg">{b.subtitle}</p>}
                     <Link to={b.link || '/products'} className="btn-primary mt-7 !px-8 !py-3.5 text-base">

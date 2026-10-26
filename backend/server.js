@@ -28,6 +28,7 @@ import addressRoutes from './src/routes/addressRoutes.js';
 import bannerRoutes from './src/routes/bannerRoutes.js';
 import notificationRoutes from './src/routes/notificationRoutes.js';
 import adminRoutes from './src/routes/adminRoutes.js';
+import aiRoutes from './src/routes/aiRoutes.js';
 
 const app = express();
 const server = http.createServer(app);
@@ -74,7 +75,9 @@ app.use('/uploads', express.static(path.resolve('uploads'), { maxAge: '7d', immu
 
 /* ---------- Routes ---------- */
 const API = '/api/v1';
-app.get(`${API}/health`, (req, res) => res.json({ success: true, status: 'ok', uptime: process.uptime() }));
+const healthHandler = (req, res) => res.json({ success: true, status: 'ok', service: 'FlashShop AI Shopping API', uptime: process.uptime() });
+app.get('/api/health', healthHandler);
+app.get(`${API}/health`, healthHandler);
 app.use(`${API}/auth`, authRoutes);
 app.use(`${API}/products`, productRoutes);
 app.use(`${API}/categories`, categoryRoutes);
@@ -89,6 +92,7 @@ app.use(`${API}/addresses`, addressRoutes);
 app.use(`${API}/banners`, bannerRoutes);
 app.use(`${API}/notifications`, notificationRoutes);
 app.use(`${API}/admin`, adminRoutes);
+app.use(`${API}/ai`, aiRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

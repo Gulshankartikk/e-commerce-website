@@ -66,9 +66,12 @@ export default function Footer() {
         {/* Link columns */}
         <div className="mt-12 grid grid-cols-2 gap-8 md:grid-cols-4">
           <div>
-            <Link to="/" className="font-display text-2xl font-bold"><span className="gradient-text">LUX</span>ORA</Link>
+            <Link to="/" className="flex items-center gap-2 font-display text-2xl font-bold">
+              <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-tr from-purple-600 to-rose-500 text-white shadow-md">⚡</span>
+              <span><span className="bg-gradient-to-r from-purple-400 via-rose-400 to-amber-300 bg-clip-text text-transparent">FLASH</span>SHOP</span>
+            </Link>
             <p className="mt-3 text-sm leading-relaxed text-slate-400">
-              Curated electronics, fashion and lifestyle products with fast delivery across India.
+              AI-powered modern shopping with live catalog copilot, curated fashion, audio and home gear.
             </p>
             <div className="mt-4 flex gap-3">
               {[FaFacebookF, FaInstagram, FaXTwitter, FaYoutube].map((Icon, i) => (
@@ -94,7 +97,7 @@ export default function Footer() {
       {/* Legal bar */}
       <div className="border-t border-white/10 py-5">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-4 text-xs text-slate-500 sm:flex-row">
-          <p>© {new Date().getFullYear()} LUXORA. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} FlashShop. All rights reserved.</p>
           <div className="flex gap-5">
             <Link to="/privacy" className="transition-colors hover:text-primary-300">Privacy Policy</Link>
             <Link to="/terms" className="transition-colors hover:text-primary-300">Terms & Conditions</Link>

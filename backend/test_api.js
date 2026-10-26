@@ -33,7 +33,14 @@ async function runTests() {
   }
 
   // 1. Health check
-  await test('API Health Check', async () => {
+  await test('API Root Health Check (/api/health)', async () => {
+    const res = await fetch('http://127.0.0.1:5000/api/health');
+    const data = await res.json().catch(() => ({}));
+    assert.strictEqual(res.status, 200);
+    assert.strictEqual(data.status, 'ok');
+  });
+
+  await test('API v1 Health Check (/api/v1/health)', async () => {
     const res = await req('/health');
     assert.strictEqual(res.status, 200);
     assert.strictEqual(res.data.status, 'ok');
@@ -43,10 +50,10 @@ async function runTests() {
   let adminToken, customerToken, sellerToken, managerToken;
   let adminUser, customerUser, sellerUser, managerUser;
 
-  await test('Multi-User: Admin Login (admin@luxora.shop)', async () => {
+  await test('Multi-User: FlashShop Admin Login (admin@flashshop.com)', async () => {
     const res = await req('/auth/login', {
       method: 'POST',
-      body: { email: 'admin@luxora.shop', password: 'Admin@12345' },
+      body: { email: 'admin@flashshop.com', password: 'Admin@12345' },
     });
     assert.strictEqual(res.status, 200);
     assert.strictEqual(res.data.user.role, 'admin');
@@ -55,10 +62,10 @@ async function runTests() {
     adminUser = res.data.user;
   });
 
-  await test('Multi-User: Customer Login (demo@luxora.shop)', async () => {
+  await test('Multi-User: FlashShop Customer Login (demo@flashshop.com)', async () => {
     const res = await req('/auth/login', {
       method: 'POST',
-      body: { email: 'demo@luxora.shop', password: 'Demo@12345' },
+      body: { email: 'demo@flashshop.com', password: 'Demo@12345' },
     });
     assert.strictEqual(res.status, 200);
     assert.strictEqual(res.data.user.role, 'user');
@@ -92,7 +99,7 @@ async function runTests() {
   });
 
   await test('Multi-User: Self-Registration with Seller Role', async () => {
-    const testEmail = `test.seller.${Date.now()}@luxora.shop`;
+    const testEmail = `test.seller.${Date.now()}@flashshop.com`;
     const res = await req('/auth/register', {
       method: 'POST',
       body: {
@@ -289,6 +296,92 @@ async function runTests() {
     });
     assert.strictEqual(res.status, 200);
     assert.ok(Array.isArray(res.data.notifications));
+  });
+
+  // 9. AI Shopping Concierge & Gemini Endpoints
+  let aiSessionId;
+  await test('AI Concierge: Natural Language Shopping Query', async () => {
+    const res = await req('/ai/chat', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${customerToken}` },
+      body: { message: 'I need wireless earbuds with active noise cancellation for flying' },
+    });
+    assert.strictEqual(res.status, 200);
+    assert.strictEqual(res.data.success, true);
+    assert.ok(res.data.reply && res.data.reply.length > 10);
+    assert.ok(Array.isArray(res.data.products));
+    assert.ok(res.data.products.length > 0);
+    assert.ok(res.data.sessionId);
+    aiSessionId = res.data.sessionId;
+  });
+
+  await test('AI Concierge: Budget Filter Enforcement (under 5000)', async () => {
+    const res = await req('/ai/chat', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${customerToken}` },
+      body: {
+        message: 'Show me audio and sports gear under 5000',
+        sessionId: aiSessionId,
+      },
+    });
+    assert.strictEqual(res.status, 200);
+    assert.strictEqual(res.data.success, true);
+    assert.strictEqual(res.data.budgetDetected, 5000);
+    // Every recommended product must strictly be <= 5000
+    res.data.products.forEach((p) => {
+      assert.ok(p.price <= 5000, `Product ${p.name} priced at ₹${p.price} exceeds ₹5000 budget`);
+    });
+  });
+
+  await test('AI Concierge: Polite Handling of Unsupported Products', async () => {
+    const res = await req('/ai/chat', {
+      method: 'POST',
+      body: { message: 'Do you sell fresh groceries or airline tickets?' },
+    });
+    assert.strictEqual(res.status, 200);
+    assert.strictEqual(res.data.success, true);
+    assert.strictEqual(res.data.intent, 'unsupported');
+    assert.ok(res.data.reply.toLowerCase().includes('curated') || res.data.reply.toLowerCase().includes('specialize'));
+  });
+
+  await test('AI Concierge: Product Review Summary with Real Evidence', async () => {
+    const res = await req(`/ai/review-summary/${sampleProduct._id}`, {
+      method: 'GET',
+    });
+    assert.strictEqual(res.status, 200);
+    assert.strictEqual(res.data.success, true);
+    assert.ok(res.data.summary);
+    assert.ok(Array.isArray(res.data.summary.pros));
+    assert.ok(Array.isArray(res.data.summary.cons));
+  });
+
+  await test('AI Concierge: Side-by-Side Comparison Matrix', async () => {
+    const productsRes = await req('/products?limit=2');
+    assert.ok(productsRes.data.products.length >= 2);
+    const id1 = productsRes.data.products[0]._id;
+    const id2 = productsRes.data.products[1]._id;
+
+    const res = await req('/ai/compare', {
+      method: 'POST',
+      body: { productIds: [id1, id2] },
+    });
+    assert.strictEqual(res.status, 200);
+    assert.strictEqual(res.data.success, true);
+    assert.ok(res.data.comparison);
+    assert.ok(res.data.comparison.summary);
+    assert.ok(res.data.comparison.verdict);
+    assert.strictEqual(res.data.products.length, 2);
+  });
+
+  await test('AI Concierge: Persistent Chat History for Logged-In User', async () => {
+    const res = await req('/ai/history', {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${customerToken}` },
+    });
+    assert.strictEqual(res.status, 200);
+    assert.strictEqual(res.data.success, true);
+    assert.ok(Array.isArray(res.data.sessions));
+    assert.ok(res.data.sessions.length > 0);
   });
 
   console.log('\n----------------------------------------');

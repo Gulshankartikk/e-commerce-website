@@ -1,8 +1,9 @@
 import { Outlet } from 'react-router-dom';
 import Navbar from './Navbar.jsx';
 import Footer from './Footer.jsx';
+import AIChatDrawer from '../ai/AIChatDrawer.jsx';
 
-/** Storefront shell: sticky navbar, routed page, footer. */
+/** Storefront shell: sticky navbar, routed page, footer, AI assistant. */
 export default function Layout() {
   return (
     <div className="flex min-h-screen flex-col">
@@ -11,6 +12,7 @@ export default function Layout() {
         <Outlet />
       </main>
       <Footer />
+      <AIChatDrawer />
     </div>
   );
 }

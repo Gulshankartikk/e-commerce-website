@@ -89,7 +89,7 @@ export default function Checkout() {
           key: data.keyId,
           amount: data.amount,
           currency: data.currency,
-          name: 'LUXORA',
+          name: 'FlashShop',
           description: 'Order payment',
           order_id: data.razorpayOrderId,
           prefill: { name: user.name, email: user.email },
