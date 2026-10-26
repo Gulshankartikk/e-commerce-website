@@ -29,29 +29,124 @@ A full-stack, production-ready MERN e-commerce store with an advanced **Google G
 
 ---
 
-## 🚀 Quick Start
+## 🌐 Production Deployment Guide (Vercel + Render + MongoDB Atlas)
+
+FlashShop is architected for seamless cloud deployment with zero code changes required:
+
+```mermaid
+flowchart LR
+    Browser["Client Browser / Mobile"] -->|"HTTPS / Static Assets"| Vercel["Frontend (Vercel)\nReact 18 + Vite\nSPA Rewrites (vercel.json)"]
+    Browser -->|"API Requests (Bearer / Cookie)"| Render["Backend (Render)\nExpress Node.js API\nDynamic CORS + Health Check"]
+    Render -->|"TLS Connection"| Atlas["Database (MongoDB Atlas)\nPersistent Products, Users,\nCarts, Orders & AI History"]
+    Render -->|"REST / TLS"| Gemini["Google Gemini AI\ngemini-2.5-flash Engine"]
+```
+
+### 1. MongoDB Atlas Setup (Database)
+1. Log in to [MongoDB Atlas](https://cloud.mongodb.com/) and create a free **M0 Cluster**.
+2. **Database Access**: Create a database user (e.g., `flashshop_admin`) with password authentication and `readWriteAnyDatabase` privileges.
+3. **Network Access**: Add IP `0.0.0.0/0` (Allow access from anywhere). *Required for dynamic hosting IPs on Render.*
+4. **Connection String**: Click **Connect** → **Drivers** (Node.js) and copy the SRV URI:
+   ```env
+   mongodb+srv://flashshop_admin:<PASSWORD>@cluster0.xxxxx.mongodb.net/flashshop?retryWrites=true&w=majority
+   ```
+5. *(Optional)* Seed demo data into your remote Atlas cluster from your local terminal:
+   ```bash
+   # Temporarily set MONGODB_URI in backend/.env, then run:
+   npm run seed --prefix backend
+   ```
+
+---
+
+### 2. Backend Deployment on Render
+
+1. Log in to [Render Dashboard](https://dashboard.render.com/) and click **New +** → **Web Service**.
+2. Connect your GitHub repository (`Gulshankartikk/e-commerce-website`).
+3. Set the following build and run parameters:
+
+| Setting | Value |
+|---|---|
+| **Name** | `flashshop-api` |
+| **Root Directory** | `backend` |
+| **Runtime** | `Node` |
+| **Build Command** | `npm install` |
+| **Start Command** | `node server.js` |
+| **Health Check Path** | `/api/health` |
+
+4. Add **Environment Variables** under Environment:
+
+| Environment Variable | Recommended Value | Note |
+|---|---|---|
+| `NODE_ENV` | `production` | Enables production security & cookies |
+| `MONGODB_URI` | `mongodb+srv://...` | Your MongoDB Atlas connection URI |
+| `JWT_SECRET` | *(64-char random string)* | Secret for signing auth tokens |
+| `JWT_EXPIRES_IN` | `7d` | Token expiry duration |
+| `CLIENT_URL` | `https://<your-vercel-app>.vercel.app` | Allowed CORS frontend origin |
+| `GEMINI_API_KEY` | *(Your Gemini API Key)* | Obtained from [Google AI Studio](https://aistudio.google.com/apikey) |
+| `GEMINI_MODEL` | `gemini-2.5-flash` | Gemini model identifier |
+
+5. Click **Create Web Service**. Once active, verify: `https://<your-render-url>/api/health`.
+
+---
+
+### 3. Frontend Deployment on Vercel
+
+1. Log in to [Vercel](https://vercel.com/) and click **Add New...** → **Project**.
+2. Import your GitHub repository (`Gulshankartikk/e-commerce-website`).
+3. Configure the project:
+
+| Setting | Value |
+|---|---|
+| **Framework Preset** | `Vite` |
+| **Root Directory** | `frontend` |
+| **Build Command** | `vite build` |
+| **Output Directory** | `dist` |
+
+4. Add **Environment Variables**:
+
+| Variable | Value |
+|---|---|
+| `VITE_API_URL` | `https://<your-render-url>.onrender.com/api/v1` |
+
+5. Click **Deploy**. Vercel will build and serve your static React SPA with auto-configured client-side route rewrites.
+6. Copy your frontend URL (e.g., `https://flashshop.vercel.app`) and ensure it is set as `CLIENT_URL` in your Render backend settings.
+
+---
+
+### 4. Post-Deployment Verification Checklist
+
+- [ ] **Health Endpoint**: `https://<render-url>/api/health` responds with `{ "success": true, "status": "ok" }`.
+- [ ] **Storefront Catalog**: `https://<vercel-url>/` displays all categories, banners, and sample products.
+- [ ] **Authentication**: Log in with demo credentials `demo@flashshop.com` / `Demo@12345`.
+- [ ] **AI Shopping Assistant**: Open drawer, test natural language query (e.g. *"Show wireless earbuds under 5000"*).
+- [ ] **Review Sentiment**: Open any product page and view the AI Customer Sentiment Synthesis card.
+- [ ] **Compare Matrix**: Open `/compare` and test the *"✨ Ask AI for Recommendation"* feature.
+- [ ] **Cart & Checkout**: Add an item to cart, apply coupon code `WELCOME10`, and place a COD order.
+
+---
+
+## 🚀 Local Development Quick Start
 
 ### Prerequisites
 - **Node.js 18+** and **npm**
-- **MongoDB** running locally (`mongodb://127.0.0.1:27017/luxora`) or a MongoDB Atlas URI
+- **MongoDB** running locally (`mongodb://127.0.0.1:27017/flashshop`) or MongoDB Atlas
 
 ### 1. Configure Environment
 Copy `.env.example` in `backend/`:
 ```bash
 cp backend/.env.example backend/.env
 ```
-Ensure `MONGO_URI` and `JWT_SECRET` are set.
+Ensure `MONGO_URI` (or `MONGODB_URI`) and `JWT_SECRET` are set.
 Add your Gemini API key (optional for basic fallback, required for live Gemini responses):
 ```env
 GEMINI_API_KEY=your_gemini_api_key_here
 GEMINI_MODEL=gemini-2.5-flash
 ```
-> Get an API key from [Google AI Studio](https://aistudio.google.com/apikey). Keep the key in `backend/.env` only.
+> Get an API key from [Google AI Studio](https://aistudio.google.com/apikey). Keep the key in `backend/.env` only. Never expose it in client code.
 
 ### 2. Install & Seed Catalog
 From the project root:
 ```bash
-# Install root, backend and frontend dependencies
+# Install root, backend, and frontend dependencies
 npm run install:all
 
 # Seed catalog (8 sample products + verified reviews + demo users + coupons)
