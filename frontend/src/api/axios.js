@@ -1,7 +1,11 @@
 import axios from 'axios';
 
 // Normalize API URL: handles bare domains, /api, /api/v1, trailing slashes, or default dev proxy
-const rawApiUrl = (import.meta.env.VITE_API_URL || '/api/v1').trim().replace(/\/+$/, '');
+const defaultApiUrl = import.meta.env.DEV
+  ? '/api/v1'
+  : 'https://e-commerce-website-4-zrlh.onrender.com/api/v1';
+
+const rawApiUrl = (import.meta.env.VITE_API_URL || defaultApiUrl).trim().replace(/\/+$/, '');
 const normalizedBaseURL = rawApiUrl.endsWith('/api/v1')
   ? rawApiUrl
   : rawApiUrl.endsWith('/api')
