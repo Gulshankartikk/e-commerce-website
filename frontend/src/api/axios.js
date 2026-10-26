@@ -1,18 +1,21 @@
 import axios from 'axios';
 
-// Normalize API URL: handles bare domains, /api, /api/v1, trailing slashes, or default dev proxy
-const defaultApiUrl = import.meta.env.DEV
-  ? '/api/v1'
-  : 'https://e-commerce-website-4-zrlh.onrender.com/api/v1';
+// In production, connect directly to the live Render backend unless overridden with an external URL
+const rawApiUrl = (import.meta.env.VITE_API_URL || '').trim().replace(/\/+$/, '');
+const isProd = import.meta.env.PROD || !import.meta.env.DEV;
 
-const rawApiUrl = (import.meta.env.VITE_API_URL || defaultApiUrl).trim().replace(/\/+$/, '');
-const normalizedBaseURL = rawApiUrl.endsWith('/api/v1')
-  ? rawApiUrl
-  : rawApiUrl.endsWith('/api')
-  ? `${rawApiUrl}/v1`
-  : rawApiUrl.startsWith('http')
-  ? `${rawApiUrl}/api/v1`
-  : rawApiUrl;
+let normalizedBaseURL;
+if (rawApiUrl.startsWith('http')) {
+  normalizedBaseURL = rawApiUrl.endsWith('/api/v1')
+    ? rawApiUrl
+    : rawApiUrl.endsWith('/api')
+    ? `${rawApiUrl}/v1`
+    : `${rawApiUrl}/api/v1`;
+} else if (isProd) {
+  normalizedBaseURL = 'https://e-commerce-website-4-zrlh.onrender.com/api/v1';
+} else {
+  normalizedBaseURL = '/api/v1';
+}
 
 /** Pre-configured axios instance — cookies + JSON, base /api/v1 (proxied in dev). */
 const api = axios.create({
