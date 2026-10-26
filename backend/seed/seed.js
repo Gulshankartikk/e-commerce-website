@@ -16,14 +16,8 @@ import AIChatSession from '../src/models/AIChat.js';
 
 const localImg = (relPath) => ({ url: relPath, publicId: '' });
 
-const run = async () => {
-  const uri = process.env.MONGODB_URI || process.env.MONGO_URI;
-  if (!uri) {
-    console.error('❌ MONGODB_URI or MONGO_URI is not set. Provide MongoDB connection string to seed.');
-    process.exit(1);
-  }
-  await mongoose.connect(uri);
-  console.log('Connected. Seeding FlashShop demo catalog & images…');
+export const seedData = async () => {
+  console.log('Seeding FlashShop demo catalog & images…');
 
   await Promise.all([
     User.deleteMany({ email: { $in: ['admin@flashshop.com', 'demo@flashshop.com', 'seller@flashshop.com', 'manager@flashshop.com', 'admin@luxora.shop', 'demo@luxora.shop', 'seller@luxora.shop', 'manager@luxora.shop'] } }),
@@ -256,7 +250,22 @@ const run = async () => {
   console.log('   🏪 Seller   → seller@flashshop.com (or seller@luxora.shop) / Seller@12345');
   console.log('   👔 Manager  → manager@flashshop.com (or manager@luxora.shop) / Manager@12345');
   console.log('   🎟️ Coupon   → WELCOME10');
+};
+
+const run = async () => {
+  const uri = process.env.MONGODB_URI || process.env.MONGO_URI;
+  if (!uri) {
+    console.error('❌ MONGODB_URI or MONGO_URI is not set. Provide MongoDB connection string to seed.');
+    process.exit(1);
+  }
+  await mongoose.connect(uri);
+  await seedData();
   await mongoose.disconnect();
 };
 
-run().catch((e) => { console.error(e); process.exit(1); });
+if (process.argv[1]?.replace(/\\/g, '/').endsWith('seed/seed.js')) {
+  run().catch((e) => {
+    console.error(e);
+    process.exit(1);
+  });
+}

@@ -31,6 +31,8 @@ import bannerRoutes from './src/routes/bannerRoutes.js';
 import notificationRoutes from './src/routes/notificationRoutes.js';
 import adminRoutes from './src/routes/adminRoutes.js';
 import aiRoutes from './src/routes/aiRoutes.js';
+import Product from './src/models/Product.js';
+import { seedData } from './seed/seed.js';
 
 const app = express();
 const server = http.createServer(app);
@@ -130,6 +132,16 @@ app.use(`${API}/notifications`, notificationRoutes);
 app.use(`${API}/admin`, adminRoutes);
 app.use(`${API}/ai`, aiRoutes);
 
+// Optional helper to populate initial catalog on remote deployments
+app.get(`${API}/seed-database`, async (req, res) => {
+  try {
+    await seedData();
+    res.json({ success: true, message: 'Database successfully seeded with demo catalog and accounts!' });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 app.use(notFound);
 app.use(errorHandler);
 
@@ -138,6 +150,15 @@ const PORT = process.env.PORT || 5000;
 const start = async () => {
   configureCloudinary();
   await connectDB();
+  try {
+    const productCount = await Product.countDocuments();
+    if (productCount === 0) {
+      console.log('🌱 Catalog is empty. Auto-seeding FlashShop demo products & accounts...');
+      await seedData();
+    }
+  } catch (seedErr) {
+    console.warn('⚠️ Auto-seed check warning:', seedErr.message);
+  }
   if (!process.env.VERCEL) {
     server.listen(PORT, () => console.log(`🚀 FlashShop API running on port ${PORT} (${process.env.NODE_ENV || 'development'})`));
   }

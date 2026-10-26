@@ -1,42 +1,18 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "services": {
-    "flashshop-api": {
-      "root": "backend",
-      "framework": "express",
-      "buildCommand": "npm install",
-      "bindings": [
-        {
-          "type": "service",
-          "service": "frontend",
-          "format": "url",
-          "env": "FRONTEND_URL"
-        }
-      ]
-    },
-    "frontend": {
-      "root": "frontend",
-      "framework": "vite"
-    }
-  },
+  "buildCommand": "npm run build --prefix frontend",
+  "outputDirectory": "frontend/dist",
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": {
-        "service": "flashshop-api"
-      }
+      "destination": "https://e-commerce-website-4-zrlh.onrender.com/api/$1"
     },
     {
       "source": "/uploads/(.*)",
-      "destination": {
-        "service": "flashshop-api"
-      }
+      "destination": "https://e-commerce-website-4-zrlh.onrender.com/uploads/$1"
     },
     {
       "source": "/(.*)",
-      "destination": {
-        "service": "frontend"
-      }
+      "destination": "/index.html"
     }
   ]
 }
