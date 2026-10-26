@@ -8,6 +8,14 @@
   },
   "rewrites": [
     {
+      "source": "/api/(.*)",
+      "destination": "https://e-commerce-website-4-zrlh.onrender.com/api/$1"
+    },
+    {
+      "source": "/uploads/(.*)",
+      "destination": "https://e-commerce-website-4-zrlh.onrender.com/uploads/$1"
+    },
+    {
       "source": "/(.*)",
       "destination": {
         "service": "frontend"
