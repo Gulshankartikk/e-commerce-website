@@ -15,14 +15,14 @@ export const sendEmail = async ({ to, subject, html }) => {
     secure: Number(process.env.SMTP_PORT) === 465,
     auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
   });
-  return transporter.sendMail({ from: process.env.EMAIL_FROM || 'LUXORA <no-reply@luxora.shop>', to, subject, html });
+  return transporter.sendMail({ from: process.env.EMAIL_FROM || 'FLASHSHOP <no-reply@flashshop.com>', to, subject, html });
 };
 
 /** Shared branded wrapper for all transactional emails. */
 export const emailTemplate = (title, bodyHtml, ctaText, ctaUrl) => `
   <div style="font-family:Inter,Arial,sans-serif;background:#0F172A;padding:32px">
     <div style="max-width:520px;margin:0 auto;background:#1E293B;border-radius:16px;padding:32px;color:#F8FAFC">
-      <h1 style="margin:0 0 8px;font-size:22px;background:linear-gradient(90deg,#4F46E5,#06B6D4);-webkit-background-clip:text;color:#818CF8">LUXORA</h1>
+      <h1 style="margin:0 0 8px;font-size:22px;background:linear-gradient(90deg,#4F46E5,#06B6D4);-webkit-background-clip:text;color:#818CF8">FLASHSHOP</h1>
       <h2 style="margin:0 0 16px;font-size:18px;color:#F8FAFC">${title}</h2>
       <div style="font-size:14px;line-height:1.7;color:#CBD5E1">${bodyHtml}</div>
       ${ctaText ? `<a href="${ctaUrl}" style="display:inline-block;margin-top:24px;background:#4F46E5;color:#fff;text-decoration:none;padding:12px 28px;border-radius:10px;font-weight:600">${ctaText}</a>` : ''}

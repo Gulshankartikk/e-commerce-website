@@ -27,7 +27,7 @@ export const createReview = catchAsync(async (req, res, next) => {
   const existing = await Review.findOne({ product: productId, user: req.user._id });
   if (existing) return next(new AppError('You have already reviewed this product. Edit your review instead', 409));
 
-  const images = req.files?.length ? await Promise.all(req.files.map((f) => storeImage(f, 'luxora/reviews'))) : [];
+  const images = req.files?.length ? await Promise.all(req.files.map((f) => storeImage(f, 'flashshop/reviews'))) : [];
   const review = await Review.create({ product: productId, user: req.user._id, rating: Number(rating), title, comment, images });
   await Review.recalcProductRating(productId);
   await review.populate('user', 'name avatar');
@@ -44,7 +44,7 @@ export const updateReview = catchAsync(async (req, res, next) => {
   if (req.body.title !== undefined) review.title = req.body.title;
   if (req.body.comment !== undefined) review.comment = req.body.comment;
   if (req.files?.length) {
-    const uploaded = await Promise.all(req.files.map((f) => storeImage(f, 'luxora/reviews')));
+    const uploaded = await Promise.all(req.files.map((f) => storeImage(f, 'flashshop/reviews')));
     review.images.push(...uploaded);
   }
   await review.save();

@@ -1,7 +1,7 @@
 {
-  "name": "LUXORA — Premium E-Commerce Store",
-  "short_name": "LUXORA",
-  "description": "Curated electronics, fashion and lifestyle products.",
+  "name": "FLASHSHOP — Modern AI-Powered E-Commerce Store",
+  "short_name": "FLASHSHOP",
+  "description": "AI-powered shopping copilot with curated audio, fashion, and lifestyle essentials.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0F172A",

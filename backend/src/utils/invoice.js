@@ -8,8 +8,8 @@ export const generateInvoicePDF = (order, res) => {
   doc.pipe(res);
 
   // Header
-  doc.fillColor('#4F46E5').fontSize(24).font('Helvetica-Bold').text('LUXORA', 50, 50);
-  doc.fillColor('#64748B').fontSize(10).font('Helvetica').text('Premium E-Commerce Store', 50, 78);
+  doc.fillColor('#4F46E5').fontSize(24).font('Helvetica-Bold').text('FLASHSHOP', 50, 50);
+  doc.fillColor('#64748B').fontSize(10).font('Helvetica').text('Modern AI-Powered E-Commerce', 50, 78);
   doc.fillColor('#0F172A').fontSize(16).font('Helvetica-Bold').text('TAX INVOICE', 400, 50, { align: 'right' });
   doc.fontSize(10).font('Helvetica').fillColor('#334155')
     .text(`Invoice #: ${order.orderNumber}`, 400, 75, { align: 'right' })
@@ -57,6 +57,6 @@ export const generateInvoicePDF = (order, res) => {
   if (order.discount > 0) row(`Discount${order.couponCode ? ` (${order.couponCode})` : ''}`, `- Rs. ${order.discount.toLocaleString('en-IN')}`);
   row('Grand Total', `Rs. ${order.totalPrice.toLocaleString('en-IN')}`, true);
 
-  doc.fontSize(9).fillColor('#64748B').text('Thank you for shopping with LUXORA. For support, reply to this invoice email or visit the Contact page.', 50, 760, { align: 'center', width: 495 });
+  doc.fontSize(9).fillColor('#64748B').text('Thank you for shopping with FLASHSHOP. For support, reply to this invoice email or visit the Contact page.', 50, 760, { align: 'center', width: 495 });
   doc.end();
 };

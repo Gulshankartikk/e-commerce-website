@@ -11,9 +11,9 @@ import { sendEmail, emailTemplate } from '../utils/sendEmail.js';
 
 const CART_POPULATE = { path: 'items.product', select: 'name slug price mrp images stock isActive' };
 
-/** Generate a human-friendly unique order number, e.g. LX-M3K9F2-8341. */
+/** Generate a human-friendly unique order number, e.g. FS-M3K9F2-8341. */
 const makeOrderNumber = () =>
-  `LX-${Date.now().toString(36).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
+  `FS-${Date.now().toString(36).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
 
 /**
  * Build an order document from the user's cart (shared by COD + payment flows).

@@ -74,8 +74,20 @@ export default function Footer() {
               AI-powered modern shopping with live catalog copilot, curated fashion, audio and home gear.
             </p>
             <div className="mt-4 flex gap-3">
-              {[FaFacebookF, FaInstagram, FaXTwitter, FaYoutube].map((Icon, i) => (
-                <a key={i} href="#" aria-label="Social link" className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-600 transition-all hover:border-primary hover:text-primary-300 hover:shadow-glow">
+              {[
+                { Icon: FaFacebookF, href: 'https://facebook.com', label: 'FlashShop on Facebook' },
+                { Icon: FaInstagram, href: 'https://instagram.com', label: 'FlashShop on Instagram' },
+                { Icon: FaXTwitter, href: 'https://twitter.com', label: 'FlashShop on X' },
+                { Icon: FaYoutube, href: 'https://youtube.com', label: 'FlashShop on YouTube' },
+              ].map(({ Icon, href, label }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-600 transition-all hover:border-primary hover:text-primary-300 hover:shadow-glow"
+                >
                   <Icon className="text-sm" />
                 </a>
               ))}

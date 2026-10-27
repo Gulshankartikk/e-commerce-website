@@ -21,7 +21,7 @@ export const getAdminBanners = catchAsync(async (req, res) => {
 export const createBanner = catchAsync(async (req, res, next) => {
   if (!req.body.title) return next(new AppError('Banner title is required', 400));
   if (!req.file) return next(new AppError('Banner image is required', 400));
-  const image = await storeImage(req.file, 'luxora/banners');
+  const image = await storeImage(req.file, 'flashshop/banners');
   const banner = await Banner.create({ ...req.body, image });
   res.status(201).json({ success: true, banner });
 });
@@ -32,7 +32,7 @@ export const updateBanner = catchAsync(async (req, res, next) => {
   if (!banner) return next(new AppError('Banner not found', 404));
   if (req.file) {
     await removeImage(banner.image?.publicId);
-    banner.image = await storeImage(req.file, 'luxora/banners');
+    banner.image = await storeImage(req.file, 'flashshop/banners');
   }
   const { title, subtitle, link, ctaText, position, order, isActive } = req.body;
   if (title !== undefined) banner.title = title;

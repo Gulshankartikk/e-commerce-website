@@ -22,7 +22,7 @@ export const upload = multer({ storage, fileFilter, limits: { fileSize: 5 * 1024
  * Upload one buffer to Cloudinary (if configured) or local disk.
  * Returns { url, publicId }.
  */
-export const storeImage = async (file, folder = 'luxora') => {
+export const storeImage = async (file, folder = 'flashshop') => {
   if (cloudinaryEnabled()) {
     return new Promise((resolve, reject) => {
       const stream = cloudinary.uploader.upload_stream(

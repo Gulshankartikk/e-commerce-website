@@ -12,6 +12,8 @@
     "dev": "concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\"",
     "dev:backend": "npm run dev --prefix backend",
     "dev:frontend": "npm run dev --prefix frontend",
+    "test": "npm run test:unit && npm run test:evals",
+    "test:unit": "node backend/test/runAllTests.js",
     "test:api": "node backend/test_api.js",
     "test:evals": "npm run test:evals --prefix backend",
     "rag:ingest": "npm run rag:ingest --prefix backend"

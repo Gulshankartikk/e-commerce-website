@@ -110,7 +110,14 @@ export default function Navbar() {
         {/* Desktop nav */}
         <nav className="ml-6 hidden items-center gap-5 text-sm font-medium md:flex">
           {navLinks.map((l) => (
-            <NavLink key={l.label} to={l.to} className={({ isActive }) => `transition-colors hover:text-primary-300 ${isActive && l.to === '/' ? 'text-primary-300' : 'text-slate-300'}`}>
+            <NavLink
+              key={l.label}
+              to={l.to}
+              end={l.to === '/'}
+              className={({ isActive }) =>
+                `transition-colors hover:text-primary-300 ${isActive ? 'text-primary-400 font-semibold' : 'text-slate-300'}`
+              }
+            >
               {l.label}
             </NavLink>
           ))}
@@ -242,7 +249,15 @@ export default function Navbar() {
                 <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search products…" className="input-field !rounded-full !py-2 pl-10" />
               </form>
               {navLinks.map((l) => (
-                <NavLink key={l.label} to={l.to} onClick={() => dispatch(setMobileMenu(false))} className="block rounded-lg px-3 py-2.5 text-sm font-medium transition-colors hover:bg-white/10">
+                <NavLink
+                  key={l.label}
+                  to={l.to}
+                  end={l.to === '/'}
+                  onClick={() => dispatch(setMobileMenu(false))}
+                  className={({ isActive }) =>
+                    `block rounded-lg px-3 py-2.5 text-sm font-medium transition-colors hover:bg-white/10 ${isActive ? 'bg-white/10 text-primary-400 font-semibold' : 'text-slate-300'}`
+                  }
+                >
                   {l.label}
                 </NavLink>
               ))}

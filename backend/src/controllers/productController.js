@@ -97,7 +97,7 @@ export const createProduct = catchAsync(async (req, res, next) => {
   const clash = await Product.findOne({ slug: body.slug });
   if (clash) body.slug = `${body.slug}-${Date.now().toString(36)}`;
 
-  body.images = await Promise.all(req.files.map((f) => storeImage(f, 'luxora/products')));
+  body.images = await Promise.all(req.files.map((f) => storeImage(f, 'flashshop/products')));
   if (Array.isArray(body.variants) && body.variants.length) {
     body.stock = body.variants.reduce((s, v) => s + Number(v.stock || 0), 0);
     body.colors = [...new Set(body.variants.map((v) => v.color).filter(Boolean))];
@@ -128,7 +128,7 @@ export const updateProduct = catchAsync(async (req, res, next) => {
     delete body.existingImages;
   }
   if (req.files?.length) {
-    const uploaded = await Promise.all(req.files.map((f) => storeImage(f, 'luxora/products')));
+    const uploaded = await Promise.all(req.files.map((f) => storeImage(f, 'flashshop/products')));
     body.images = [...(body.images || product.images), ...uploaded];
   }
   if (body.name && body.name !== product.name) body.slug = slugify(body.name);

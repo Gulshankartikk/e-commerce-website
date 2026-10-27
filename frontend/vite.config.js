@@ -13,6 +13,13 @@ export default defineConfig({
       '/uploads': { target: 'http://127.0.0.1:5000', changeOrigin: true },
     },
   },
+  preview: {
+    port: 4173,
+    proxy: {
+      '/api': { target: 'http://127.0.0.1:5000', changeOrigin: true },
+      '/uploads': { target: 'http://127.0.0.1:5000', changeOrigin: true },
+    },
+  },
   build: {
     // Split heavy vendor libs into their own cacheable chunks
     rollupOptions: {

@@ -18,7 +18,7 @@ export const createCategory = catchAsync(async (req, res, next) => {
   const { name, description } = req.body;
   if (!name) return next(new AppError('Category name is required', 400));
   const data = { name, description, slug: slugify(name) };
-  if (req.file) data.image = await storeImage(req.file, 'luxora/categories');
+  if (req.file) data.image = await storeImage(req.file, 'flashshop/categories');
   const category = await Category.create(data);
   res.status(201).json({ success: true, category });
 });
@@ -34,7 +34,7 @@ export const updateCategory = catchAsync(async (req, res, next) => {
   if (req.body.isActive !== undefined) category.isActive = req.body.isActive === 'true' || req.body.isActive === true;
   if (req.file) {
     await removeImage(category.image?.publicId);
-    category.image = await storeImage(req.file, 'luxora/categories');
+    category.image = await storeImage(req.file, 'flashshop/categories');
   }
   await category.save();
   res.json({ success: true, category });
@@ -60,7 +60,7 @@ export const createBrand = catchAsync(async (req, res, next) => {
   const { name } = req.body;
   if (!name) return next(new AppError('Brand name is required', 400));
   const data = { name, slug: slugify(name) };
-  if (req.file) data.logo = await storeImage(req.file, 'luxora/brands');
+  if (req.file) data.logo = await storeImage(req.file, 'flashshop/brands');
   const brand = await Brand.create(data);
   res.status(201).json({ success: true, brand });
 });
@@ -75,7 +75,7 @@ export const updateBrand = catchAsync(async (req, res, next) => {
   if (req.body.isActive !== undefined) brand.isActive = req.body.isActive === 'true' || req.body.isActive === true;
   if (req.file) {
     await removeImage(brand.logo?.publicId);
-    brand.logo = await storeImage(req.file, 'luxora/brands');
+    brand.logo = await storeImage(req.file, 'flashshop/brands');
   }
   await brand.save();
   res.json({ success: true, brand });

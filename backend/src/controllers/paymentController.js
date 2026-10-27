@@ -33,7 +33,7 @@ export const createStripeIntent = catchAsync(async (req, res) => {
     amount: order.totalPrice * 100, // paise
     currency: 'inr',
     metadata: { orderId: String(order._id), orderNumber: order.orderNumber, userId: String(req.user._id) },
-    description: `LUXORA order ${order.orderNumber}`,
+    description: `FlashShop order ${order.orderNumber}`,
   });
   order.paymentInfo = { id: intent.id, provider: 'stripe' };
   await order.save();
