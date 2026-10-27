@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { IconSlidersHorizontal, IconX } from '../components/ui/icons.jsx';
+import { IconSlidersHorizontal, IconX, IconSearch } from '../components/ui/icons.jsx';
 import { AnimatePresence, motion } from 'framer-motion';
 import useFetch from '../hooks/useFetch.js';
 import ProductCard from '../components/product/ProductCard.jsx';
@@ -231,7 +231,7 @@ export default function Products() {
               <Pagination page={data.page} pages={data.pages} onChange={(p) => { const next = new URLSearchParams(params); next.set('page', p); setParams(next); }} />
             </>
           ) : (
-            <EmptyState icon={FiSearch} title="No products found" message="Try adjusting your filters or search for something else." ctaText="Clear filters" ctaLink="/products" />
+            <EmptyState icon={IconSearch} title="No products found" message="Try adjusting your filters or search for something else." ctaText="Clear filters" ctaLink="/products" />
           )}
         </div>
       </div>
