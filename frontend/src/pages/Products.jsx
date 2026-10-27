@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { FiFilter, FiX, FiSearch } from 'react-icons/fi';
+import { IconSlidersHorizontal, IconX } from '../components/ui/icons.jsx';
 import { AnimatePresence, motion } from 'framer-motion';
 import useFetch from '../hooks/useFetch.js';
 import ProductCard from '../components/product/ProductCard.jsx';
@@ -173,8 +173,8 @@ export default function Products() {
           {data && <span className="ml-2 text-sm font-normal text-[#65716A]">({data.total} items)</span>}
         </h1>
         <div className="flex items-center gap-3">
-          <button onClick={() => setShowFilters(true)} className="btn-outline !py-2 text-sm lg:hidden">
-            <FiFilter /> Filters {activeFilterCount > 0 && `(${activeFilterCount})`}
+          <button onClick={() => setShowFilters(true)} className="btn-outline !py-2 text-sm lg:hidden flex items-center gap-1.5" aria-label="Open filter drawer">
+            <IconSlidersHorizontal size={16} /> Filters {activeFilterCount > 0 && `(${activeFilterCount})`}
           </button>
           <select
             value={params.get('sort') || 'newest'}
@@ -211,7 +211,7 @@ export default function Products() {
               >
                 <div className="mb-4 flex items-center justify-between">
                   <h3 className="font-bold text-base text-[#202923]">Filter Products</h3>
-                  <button onClick={() => setShowFilters(false)} className="rounded-lg p-1.5 text-[#65716A] hover:bg-[#F1F7F4]"><FiX className="text-xl" /></button>
+                  <button onClick={() => setShowFilters(false)} aria-label="Close filters" className="rounded-lg p-1.5 text-[#65716A] hover:bg-[#EAF4EF] hover:text-[#066B55]"><IconX size={20} /></button>
                 </div>
                 {filtersPanel}
               </motion.div>

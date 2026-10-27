@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FiSearch, FiShield, FiSlash, FiTrash2, FiUserCheck } from 'react-icons/fi';
+import { IconSearch, IconSlash, IconTrash2 } from '../../components/ui/icons.jsx';
 import toast from 'react-hot-toast';
 import useFetch from '../../hooks/useFetch.js';
 import useDebounce from '../../hooks/useDebounce.js';
@@ -36,7 +36,7 @@ export default function AdminUsers() {
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-2xl font-bold">Users & Roles {data && <span className="text-sm font-normal text-slate-400">({data.total})</span>}</h1>
         <div className="relative">
-          <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+          <IconSearch size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#89938D]" />
           <input value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }} placeholder="Search name or email…" className="input-field !py-2 pl-9 text-sm" />
         </div>
       </div>
@@ -65,27 +65,27 @@ export default function AdminUsers() {
                       className={`rounded-lg px-2.5 py-1 text-xs font-semibold capitalize outline-none ${ROLE_BADGES[u.role] || 'bg-[#F1F7F4] text-[#202923]'}`}
                       style={{ background: '#F1F7F4' }}
                     >
-                      <option value="user" className="bg-white text-[#202923]">🛍️ User / Customer</option>
-                      <option value="seller" className="bg-white text-[#202923]">🏪 Seller / Vendor</option>
-                      <option value="manager" className="bg-white text-[#202923]">👔 Manager</option>
-                      <option value="admin" className="bg-white text-[#202923]">👑 Admin</option>
+                      <option value="user" className="bg-white text-[#202923]">User / Customer</option>
+                      <option value="seller" className="bg-white text-[#202923]">Seller / Vendor</option>
+                      <option value="manager" className="bg-white text-[#202923]">Manager</option>
+                      <option value="admin" className="bg-white text-[#202923]">Admin</option>
                     </select>
                   </td>
-                  <td className="p-4">{u.isVerified ? <span className="text-green-400">✓</span> : <span className="text-slate-500">—</span>}</td>
-                  <td className="p-4 text-slate-400">{formatDate(u.createdAt)}</td>
-                  <td className="p-4">{u.isBlocked ? <span className="chip bg-red-500/15 text-red-400">Blocked</span> : <span className="chip bg-green-500/15 text-green-400">Active</span>}</td>
+                  <td className="p-4">{u.isVerified ? <span className="text-[#168764] font-bold">✓</span> : <span className="text-[#89938D]">—</span>}</td>
+                  <td className="p-4 text-[#65716A]">{formatDate(u.createdAt)}</td>
+                  <td className="p-4">{u.isBlocked ? <span className="chip bg-[#B42318]/15 text-[#B42318]">Blocked</span> : <span className="chip bg-[#EAF4EF] text-[#087F65]">Active</span>}</td>
                   <td className="p-4 text-right">
                     <button
                       onClick={() => act(() => api.put(`/admin/users/${u._id}/block`), u.isBlocked ? 'User unblocked' : 'User blocked')}
-                      title={u.isBlocked ? 'Unblock' : 'Block'} className="p-2 text-slate-400 hover:text-[#087F65]"
+                      title={u.isBlocked ? 'Unblock' : 'Block'} className="rounded-lg p-1.5 text-[#65716A] hover:bg-[#EAF4EF] hover:text-[#087F65] transition-colors inline-block mr-1"
                     >
-                      <FiSlash />
+                      <IconSlash size={16} />
                     </button>
                     <button
                       onClick={() => window.confirm(`Delete ${u.name}? This cannot be undone.`) && act(() => api.delete(`/admin/users/${u._id}`), 'User deleted')}
-                      title="Delete" className="p-2 text-slate-400 hover:text-red-400"
+                      title="Delete" className="rounded-lg p-1.5 text-[#65716A] hover:bg-[#EAF4EF] hover:text-[#B42318] transition-colors inline-block"
                     >
-                      <FiTrash2 />
+                      <IconTrash2 size={16} />
                     </button>
                   </td>
                 </tr>

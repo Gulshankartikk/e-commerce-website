@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FiPlus, FiEdit2, FiTrash2, FiSearch } from 'react-icons/fi';
+import { IconPlus, IconEdit, IconTrash2, IconSearch } from '../../components/ui/icons.jsx';
 import toast from 'react-hot-toast';
 import useFetch from '../../hooks/useFetch.js';
 import useDebounce from '../../hooks/useDebounce.js';
@@ -104,10 +104,10 @@ export default function AdminProducts() {
         <h1 className="text-2xl font-bold">Products {data && <span className="text-sm font-normal text-slate-400">({data.total})</span>}</h1>
         <div className="flex gap-3">
           <div className="relative">
-            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+            <IconSearch size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#89938D]" />
             <input value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }} placeholder="Search products…" className="input-field !py-2 pl-9 text-sm" />
           </div>
-          <button onClick={openAdd} className="btn-primary !py-2 text-sm"><FiPlus /> Add product</button>
+          <button onClick={openAdd} className="btn-primary !py-2 text-sm flex items-center gap-1.5"><IconPlus size={16} /> Add product</button>
         </div>
       </div>
 
@@ -143,8 +143,8 @@ export default function AdminProducts() {
                     </div>
                   </td>
                   <td className="p-4 text-right">
-                    <button onClick={() => openEdit(p)} aria-label="Edit" className="p-2 text-slate-400 hover:text-primary-300"><FiEdit2 /></button>
-                    <button onClick={() => remove(p)} aria-label="Delete" className="p-2 text-slate-400 hover:text-red-400"><FiTrash2 /></button>
+                    <button onClick={() => openEdit(p)} aria-label="Edit" className="p-1.5 text-[#65716A] hover:text-[#087F65] hover:bg-[#EAF4EF] rounded-lg transition-colors inline-block mr-1"><IconEdit size={16} /></button>
+                    <button onClick={() => remove(p)} aria-label="Delete" className="p-1.5 text-[#65716A] hover:text-[#B42318] hover:bg-[#EAF4EF] rounded-lg transition-colors inline-block"><IconTrash2 size={16} /></button>
                   </td>
                 </tr>
               ))}

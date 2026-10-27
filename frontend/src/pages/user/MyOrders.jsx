@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FiPackage } from 'react-icons/fi';
+import { IconPackage } from '../../components/ui/icons.jsx';
 import useFetch from '../../hooks/useFetch.js';
 import Pagination from '../../components/ui/Pagination.jsx';
 import EmptyState from '../../components/ui/EmptyState.jsx';
@@ -14,7 +14,7 @@ export default function MyOrders() {
 
   if (loading) return <TableSkeleton rows={4} />;
   if (!data?.orders?.length) {
-    return <EmptyState icon={FiPackage} title="No orders yet" message="When you place an order, it will show up here with live tracking." />;
+    return <EmptyState icon={IconPackage} title="No orders yet" message="When you place an order, it will show up here with live tracking." />;
   }
 
   return (

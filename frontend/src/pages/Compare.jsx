@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { FiBarChart2, FiX, FiCheck } from 'react-icons/fi';
-import { BsStars } from 'react-icons/bs';
+import { IconBarChart, IconX, IconCheck, IconSparkles } from '../components/ui/icons.jsx';
 import toast from 'react-hot-toast';
 import api from '../api/axios.js';
 import Rating from '../components/ui/Rating.jsx';
@@ -52,7 +51,7 @@ export default function Compare() {
   };
 
   if (!loading && !products.length) {
-    return <EmptyState icon={FiBarChart2} title="Nothing to compare" message="Add up to 3 products to compare using the compare icon on any product card." />;
+    return <EmptyState icon={IconBarChart} title="Nothing to compare" message="Add up to 3 products to compare using the compare icon on any product card." />;
   }
 
   const rows = [
@@ -78,8 +77,8 @@ export default function Compare() {
             disabled={aiLoading}
             className="flex items-center gap-2 rounded-xl bg-[#087F65] hover:bg-[#066B55] px-4 py-2.5 text-xs font-bold text-white shadow-sm disabled:opacity-50 transition-all"
           >
-            <BsStars className={aiLoading ? 'animate-spin' : ''} />
-            {aiLoading ? 'Analyzing Specifications...' : '✨ Ask AI for Recommendation'}
+            <IconSparkles size={16} className={aiLoading ? 'animate-spin' : ''} />
+            {aiLoading ? 'Analyzing Specifications...' : 'Ask AI for Recommendation'}
           </button>
         )}
       </div>
@@ -89,7 +88,7 @@ export default function Compare() {
         <div className="mb-8 rounded-2xl border border-[#E4EAE6] bg-[#F1F7F4] p-6 shadow-sm">
           <div className="flex items-center gap-3 border-b border-[#E4EAE6] pb-4">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#EAF4EF] text-[#075E4B] border border-[#DDEBE3] shadow-sm">
-              <BsStars className="text-lg" />
+              <IconSparkles size={20} className="text-[#075E4B]" />
             </div>
             <div>
               <h3 className="font-bold text-[#202923] text-base">Gemini AI Executive Comparison Verdict</h3>
@@ -146,7 +145,7 @@ export default function Compare() {
                 }
                 className="flex items-center gap-1.5 text-xs font-semibold text-[#087F65] hover:text-[#066B55]"
               >
-                Discuss further with AI Concierge <BsStars />
+                Discuss further with AI Concierge <IconSparkles size={14} />
               </button>
             </div>
           </div>
@@ -159,7 +158,7 @@ export default function Compare() {
               <th className="w-32 p-3 text-left text-[#65716A]">Product</th>
               {products.map((p) => (
                 <th key={p._id} className="card-surface p-4 text-center align-top bg-white border border-[#E4EAE6] rounded-xl">
-                  <button onClick={() => dispatch(toggleCompare(p.slug))} aria-label="Remove from compare" className="ml-auto block text-[#89938D] hover:text-red-500"><FiX /></button>
+                  <button onClick={() => dispatch(toggleCompare(p.slug))} aria-label="Remove from compare" className="ml-auto block text-[#89938D] hover:text-[#B42318] p-1"><IconX size={16} /></button>
                   <Link to={`/product/${p.slug}`}>
                     <img src={imgUrl(p.images?.[0]?.url)} alt={p.name} className="mx-auto h-32 w-32 rounded-xl object-cover bg-[#F1F7F4] p-2" />
                     <p className="mt-2 font-semibold text-[#202923] transition-colors hover:text-[#087F65]">{p.name}</p>

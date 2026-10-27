@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { FiShoppingCart, FiTrash2, FiTag, FiX, FiBookmark, FiArrowRight } from 'react-icons/fi';
+import { IconShoppingCart, IconTrash2, IconTag, IconX, IconArrowRight, IconPlus, IconMinus } from '../components/ui/icons.jsx';
 import toast from 'react-hot-toast';
 import { updateCartItem, removeCartItem, toggleSaveForLater, applyCoupon, removeCoupon } from '../features/cartSlice.js';
 import EmptyState from '../components/ui/EmptyState.jsx';
@@ -17,14 +17,14 @@ export default function Cart() {
   const [couponInput, setCouponInput] = useState('');
 
   if (!user) {
-    return <EmptyState icon={FiShoppingCart} title="Your cart is waiting" message="Sign in to view your cart and continue shopping." ctaText="Sign in" ctaLink="/login" />;
+    return <EmptyState icon={IconShoppingCart} title="Your cart is waiting" message="Sign in to view your cart and continue shopping." ctaText="Sign in" ctaLink="/login" />;
   }
 
   const activeItems = cart?.items.filter((i) => !i.savedForLater && i.product) || [];
   const savedItems = cart?.items.filter((i) => i.savedForLater && i.product) || [];
 
   if (!activeItems.length && !savedItems.length) {
-    return <EmptyState icon={FiShoppingCart} title="Your cart is empty" message="Explore our electronics catalog and find something you love." ctaText="Discover products" ctaLink="/products" />;
+    return <EmptyState icon={IconShoppingCart} title="Your cart is empty" message="Explore our electronics catalog and find something you love." ctaText="Discover products" ctaLink="/products" />;
   }
 
   const act = async (thunkAction, successMsg) => {
@@ -51,21 +51,25 @@ export default function Cart() {
             )}
             {item.product.stock === 0 && <p className="mt-1 text-xs font-semibold text-[#B42318]">Out of stock</p>}
           </div>
-          <button onClick={() => act(removeCartItem(item._id), 'Removed from cart')} aria-label="Remove item" className="p-1 text-[#65716A] transition-colors hover:text-[#B42318]">
-            <FiTrash2 />
+          <button onClick={() => act(removeCartItem(item._id), 'Removed from cart')} aria-label="Remove item" className="p-1.5 rounded-lg text-[#65716A] transition-colors hover:text-[#B42318] hover:bg-red-50">
+            <IconTrash2 size={16} />
           </button>
         </div>
         <div className="mt-auto flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-[#E4EAE6]/60">
           {!saved ? (
             <div className="flex items-center rounded-lg border border-[#E4EAE6] bg-[#F1F7F4] text-sm">
-              <button onClick={() => item.quantity > 1 && act(updateCartItem({ itemId: item._id, quantity: item.quantity - 1 }))} className="px-3 py-1 text-[#202923] hover:text-[#087F65]" aria-label="Decrease">−</button>
+              <button onClick={() => item.quantity > 1 && act(updateCartItem({ itemId: item._id, quantity: item.quantity - 1 }))} className="px-2.5 py-1 text-[#202923] hover:text-[#087F65] hover:bg-[#EAF4EF] rounded-l-lg transition-colors" aria-label="Decrease">
+                <IconMinus size={14} />
+              </button>
               <span className="w-8 text-center font-semibold text-[#202923]">{item.quantity}</span>
-              <button onClick={() => act(updateCartItem({ itemId: item._id, quantity: item.quantity + 1 }))} className="px-3 py-1 text-[#202923] hover:text-[#087F65]" aria-label="Increase">+</button>
+              <button onClick={() => act(updateCartItem({ itemId: item._id, quantity: item.quantity + 1 }))} className="px-2.5 py-1 text-[#202923] hover:text-[#087F65] hover:bg-[#EAF4EF] rounded-r-lg transition-colors" aria-label="Increase">
+                <IconPlus size={14} />
+              </button>
             </div>
           ) : <span />}
           <div className="flex items-center gap-3">
             <button onClick={() => act(toggleSaveForLater(item._id), saved ? 'Moved to cart' : 'Saved for later')} className="flex items-center gap-1 text-xs font-semibold text-[#087F65] hover:underline">
-              <FiBookmark /> {saved ? 'Move to cart' : 'Save for later'}
+              {saved ? 'Move to cart' : 'Save for later'}
             </button>
             <span className="font-bold text-[#087F65]">{formatPrice(item.product.price * item.quantity)}</span>
           </div>
@@ -99,8 +103,8 @@ export default function Cart() {
             {/* Coupon */}
             {cart.coupon?.code ? (
               <div className="mb-4 flex items-center justify-between rounded-lg border border-[#DDEBE3] bg-[#EAF4EF] px-3.5 py-2.5 text-sm">
-                <span className="flex items-center gap-2 font-bold text-[#075E4B]"><FiTag /> {cart.coupon.code}</span>
-                <button onClick={() => act(removeCoupon(), 'Coupon removed')} aria-label="Remove coupon" className="text-[#65716A] hover:text-[#B42318]"><FiX /></button>
+                <span className="flex items-center gap-2 font-bold text-[#075E4B]"><IconTag size={16} /> {cart.coupon.code}</span>
+                <button onClick={() => act(removeCoupon(), 'Coupon removed')} aria-label="Remove coupon" className="text-[#65716A] hover:text-[#B42318] p-1"><IconX size={16} /></button>
               </div>
             ) : (
               <form
@@ -124,8 +128,8 @@ export default function Cart() {
                 Add {formatPrice(999 - totals.itemsPrice)} more for free shipping
               </p>
             )}
-            <button onClick={() => navigate('/checkout')} disabled={loading} className="btn-primary mt-5 w-full !py-3 font-semibold shadow-sm">
-              Proceed to checkout <FiArrowRight />
+            <button onClick={() => navigate('/checkout')} disabled={loading} className="btn-primary mt-5 w-full !py-3 font-semibold shadow-sm flex items-center justify-center gap-2">
+              Proceed to checkout <IconArrowRight size={18} />
             </button>
           </aside>
         )}

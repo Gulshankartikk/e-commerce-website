@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
-import { FiTrendingUp, FiUsers, FiShoppingBag, FiBox } from 'react-icons/fi';
+import { IconTrendingUp, IconUsers, IconShoppingCart, IconPackage, IconAlertCircle } from '../../components/ui/icons.jsx';
 import useFetch from '../../hooks/useFetch.js';
 import { TableSkeleton } from '../../components/ui/Skeletons.jsx';
 import { formatPrice, formatDate, STATUS_COLORS, imgUrl } from '../../utils/format.js';
@@ -17,10 +17,10 @@ export default function AdminDashboard() {
   const stats = data?.stats || {};
 
   const kpis = [
-    { label: 'Total Revenue', value: formatPrice(stats.totalRevenue), icon: FiTrendingUp, bg: 'bg-[#EAF4EF]', color: 'text-[#087F65]' },
-    { label: 'Total Orders', value: stats.totalOrders ?? 0, icon: FiShoppingBag, bg: 'bg-[#EAF4EF]', color: 'text-[#087F65]' },
-    { label: 'Customers', value: stats.totalUsers ?? 0, icon: FiUsers, bg: 'bg-[#EAF4EF]', color: 'text-[#087F65]' },
-    { label: 'Live Products', value: stats.totalProducts ?? 0, icon: FiBox, bg: 'bg-[#EAF4EF]', color: 'text-[#087F65]' },
+    { label: 'Total Revenue', value: formatPrice(stats.totalRevenue), icon: IconTrendingUp, bg: 'bg-[#EAF4EF]', color: 'text-[#087F65]' },
+    { label: 'Total Orders', value: stats.totalOrders ?? 0, icon: IconShoppingCart, bg: 'bg-[#EAF4EF]', color: 'text-[#087F65]' },
+    { label: 'Customers', value: stats.totalUsers ?? 0, icon: IconUsers, bg: 'bg-[#EAF4EF]', color: 'text-[#087F65]' },
+    { label: 'Live Products', value: stats.totalProducts ?? 0, icon: IconPackage, bg: 'bg-[#EAF4EF]', color: 'text-[#087F65]' },
   ];
 
   const pieData = (data?.statusBreakdown || []).map((s) => ({ name: s._id, value: s.count }));
@@ -44,7 +44,7 @@ export default function AdminDashboard() {
         {kpis.map((k) => (
           <div key={k.label} className="rounded-xl border border-[#E4EAE6] bg-white p-5 shadow-sm flex items-center gap-4">
             <span className={`flex h-12 w-12 items-center justify-center rounded-xl ${k.bg} text-xl ${k.color} border border-[#DDEBE3]`}>
-              <k.icon />
+              <k.icon size={22} />
             </span>
             <div>
               <p className="text-xs font-bold uppercase tracking-wider text-[#65716A]">{k.label}</p>
@@ -139,7 +139,9 @@ export default function AdminDashboard() {
           </div>
           {data?.lowStock?.length > 0 && (
             <div className="rounded-xl border-l-4 border-l-[#B42318] border border-[#E4EAE6] bg-white p-5 shadow-sm">
-              <h2 className="mb-2 font-bold text-sm text-[#B42318]">⚠ Low Stock Alerts</h2>
+              <h2 className="mb-2 font-bold text-sm text-[#B42318] flex items-center gap-1.5">
+                <IconAlertCircle size={16} className="text-[#B42318]" /> Low Stock Alerts
+              </h2>
               <ul className="space-y-2 text-sm">
                 {data.lowStock.map((p) => (
                   <li key={p._id} className="flex justify-between gap-2 text-xs">

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
-import { FiMapPin, FiPlus, FiTruck, FiZap, FiCreditCard, FiDollarSign, FiSmartphone } from 'react-icons/fi';
+import { IconMapPin, IconPlus, IconTruck, IconZap, IconCreditCard, IconSmartphone, IconCheckCircle2 } from '../components/ui/icons.jsx';
 import toast from 'react-hot-toast';
 import api from '../api/axios.js';
 import useFetch from '../hooks/useFetch.js';
@@ -122,9 +122,9 @@ export default function Checkout() {
   };
 
   const paymentOptions = [
-    { id: 'cod', label: 'Cash on Delivery', desc: 'Pay when your order arrives', icon: FiDollarSign, enabled: true },
-    { id: 'razorpay', label: 'Razorpay', desc: 'UPI, cards, netbanking & wallets', icon: FiSmartphone, enabled: payConfig?.razorpay },
-    { id: 'stripe', label: 'Stripe', desc: 'International credit & debit cards', icon: FiCreditCard, enabled: payConfig?.stripe },
+    { id: 'cod', label: 'Cash on Delivery', desc: 'Pay when your order arrives', icon: IconCreditCard, enabled: true },
+    { id: 'razorpay', label: 'Razorpay', desc: 'UPI, cards, netbanking & wallets', icon: IconSmartphone, enabled: payConfig?.razorpay },
+    { id: 'stripe', label: 'Stripe', desc: 'International credit & debit cards', icon: IconCreditCard, enabled: payConfig?.stripe },
   ];
 
   const inputCls = (err) => `input-field ${err ? '!border-[#B42318]' : ''}`;
@@ -139,8 +139,8 @@ export default function Checkout() {
           {/* 1 — Address */}
           <section className="rounded-xl border border-[#E4EAE6] bg-white p-6 shadow-sm">
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="flex items-center gap-2 text-lg font-bold text-[#202923]"><FiMapPin className="text-[#087F65]" /> Delivery Address</h2>
-              <button onClick={() => setAddressModal(true)} className="btn-outline !py-1.5 text-xs font-semibold"><FiPlus /> Add new</button>
+              <h2 className="flex items-center gap-2 text-lg font-bold text-[#202923]"><IconMapPin size={20} className="text-[#087F65]" /> Delivery Address</h2>
+              <button onClick={() => setAddressModal(true)} className="btn-outline !py-1.5 text-xs font-semibold flex items-center gap-1"><IconPlus size={14} /> Add new</button>
             </div>
             {addresses.length === 0 ? (
               <p className="text-sm text-[#65716A]">No saved addresses yet. Add one to continue.</p>
@@ -164,18 +164,18 @@ export default function Checkout() {
 
           {/* 2 — Delivery */}
           <section className="rounded-xl border border-[#E4EAE6] bg-white p-6 shadow-sm">
-            <h2 className="mb-4 flex items-center gap-2 text-lg font-bold text-[#202923]"><FiTruck className="text-[#087F65]" /> Delivery Option</h2>
+            <h2 className="mb-4 flex items-center gap-2 text-lg font-bold text-[#202923]"><IconTruck size={20} className="text-[#087F65]" /> Delivery Option</h2>
             <div className="grid gap-3 sm:grid-cols-2">
               {[
-                { id: 'standard', label: 'Standard Delivery', desc: '4–6 business days', extra: 'FREE over ₹999', icon: FiTruck },
-                { id: 'express', label: 'Express Delivery', desc: '1–2 business days', extra: '+ ₹99', icon: FiZap },
+                { id: 'standard', label: 'Standard Delivery', desc: '4–6 business days', extra: 'FREE over ₹999', icon: IconTruck },
+                { id: 'express', label: 'Express Delivery', desc: '1–2 business days', extra: '+ ₹99', icon: IconZap },
               ].map((opt) => (
                 <button
                   key={opt.id}
                   onClick={() => setDelivery(opt.id)}
                   className={`flex items-center gap-3 rounded-xl border p-4 text-left transition-all ${delivery === opt.id ? 'border-[#087F65] bg-[#EAF4EF]' : 'border-[#E4EAE6] bg-white hover:border-[#087F65]'}`}
                 >
-                  <opt.icon className="text-xl text-[#087F65]" />
+                  <opt.icon size={20} className="text-[#087F65]" />
                   <div className="flex-1">
                     <p className="text-sm font-semibold text-[#202923]">{opt.label}</p>
                     <p className="text-xs text-[#65716A]">{opt.desc}</p>
@@ -188,7 +188,7 @@ export default function Checkout() {
 
           {/* 3 — Payment */}
           <section className="rounded-xl border border-[#E4EAE6] bg-white p-6 shadow-sm">
-            <h2 className="mb-4 flex items-center gap-2 text-lg font-bold text-[#202923]"><FiCreditCard className="text-[#087F65]" /> Payment Method</h2>
+            <h2 className="mb-4 flex items-center gap-2 text-lg font-bold text-[#202923]"><IconCreditCard size={20} className="text-[#087F65]" /> Payment Method</h2>
             <div className="space-y-3">
               {paymentOptions.map((opt) => (
                 <button
@@ -197,7 +197,7 @@ export default function Checkout() {
                   disabled={!opt.enabled}
                   className={`flex w-full items-center gap-3 rounded-xl border p-4 text-left transition-all disabled:opacity-40 ${payment === opt.id ? 'border-[#087F65] bg-[#EAF4EF]' : 'border-[#E4EAE6] bg-white hover:border-[#087F65]'}`}
                 >
-                  <opt.icon className="text-xl text-[#087F65]" />
+                  <opt.icon size={20} className="text-[#087F65]" />
                   <div className="flex-1">
                     <p className="text-sm font-semibold text-[#202923]">{opt.label}</p>
                     <p className="text-xs text-[#65716A]">{opt.enabled ? opt.desc : 'Not configured on this server'}</p>

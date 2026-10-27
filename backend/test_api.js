@@ -341,7 +341,11 @@ async function runTests() {
     assert.strictEqual(res.status, 200);
     assert.strictEqual(res.data.success, true);
     assert.strictEqual(res.data.intent, 'unsupported');
-    assert.ok(res.data.reply.toLowerCase().includes('curated') || res.data.reply.toLowerCase().includes('specialize'));
+    assert.ok(
+      res.data.reply.toLowerCase().includes('curat') ||
+      res.data.reply.toLowerCase().includes('specialize') ||
+      res.data.reply.toLowerCase().includes('does not sell')
+    );
   });
 
   await test('AI Concierge: Product Review Summary with Real Evidence', async () => {

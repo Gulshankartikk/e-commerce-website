@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, FreeMode } from 'swiper/modules';
-import { FiArrowRight } from 'react-icons/fi';
+import { IconArrowRight } from '../ui/icons.jsx';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/free-mode';
@@ -25,7 +25,7 @@ export default function ProductRow({ title, subtitle, products, loading, viewAll
             className="flex items-center gap-1.5 text-sm font-semibold text-[#087F65] transition-colors hover:text-[#066B55]"
           >
             <span>View all</span>
-            <FiArrowRight className="text-base" />
+            <IconArrowRight size={16} />
           </Link>
         )}
       </div>

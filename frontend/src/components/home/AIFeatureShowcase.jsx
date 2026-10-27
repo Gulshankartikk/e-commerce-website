@@ -2,8 +2,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FiArrowUpRight, FiShoppingBag, FiCheckCircle } from 'react-icons/fi';
-import { BsStars } from 'react-icons/bs';
+import { IconCheckCircle2, IconArrowRight, IconShoppingCart, IconSparkles } from '../ui/icons.jsx';
 import { setAiDrawer } from '../../features/uiSlice.js';
 import { addToCart } from '../../features/cartSlice.js';
 import toast from 'react-hot-toast';
@@ -82,15 +81,15 @@ export default function AIFeatureShowcase({ featuredProducts = [] }) {
             {/* Feature Pills */}
             <div className="flex flex-wrap items-center gap-2.5 pt-1">
               <span className="inline-flex items-center gap-1.5 rounded-lg border border-[#E4EAE6] bg-white px-3.5 py-2 text-xs font-bold text-[#202923] shadow-sm">
-                <FiCheckCircle className="text-[#087F65]" />
+                <IconCheckCircle2 size={16} className="text-[#087F65]" />
                 Live Catalog Grounding
               </span>
               <span className="inline-flex items-center gap-1.5 rounded-lg border border-[#E4EAE6] bg-white px-3.5 py-2 text-xs font-bold text-[#202923] shadow-sm">
-                <FiCheckCircle className="text-[#087F65]" />
+                <IconCheckCircle2 size={16} className="text-[#087F65]" />
                 Verified Citations
               </span>
               <span className="inline-flex items-center gap-1.5 rounded-lg border border-[#E4EAE6] bg-white px-3.5 py-2 text-xs font-bold text-[#202923] shadow-sm">
-                <FiCheckCircle className="text-[#087F65]" />
+                <IconCheckCircle2 size={16} className="text-[#087F65]" />
                 One-Click Add to Cart
               </span>
             </div>
@@ -102,7 +101,7 @@ export default function AIFeatureShowcase({ featuredProducts = [] }) {
                 className="btn-primary !px-7 !py-3.5 text-sm font-semibold shadow-[0_4px_16px_rgba(8,127,101,0.25)] hover:shadow-[0_6px_20px_rgba(8,127,101,0.35)]"
               >
                 <span>Try Store Assistant</span>
-                <FiArrowUpRight className="text-base" />
+                <IconArrowRight size={18} />
               </button>
               <button
                 onClick={() => navigate('/products')}
@@ -143,7 +142,7 @@ export default function AIFeatureShowcase({ featuredProducts = [] }) {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2.5">
                         <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-white/20">
-                          <BsStars className="text-sm text-white" />
+                          <IconSparkles size={16} className="text-white" />
                         </div>
                         <div>
                           <h4 className="text-sm font-bold">FlashShop Copilot</h4>
@@ -193,9 +192,9 @@ export default function AIFeatureShowcase({ featuredProducts = [] }) {
                             <p className="text-xs font-bold text-[#087F65]">{formatPrice(p.price)}</p>
                             <button
                               onClick={(e) => handleQuickAdd(e, p)}
-                              className="mt-2 flex w-full items-center justify-center gap-1 rounded bg-[#087F65] py-1 text-[11px] font-bold text-white hover:bg-[#066B55]"
+                              className="mt-2 flex w-full items-center justify-center gap-1.5 rounded bg-[#087F65] py-1 text-[11px] font-bold text-white hover:bg-[#066B55]"
                             >
-                              <FiShoppingBag className="text-xs" /> Add
+                              <IconShoppingCart size={13} /> Add
                             </button>
                           </div>
                         ))}

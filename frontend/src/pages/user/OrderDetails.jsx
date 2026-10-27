@@ -1,5 +1,5 @@
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { FiDownload, FiXCircle, FiCheck } from 'react-icons/fi';
+import { IconDownload, IconXCircle, IconCheck } from '../../components/ui/icons.jsx';
 import toast from 'react-hot-toast';
 import useFetch from '../../hooks/useFetch.js';
 import api from '../../api/axios.js';
@@ -59,8 +59,8 @@ export default function OrderDetails() {
           <p className="text-sm text-slate-400">Placed {formatDateTime(order.createdAt)}</p>
         </div>
         <div className="flex gap-2">
-          <button onClick={downloadInvoice} className="btn-outline !py-2 text-sm"><FiDownload /> Invoice</button>
-          {canCancel && <button onClick={cancelOrder} className="btn-outline !py-2 text-sm text-red-400"><FiXCircle /> Cancel order</button>}
+          <button onClick={downloadInvoice} className="btn-outline !py-2 text-sm"><IconDownload size={16} /> Invoice</button>
+          {canCancel && <button onClick={cancelOrder} className="btn-outline !py-2 text-sm text-red-400"><IconXCircle size={16} /> Cancel order</button>}
         </div>
       </div>
 
@@ -76,7 +76,7 @@ export default function OrderDetails() {
                 <div key={step} className="flex flex-1 items-center last:flex-none">
                   <div className="flex flex-col items-center">
                     <span className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold transition-all ${done ? 'bg-[#087F65] text-white shadow-sm' : 'bg-[#E4EAE6] text-[#89938D]'}`}>
-                      {done ? <FiCheck /> : i + 1}
+                      {done ? <IconCheck size={16} strokeWidth={2.2} /> : i + 1}
                     </span>
                     <span className={`mt-1.5 hidden text-[10px] capitalize sm:block ${done ? 'text-[#075E4B] font-semibold' : 'text-[#89938D]'}`}>{step.replace(/-/g, ' ')}</span>
                   </div>

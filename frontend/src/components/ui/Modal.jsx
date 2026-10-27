@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { FiX } from 'react-icons/fi';
+import { IconX } from './icons.jsx';
 import { useEffect } from 'react';
 
 /** Accessible animated modal. */
@@ -27,7 +27,7 @@ export default function Modal({ open, onClose, title, children, maxWidth = 'max-
           >
             <div className="mb-4 flex items-center justify-between border-b border-[#E4EAE6] pb-3">
               <h3 className="text-lg font-bold text-[#202923]">{title}</h3>
-              <button onClick={onClose} aria-label="Close" className="rounded-lg p-2 text-[#65716A] transition-colors hover:bg-[#F1F7F4] hover:text-[#202923]"><FiX /></button>
+              <button onClick={onClose} aria-label="Close" className="rounded-lg p-2 text-[#65716A] transition-colors hover:bg-[#EAF4EF] hover:text-[#066B55]"><IconX size={20} /></button>
             </div>
             {children}
           </motion.div>

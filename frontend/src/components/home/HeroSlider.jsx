@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FiArrowRight, FiTruck, FiShield, FiHeadphones } from 'react-icons/fi';
+import { IconArrowRight, IconTruck, IconShieldCheck, IconPhone, IconCheck } from '../ui/icons.jsx';
 import { imgUrl } from '../../utils/format.js';
 
 /** Wide light-mint hero section matching the reference design. */
@@ -55,7 +55,7 @@ export default function HeroSlider({ banners, loading }) {
                 className="btn-primary !px-7 !py-3.5 text-base font-semibold shadow-[0_4px_16px_rgba(8,127,101,0.25)] hover:shadow-[0_6px_20px_rgba(8,127,101,0.35)]"
               >
                 <span>{banner.ctaText || 'Discover products'}</span>
-                <FiArrowRight className="text-lg" />
+                <IconArrowRight size={18} />
               </Link>
               <Link
                 to="/products?featured=true"
@@ -69,7 +69,7 @@ export default function HeroSlider({ banners, loading }) {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-6 border-t border-[#E4EAE6]/80">
               <div className="flex items-center gap-2.5">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#DDEBE3] text-[#075E4B]">
-                  <FiTruck className="text-base" />
+                  <IconTruck size={18} />
                 </div>
                 <div>
                   <p className="text-xs font-bold text-[#202923]">Free Shipping</p>
@@ -79,7 +79,7 @@ export default function HeroSlider({ banners, loading }) {
 
               <div className="flex items-center gap-2.5">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#DDEBE3] text-[#075E4B]">
-                  <FiShield className="text-base" />
+                  <IconShieldCheck size={18} />
                 </div>
                 <div>
                   <p className="text-xs font-bold text-[#202923]">1-Year Warranty</p>
@@ -89,7 +89,7 @@ export default function HeroSlider({ banners, loading }) {
 
               <div className="flex items-center gap-2.5">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#DDEBE3] text-[#075E4B]">
-                  <FiHeadphones className="text-base" />
+                  <IconPhone size={18} />
                 </div>
                 <div>
                   <p className="text-xs font-bold text-[#202923]">24/7 Support</p>
@@ -117,8 +117,8 @@ export default function HeroSlider({ banners, loading }) {
 
               {/* Floating verified badge */}
               <div className="absolute -bottom-4 -left-4 rounded-xl bg-white p-3 shadow-lg border border-[#E4EAE6] flex items-center gap-3">
-                <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#EAF4EF] text-[#087F65] font-bold text-lg">
-                  ✓
+                <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#EAF4EF] text-[#087F65]">
+                  <IconCheck size={20} />
                 </span>
                 <div>
                   <p className="text-xs font-bold text-[#202923]">Verified Authentic</p>

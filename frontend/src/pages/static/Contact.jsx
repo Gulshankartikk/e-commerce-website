@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { FiMail, FiPhone, FiMapPin, FiMessageCircle } from 'react-icons/fi';
+import { IconMail, IconPhone, IconMapPin, IconMessageCircle } from '../../components/ui/icons.jsx';
 import toast from 'react-hot-toast';
 import Breadcrumbs from '../../components/ui/Breadcrumbs.jsx';
 
@@ -17,10 +17,10 @@ export default function Contact() {
   };
 
   const channels = [
-    { icon: FiMail, label: 'Email', value: 'support@flashshop.com', sub: 'Replies within 24 hours' },
-    { icon: FiPhone, label: 'Phone', value: '1800-120-4567', sub: 'Mon–Sat, 9am–7pm IST' },
-    { icon: FiMessageCircle, label: 'Chat', value: 'Live chat', sub: 'From the Help widget, 24×7' },
-    { icon: FiMapPin, label: 'Office', value: 'HSR Layout, Bengaluru 560102', sub: 'Karnataka, India' },
+    { icon: IconMail, label: 'Email', value: 'support@flashshop.com', sub: 'Replies within 24 hours' },
+    { icon: IconPhone, label: 'Phone', value: '1800-120-4567', sub: 'Mon–Sat, 9am–7pm IST' },
+    { icon: IconMessageCircle, label: 'Chat', value: 'Live chat', sub: 'From the Help widget, 24×7' },
+    { icon: IconMapPin, label: 'Office', value: 'HSR Layout, Bengaluru 560102', sub: 'Karnataka, India' },
   ];
 
   return (
@@ -31,7 +31,7 @@ export default function Contact() {
         <div className="space-y-4">
           {channels.map((c) => (
             <div key={c.label} className="card-surface flex items-center gap-4 p-5 bg-white border border-[#E4EAE6] rounded-2xl">
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#EAF4EF] text-xl text-[#075E4B] border border-[#DDEBE3]"><c.icon /></span>
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#EAF4EF] text-[#087F65] border border-[#DDEBE3]"><c.icon size={22} /></span>
               <div>
                 <p className="text-xs uppercase tracking-wide text-[#65716A]">{c.label}</p>
                 <p className="font-semibold text-[#202923]">{c.value}</p>

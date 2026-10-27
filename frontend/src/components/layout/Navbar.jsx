@@ -2,18 +2,18 @@ import { useState, useRef, useEffect } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  FiSearch,
-  FiHeart,
-  FiShoppingCart,
-  FiUser,
-  FiMenu,
-  FiX,
-  FiLogOut,
-  FiGrid,
-  FiPackage,
-  FiMic,
-} from 'react-icons/fi';
-import { BsStars } from 'react-icons/bs';
+  IconSearch,
+  IconHeart,
+  IconShoppingCart,
+  IconUserRound,
+  IconMenu,
+  IconX,
+  IconLogOut,
+  IconLayoutDashboard,
+  IconPackage,
+  IconMic,
+  IconSparkles,
+} from '../ui/icons.jsx';
 import { AnimatePresence, motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { logoutUser } from '../../features/authSlice.js';
@@ -104,11 +104,11 @@ export default function Navbar() {
       <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-3 sm:px-6">
         {/* Mobile menu button */}
         <button
-          className="rounded-lg p-2 text-[#202923] hover:bg-[#F1F7F4] md:hidden transition-colors"
-          aria-label="Menu"
+          className="rounded-lg p-2 text-[#075E4B] hover:bg-[#EAF4EF] hover:text-[#066B55] md:hidden transition-colors"
+          aria-label="Toggle menu"
           onClick={() => dispatch(setMobileMenu(!mobileOpen))}
         >
-          {mobileOpen ? <FiX className="text-xl" /> : <FiMenu className="text-xl" />}
+          {mobileOpen ? <IconX size={22} /> : <IconMenu size={22} />}
         </button>
 
         {/* Brand Logo in Deep Emerald */}
@@ -144,7 +144,7 @@ export default function Navbar() {
         {/* Search Bar with Subtle Icon */}
         <div ref={searchRef} className="relative ml-auto hidden flex-1 max-w-md sm:block">
           <form onSubmit={submitSearch} role="search">
-            <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#65716A]" />
+            <IconSearch size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#65716A]" />
             <input
               value={query}
               onChange={(e) => { setQuery(e.target.value); setShowSuggestions(true); }}
@@ -159,7 +159,7 @@ export default function Navbar() {
               aria-label="Voice search"
               className="absolute right-3 top-1/2 -translate-y-1/2 text-[#65716A] transition-colors hover:text-[#087F65]"
             >
-              <FiMic />
+              <IconMic size={18} />
             </button>
           </form>
 
@@ -197,7 +197,7 @@ export default function Navbar() {
             aria-label="Open AI Shopping Assistant"
             className="flex items-center gap-1.5 rounded-full bg-[#EAF4EF] border border-[#DDEBE3] px-3.5 py-1.5 text-xs font-semibold text-[#075E4B] hover:bg-[#DDEBE3] hover:text-[#087F65] transition-all shadow-sm"
           >
-            <BsStars className="text-sm text-[#168764]" />
+            <IconSparkles size={16} className="text-[#168764]" />
             <span className="hidden sm:inline font-bold">Ask AI</span>
           </button>
 
@@ -205,9 +205,9 @@ export default function Navbar() {
           <Link
             to="/wishlist"
             aria-label="Wishlist"
-            className="relative rounded-full p-2.5 text-[#202923] transition-colors hover:bg-[#F1F7F4] hover:text-[#087F65]"
+            className="relative rounded-full p-2.5 text-[#075E4B] transition-colors hover:bg-[#EAF4EF] hover:text-[#066B55]"
           >
-            <FiHeart className="text-lg" />
+            <IconHeart size={20} />
             {wishlistCount > 0 && (
               <span className="absolute 1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#168764] text-[10px] font-bold text-white">
                 {wishlistCount}
@@ -219,9 +219,9 @@ export default function Navbar() {
           <Link
             to="/cart"
             aria-label="Cart"
-            className="relative rounded-full p-2.5 text-[#202923] transition-colors hover:bg-[#F1F7F4] hover:text-[#087F65]"
+            className="relative rounded-full p-2.5 text-[#075E4B] transition-colors hover:bg-[#EAF4EF] hover:text-[#066B55]"
           >
-            <FiShoppingCart className="text-lg" />
+            <IconShoppingCart size={20} />
             {cartCount > 0 && (
               <span className="absolute 1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#087F65] text-[10px] font-bold text-white">
                 {cartCount}
@@ -260,31 +260,31 @@ export default function Navbar() {
                       <Link
                         to="/dashboard"
                         onClick={() => setUserMenu(false)}
-                        className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-[#202923] transition-colors hover:bg-[#F1F7F4] hover:text-[#087F65]"
+                        className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-[#202923] transition-colors hover:bg-[#EAF4EF] hover:text-[#087F65]"
                       >
-                        <FiUser /> My Account
+                        <IconUserRound size={18} className="text-[#65716A]" /> My Account
                       </Link>
                       <Link
                         to="/dashboard/orders"
                         onClick={() => setUserMenu(false)}
-                        className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-[#202923] transition-colors hover:bg-[#F1F7F4] hover:text-[#087F65]"
+                        className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-[#202923] transition-colors hover:bg-[#EAF4EF] hover:text-[#087F65]"
                       >
-                        <FiPackage /> My Orders
+                        <IconPackage size={18} className="text-[#65716A]" /> My Orders
                       </Link>
                       {['admin', 'manager', 'seller'].includes(user.role) && (
                         <Link
                           to="/admin"
                           onClick={() => setUserMenu(false)}
-                          className="flex items-center gap-2.5 px-4 py-2.5 text-sm font-medium text-[#087F65] transition-colors hover:bg-[#F1F7F4]"
+                          className="flex items-center gap-2.5 px-4 py-2.5 text-sm font-medium text-[#087F65] transition-colors hover:bg-[#EAF4EF]"
                         >
-                          <FiGrid /> {user.role === 'admin' ? 'Admin Panel' : user.role === 'seller' ? 'Seller Panel' : 'Manager Panel'}
+                          <IconLayoutDashboard size={18} className="text-[#087F65]" /> {user.role === 'admin' ? 'Admin Panel' : user.role === 'seller' ? 'Seller Panel' : 'Manager Panel'}
                         </Link>
                       )}
                       <button
                         onClick={handleLogout}
-                        className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-[#B42318] transition-colors hover:bg-[#F1F7F4]"
+                        className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-[#B42318] transition-colors hover:bg-[#EAF4EF]"
                       >
-                        <FiLogOut /> Logout
+                        <IconLogOut size={18} /> Logout
                       </button>
                     </motion.div>
                   )}
@@ -314,13 +314,13 @@ export default function Navbar() {
                   dispatch(setMobileMenu(false));
                   dispatch(toggleAiDrawer());
                 }}
-                className="flex w-full items-center gap-2 rounded-lg bg-[#EAF4EF] border border-[#DDEBE3] px-3.5 py-2.5 text-sm font-semibold text-[#075E4B]"
+                className="flex w-full items-center gap-2 rounded-lg bg-[#EAF4EF] border border-[#DDEBE3] px-3.5 py-2.5 text-sm font-semibold text-[#075E4B] hover:bg-[#DDEBE3]"
               >
-                <BsStars className="text-[#168764]" />
+                <IconSparkles size={18} className="text-[#168764]" />
                 Ask AI Shopping Assistant
               </button>
               <form onSubmit={(e) => { submitSearch(e); dispatch(setMobileMenu(false)); }} className="relative mb-2 sm:hidden">
-                <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#65716A]" />
+                <IconSearch size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#65716A]" />
                 <input
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}

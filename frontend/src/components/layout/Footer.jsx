@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FiSend } from 'react-icons/fi';
-import { FaFacebookF, FaInstagram, FaXTwitter, FaYoutube } from 'react-icons/fa6';
+import { IconSend, IconFacebook, IconTwitter, IconInstagram, IconYoutube } from '../ui/icons.jsx';
 import toast from 'react-hot-toast';
 
 /** Site footer styled in clean soft mint and deep emerald. */
@@ -66,7 +65,7 @@ export default function Footer() {
               className="input-field flex-1"
             />
             <button type="submit" className="btn-primary !px-5" aria-label="Subscribe">
-              <FiSend />
+              <IconSend size={18} />
             </button>
           </form>
         </div>
@@ -87,10 +86,10 @@ export default function Footer() {
             </p>
             <div className="mt-5 flex gap-2.5">
               {[
-                { Icon: FaFacebookF, href: 'https://facebook.com', label: 'FlashShop on Facebook' },
-                { Icon: FaInstagram, href: 'https://instagram.com', label: 'FlashShop on Instagram' },
-                { Icon: FaXTwitter, href: 'https://twitter.com', label: 'FlashShop on X' },
-                { Icon: FaYoutube, href: 'https://youtube.com', label: 'FlashShop on YouTube' },
+                { Icon: IconFacebook, href: 'https://facebook.com', label: 'FlashShop on Facebook' },
+                { Icon: IconInstagram, href: 'https://instagram.com', label: 'FlashShop on Instagram' },
+                { Icon: IconTwitter, href: 'https://twitter.com', label: 'FlashShop on X' },
+                { Icon: IconYoutube, href: 'https://youtube.com', label: 'FlashShop on YouTube' },
               ].map(({ Icon, href, label }) => (
                 <a
                   key={label}
@@ -100,7 +99,7 @@ export default function Footer() {
                   aria-label={label}
                   className="flex h-9 w-9 items-center justify-center rounded-lg border border-[#E4EAE6] bg-white text-[#65716A] transition-all hover:border-[#087F65] hover:text-[#087F65] hover:bg-[#EAF4EF]"
                 >
-                  <Icon className="text-sm" />
+                  <Icon size={18} />
                 </a>
               ))}
             </div>

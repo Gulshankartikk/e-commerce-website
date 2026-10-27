@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { FiCheckCircle, FiXCircle } from 'react-icons/fi';
+import { IconCheckCircle2, IconXCircle } from '../../components/ui/icons.jsx';
 import api from '../../api/axios.js';
 
 /** Email verification landing page — verifies the token on load. */
@@ -17,26 +17,26 @@ export default function VerifyEmail() {
 
   return (
     <div className="flex min-h-[70vh] items-center justify-center px-4">
-      <div className="glass w-full max-w-md rounded-3xl p-8 text-center">
+      <div className="card-surface w-full max-w-md rounded-2xl p-8 text-center border border-[#E4EAE6] shadow-[0_8px_30px_rgba(21,61,43,0.08)]">
         {status === 'verifying' && (
           <>
-            <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-slate-600 border-t-primary" />
-            <h1 className="mt-4 text-xl font-bold">Verifying your email…</h1>
+            <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-[#E4EAE6] border-t-[#087F65]" />
+            <h1 className="mt-4 text-xl font-bold text-[#202923]">Verifying your email…</h1>
           </>
         )}
         {status === 'success' && (
           <>
-            <FiCheckCircle className="mx-auto text-6xl text-green-400" />
-            <h1 className="mt-4 text-xl font-bold">Email verified!</h1>
-            <p className="mt-2 text-sm text-slate-400">Your account is fully activated. Happy shopping!</p>
+            <IconCheckCircle2 size={56} className="mx-auto text-[#168764]" />
+            <h1 className="mt-4 text-xl font-bold text-[#202923]">Email verified!</h1>
+            <p className="mt-2 text-sm text-[#65716A]">Your account is fully activated. Happy shopping!</p>
             <Link to="/products" className="btn-primary mt-6 inline-flex">Start shopping</Link>
           </>
         )}
         {status === 'error' && (
           <>
-            <FiXCircle className="mx-auto text-6xl text-red-400" />
-            <h1 className="mt-4 text-xl font-bold">Verification failed</h1>
-            <p className="mt-2 text-sm text-slate-400">{message}</p>
+            <IconXCircle size={56} className="mx-auto text-[#B42318]" />
+            <h1 className="mt-4 text-xl font-bold text-[#202923]">Verification failed</h1>
+            <p className="mt-2 text-sm text-[#65716A]">{message}</p>
             <Link to="/" className="btn-outline mt-6 inline-flex">Back to home</Link>
           </>
         )}

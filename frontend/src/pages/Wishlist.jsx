@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { FiHeart } from 'react-icons/fi';
+import { IconHeart } from '../components/ui/icons.jsx';
 import ProductCard from '../components/product/ProductCard.jsx';
 import EmptyState from '../components/ui/EmptyState.jsx';
 import Breadcrumbs from '../components/ui/Breadcrumbs.jsx';
@@ -10,7 +10,7 @@ export default function Wishlist() {
   const products = wishlist?.products || [];
 
   if (!products.length) {
-    return <EmptyState icon={FiHeart} title="Your wishlist is empty" message="Tap the heart on any product to save it here for later." />;
+    return <EmptyState icon={IconHeart} title="Your wishlist is empty" message="Tap the heart on any product to save it here for later." />;
   }
 
   return (

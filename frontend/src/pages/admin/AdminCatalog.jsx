@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FiPlus, FiEdit2, FiTrash2 } from 'react-icons/fi';
+import { IconPlus, IconEdit, IconTrash2 } from '../../components/ui/icons.jsx';
 import toast from 'react-hot-toast';
 import useFetch from '../../hooks/useFetch.js';
 import api from '../../api/axios.js';
@@ -58,7 +58,7 @@ export default function AdminCatalog() {
     <div>
       <div className="mb-5 flex items-center justify-between">
         <h1 className="text-2xl font-bold">Categories & Brands</h1>
-        <button onClick={openAdd} className="btn-primary !py-2 text-sm"><FiPlus /> Add {isCat ? 'category' : 'brand'}</button>
+        <button onClick={openAdd} className="btn-primary !py-2 text-sm flex items-center gap-1.5"><IconPlus size={16} /> Add {isCat ? 'category' : 'brand'}</button>
       </div>
 
       <div className="mb-5 flex gap-2">
@@ -79,8 +79,8 @@ export default function AdminCatalog() {
                 {item.description && <p className="truncate text-xs text-slate-400">{item.description}</p>}
               </div>
               <div className="flex shrink-0">
-                <button onClick={() => openEdit(item)} aria-label="Edit" className="p-2 text-slate-400 hover:text-primary-300"><FiEdit2 /></button>
-                <button onClick={() => remove(item)} aria-label="Delete" className="p-2 text-slate-400 hover:text-red-400"><FiTrash2 /></button>
+                <button onClick={() => openEdit(item)} aria-label="Edit" className="p-1.5 text-[#65716A] hover:bg-[#EAF4EF] hover:text-[#087F65] rounded-lg transition-colors mr-1"><IconEdit size={16} /></button>
+                <button onClick={() => remove(item)} aria-label="Delete" className="p-1.5 text-[#65716A] hover:bg-[#EAF4EF] hover:text-[#B42318] rounded-lg transition-colors"><IconTrash2 size={16} /></button>
               </div>
             </div>
           ))}

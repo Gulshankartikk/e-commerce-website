@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FiTrash2, FiEye, FiEyeOff } from 'react-icons/fi';
+import { IconTrash2, IconEye, IconEyeOff } from '../../components/ui/icons.jsx';
 import toast from 'react-hot-toast';
 import useFetch from '../../hooks/useFetch.js';
 import api from '../../api/axios.js';
@@ -49,10 +49,12 @@ export default function AdminReviews() {
                   </p>
                 </div>
                 <div className="flex shrink-0">
-                  <button onClick={() => toggle(r)} title={r.isApproved ? 'Hide review' : 'Approve review'} className="p-2 text-slate-400 hover:text-[#087F65]">
-                    {r.isApproved ? <FiEyeOff /> : <FiEye />}
+                  <button onClick={() => toggle(r)} title={r.isApproved ? 'Hide review' : 'Approve review'} className="p-1.5 text-[#65716A] hover:bg-[#EAF4EF] hover:text-[#087F65] rounded-lg transition-colors mr-1">
+                    {r.isApproved ? <IconEyeOff size={16} /> : <IconEye size={16} />}
                   </button>
-                  <button onClick={() => remove(r)} title="Delete" className="p-2 text-slate-400 hover:text-red-400"><FiTrash2 /></button>
+                  <button onClick={() => remove(r)} title="Delete" className="p-1.5 text-[#65716A] hover:bg-[#EAF4EF] hover:text-[#B42318] rounded-lg transition-colors">
+                    <IconTrash2 size={16} />
+                  </button>
                 </div>
               </div>
             </div>

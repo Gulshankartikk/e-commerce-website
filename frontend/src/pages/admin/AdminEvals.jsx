@@ -1,18 +1,18 @@
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import {
-  FiActivity,
-  FiPlay,
-  FiRefreshCw,
-  FiCheckCircle,
-  FiXCircle,
-  FiAlertTriangle,
-  FiClock,
-  FiDollarSign,
-  FiBookOpen,
-  FiShield,
-  FiFilter,
-} from 'react-icons/fi';
+  IconSparkles,
+  IconPlay,
+  IconRefreshCw,
+  IconCheckCircle2,
+  IconXCircle,
+  IconAlertCircle,
+  IconClock,
+  IconDollarSign,
+  IconBookOpen,
+  IconShieldCheck,
+  IconSlidersHorizontal,
+} from '../../components/ui/icons.jsx';
 import api from '../../api/axios.js';
 import { TableSkeleton } from '../../components/ui/Skeletons.jsx';
 import { formatDate } from '../../utils/format.js';
@@ -104,7 +104,7 @@ export default function AdminEvals() {
     {
       label: 'Quality Gate',
       value: isGatePassed ? 'PASSED' : 'FAILED',
-      icon: isGatePassed ? FiCheckCircle : FiXCircle,
+      icon: isGatePassed ? IconCheckCircle2 : IconXCircle,
       bg: isGatePassed ? 'bg-[#EAF4EF]' : 'bg-[#B42318]/10',
       color: isGatePassed ? 'text-[#087F65]' : 'text-[#B42318]',
     },
@@ -112,7 +112,7 @@ export default function AdminEvals() {
       label: 'Pass Rate',
       value: `${latestMetrics.passRate ?? 0}%`,
       sub: `${latestMetrics.passedCases ?? 0}/${latestMetrics.totalCases ?? 0} cases`,
-      icon: FiActivity,
+      icon: IconSparkles,
       bg: 'bg-[#EAF4EF]',
       color: 'text-[#087F65]',
     },
@@ -120,7 +120,7 @@ export default function AdminEvals() {
       label: 'Mean Recall@k',
       value: (latestMetrics.meanRecallAtK ?? 0).toFixed(2),
       sub: 'Top-k semantic retrieval',
-      icon: FiBookOpen,
+      icon: IconBookOpen,
       bg: 'bg-[#EAF4EF]',
       color: 'text-[#087F65]',
     },
@@ -128,7 +128,7 @@ export default function AdminEvals() {
       label: 'Citation Precision',
       value: (latestMetrics.meanCitationPrecision ?? 0).toFixed(2),
       sub: 'Zero hallucinated links',
-      icon: FiShield,
+      icon: IconShieldCheck,
       bg: 'bg-[#EAF4EF]',
       color: 'text-[#087F65]',
     },
@@ -136,7 +136,7 @@ export default function AdminEvals() {
       label: 'Mean Faithfulness',
       value: (latestMetrics.meanFaithfulness ?? 0).toFixed(2),
       sub: 'Groundedness score',
-      icon: FiCheckCircle,
+      icon: IconCheckCircle2,
       bg: 'bg-[#EAF4EF]',
       color: 'text-[#087F65]',
     },
@@ -144,7 +144,7 @@ export default function AdminEvals() {
       label: 'Abstention Accuracy',
       value: `${((latestMetrics.abstentionAccuracy ?? 0) * 100).toFixed(0)}%`,
       sub: 'Out-of-scope discipline',
-      icon: FiShield,
+      icon: IconShieldCheck,
       bg: 'bg-[#EAF4EF]',
       color: 'text-[#087F65]',
     },
@@ -152,7 +152,7 @@ export default function AdminEvals() {
       label: 'Avg Latency',
       value: `${latestMetrics.averageLatencyMs ?? 0}ms`,
       sub: 'End-to-end response',
-      icon: FiClock,
+      icon: IconClock,
       bg: 'bg-[#EAF4EF]',
       color: 'text-[#087F65]',
     },
@@ -160,7 +160,7 @@ export default function AdminEvals() {
       label: 'Total Cost',
       value: `$${(latestMetrics.totalCostUsd ?? 0).toFixed(4)}`,
       sub: `${latestMetrics.totalTokens ?? 0} tokens`,
-      icon: FiDollarSign,
+      icon: IconDollarSign,
       bg: 'bg-[#EAF4EF]',
       color: 'text-[#087F65]',
     },
@@ -182,7 +182,7 @@ export default function AdminEvals() {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2.5 text-[#202923]">
-            <FiActivity className="text-[#087F65]" />
+            <IconSparkles size={22} className="text-[#087F65]" />
             <span>AI RAG & Automated Evaluation Dashboard</span>
           </h1>
           <p className="mt-1 text-xs text-[#65716A]">
@@ -196,7 +196,7 @@ export default function AdminEvals() {
             disabled={reindexing}
             className="btn-outline !py-2 text-xs font-semibold disabled:opacity-50"
           >
-            <FiRefreshCw className={reindexing ? 'animate-spin' : ''} />
+            <IconRefreshCw size={15} className={reindexing ? 'animate-spin' : ''} />
             <span>{reindexing ? 'Re-indexing...' : 'Re-index Knowledge'}</span>
           </button>
 
@@ -205,7 +205,7 @@ export default function AdminEvals() {
             disabled={triggering}
             className="btn-primary !py-2 text-xs font-semibold disabled:opacity-50"
           >
-            <FiPlay className={triggering ? 'animate-pulse' : ''} />
+            <IconPlay size={15} className={triggering ? 'animate-pulse' : ''} />
             <span>{triggering ? 'Running Evals...' : 'Run Evaluation Suite'}</span>
           </button>
         </div>
@@ -218,7 +218,7 @@ export default function AdminEvals() {
             <span
               className={`flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl ${k.bg} text-lg ${k.color} border border-[#DDEBE3]`}
             >
-              <k.icon />
+              <k.icon size={20} />
             </span>
             <div className="min-w-0 flex-1">
               <p className="text-[11px] font-bold uppercase tracking-wider text-[#65716A]">{k.label}</p>
@@ -408,7 +408,7 @@ export default function AdminEvals() {
         <div className="space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#E4EAE6] bg-white p-3.5 shadow-sm">
             <div className="flex items-center gap-2">
-              <FiFilter className="text-[#65716A] text-sm" />
+              <IconSlidersHorizontal size={15} className="text-[#65716A]" />
               <span className="text-xs font-bold text-[#202923]">Filter cases:</span>
               <div className="flex flex-wrap gap-1">
                 {['all', 'passed', 'failed', 'policy', 'specs', 'adversarial', 'unsupported'].map((f) => (
@@ -479,7 +479,7 @@ export default function AdminEvals() {
 
                   {c.failureReason && (
                     <div className="rounded-lg border border-[#B42318]/30 bg-[#B42318]/10 p-2.5 text-[#B42318] flex items-center gap-2">
-                      <FiAlertTriangle className="flex-shrink-0" />
+                      <IconAlertCircle size={16} className="flex-shrink-0" />
                       <span>Failure Reason: {c.failureReason}</span>
                     </div>
                   )}
@@ -517,7 +517,7 @@ export default function AdminEvals() {
                           key={ci}
                           className="inline-flex items-center gap-1 rounded-md bg-[#EAF4EF] border border-[#DDEBE3] px-2 py-0.5 text-[10px] font-bold text-[#075E4B]"
                         >
-                          <FiCheckCircle className="text-[9px] text-[#087F65]" />
+                          <IconCheckCircle2 size={11} className="text-[#087F65]" />
                           {cite.sourceId} ({cite.chunkId})
                         </span>
                       ))}

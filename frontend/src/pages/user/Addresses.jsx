@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { FiPlus, FiEdit2, FiTrash2, FiMapPin } from 'react-icons/fi';
+import { IconPlus, IconEdit, IconTrash2, IconMapPin, IconPhone } from '../../components/ui/icons.jsx';
 import toast from 'react-hot-toast';
 import api from '../../api/axios.js';
 import Modal from '../../components/ui/Modal.jsx';
@@ -42,29 +42,29 @@ export default function Addresses() {
   return (
     <div>
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-lg font-bold">Saved addresses</h2>
-        <button onClick={openAdd} className="btn-primary !py-2 text-sm"><FiPlus /> Add address</button>
+        <h2 className="text-lg font-bold text-[#202923]">Saved addresses</h2>
+        <button onClick={openAdd} className="btn-primary !py-2 text-sm flex items-center gap-1.5"><IconPlus size={16} /> Add address</button>
       </div>
 
       {addresses.length === 0 ? (
         <div className="card-surface flex flex-col items-center gap-3 p-10 text-center">
-          <FiMapPin className="text-4xl text-slate-600" />
-          <p className="text-sm text-slate-400">No addresses saved yet. Add one to speed up checkout.</p>
+          <IconMapPin size={40} className="text-[#89938D]" />
+          <p className="text-sm text-[#65716A]">No addresses saved yet. Add one to speed up checkout.</p>
         </div>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2">
           {addresses.map((a) => (
             <div key={a._id} className="card-surface p-5">
               <div className="flex items-start justify-between">
-                <p className="font-semibold">{a.fullName} {a.isDefault && <span className="chip ml-1 bg-secondary-500/20 text-[10px] text-secondary-400">Default</span>}</p>
+                <p className="font-semibold text-[#202923]">{a.fullName} {a.isDefault && <span className="chip ml-1 bg-[#EAF4EF] text-[10px] text-[#087F65] font-semibold">Default</span>}</p>
                 <div className="flex gap-1">
-                  <button onClick={() => openEdit(a)} aria-label="Edit" className="p-1.5 text-slate-400 hover:text-primary-300"><FiEdit2 /></button>
-                  <button onClick={() => remove(a._id)} aria-label="Delete" className="p-1.5 text-slate-400 hover:text-red-400"><FiTrash2 /></button>
+                  <button onClick={() => openEdit(a)} aria-label="Edit address" className="rounded-lg p-1.5 text-[#65716A] transition-colors hover:bg-[#EAF4EF] hover:text-[#087F65]"><IconEdit size={16} /></button>
+                  <button onClick={() => remove(a._id)} aria-label="Delete address" className="rounded-lg p-1.5 text-[#65716A] transition-colors hover:bg-[#EAF4EF] hover:text-[#B42318]"><IconTrash2 size={16} /></button>
                 </div>
               </div>
-              <p className="mt-2 text-sm text-slate-400">{a.line1}{a.line2 && `, ${a.line2}`}</p>
-              <p className="text-sm text-slate-400">{a.city}, {a.state} — {a.pincode}</p>
-              <p className="mt-1 text-sm text-slate-400">📞 {a.phone}</p>
+              <p className="mt-2 text-sm text-[#65716A]">{a.line1}{a.line2 && `, ${a.line2}`}</p>
+              <p className="text-sm text-[#65716A]">{a.city}, {a.state} — {a.pincode}</p>
+              <p className="mt-1.5 flex items-center gap-1.5 text-sm text-[#65716A]"><IconPhone size={14} className="text-[#89938D]" /> {a.phone}</p>
             </div>
           ))}
         </div>

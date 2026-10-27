@@ -1,9 +1,19 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { FiHeart, FiShare2, FiShoppingCart, FiCheck, FiTruck, FiShield, FiRotateCcw, FiEdit2, FiTrash2 } from 'react-icons/fi';
-import { FaHeart } from 'react-icons/fa';
-import { BsStars } from 'react-icons/bs';
+import {
+  IconHeart,
+  IconShare2,
+  IconShoppingCart,
+  IconCheck,
+  IconTruck,
+  IconShieldCheck,
+  IconRefreshCw,
+  IconTrash2,
+  IconSparkles,
+  IconPlus,
+  IconMinus,
+} from '../components/ui/icons.jsx';
 import toast from 'react-hot-toast';
 import useFetch from '../hooks/useFetch.js';
 import api from '../api/axios.js';
@@ -248,7 +258,7 @@ export default function ProductDetails() {
           {product.highlights?.length > 0 && (
             <ul className="mt-5 space-y-2">
               {product.highlights.map((h, i) => (
-                <li key={i} className="flex items-center gap-2 text-sm text-[#202923]"><FiCheck className="shrink-0 text-[#087F65] text-base" /> {h}</li>
+                <li key={i} className="flex items-center gap-2 text-sm text-[#202923]"><IconCheck size={16} className="shrink-0 text-[#087F65]" /> {h}</li>
               ))}
             </ul>
           )}
@@ -286,38 +296,42 @@ export default function ProductDetails() {
 
           <div className="mt-5 flex flex-wrap items-center gap-3">
             <div className="flex items-center rounded-lg border border-[#E4EAE6] bg-white">
-              <button onClick={() => setQty(Math.max(1, qty - 1))} className="px-3.5 py-2 text-[#202923] transition-colors hover:text-[#087F65]" aria-label="Decrease quantity">−</button>
+              <button onClick={() => setQty(Math.max(1, qty - 1))} className="px-3 py-2 text-[#202923] transition-colors hover:text-[#087F65] hover:bg-[#EAF4EF]" aria-label="Decrease quantity">
+                <IconMinus size={15} />
+              </button>
               <span className="w-8 text-center text-sm font-semibold text-[#202923]">{qty}</span>
-              <button onClick={() => setQty(Math.min(10, variantStock, qty + 1))} className="px-3.5 py-2 text-[#202923] transition-colors hover:text-[#087F65]" aria-label="Increase quantity">+</button>
+              <button onClick={() => setQty(Math.min(10, variantStock, qty + 1))} className="px-3 py-2 text-[#202923] transition-colors hover:text-[#087F65] hover:bg-[#EAF4EF]" aria-label="Increase quantity">
+                <IconPlus size={15} />
+              </button>
             </div>
             <button onClick={handleAddToCart} disabled={variantStock === 0} className="btn-primary flex-1 !py-3 sm:flex-none sm:px-8">
-              <FiShoppingCart /> Add to cart
+              <IconShoppingCart size={18} /> Add to cart
             </button>
             <button onClick={handleBuyNow} disabled={variantStock === 0} className="btn-accent flex-1 !py-3 sm:flex-none sm:px-8">Buy now</button>
             <button
               onClick={() => requireAuth() && dispatch(toggleWishlist(product._id))}
               aria-label="Toggle wishlist"
-              className="btn-outline !px-3.5 !py-3"
+              className="btn-outline !px-3.5 !py-3 hover:bg-[#EAF4EF]"
             >
-              {inWishlist ? <FaHeart className="text-[#168764]" /> : <FiHeart />}
+              <IconHeart size={18} className={inWishlist ? 'fill-[#168764] text-[#168764]' : 'text-[#65716A]'} />
             </button>
-            <button onClick={handleShare} aria-label="Share product" className="btn-outline !px-3.5 !py-3"><FiShare2 /></button>
+            <button onClick={handleShare} aria-label="Share product" className="btn-outline !px-3.5 !py-3 hover:bg-[#EAF4EF]"><IconShare2 size={18} /></button>
             <button
               onClick={() => dispatch(setAiDrawer({ open: true, query: `Tell me about the highlights, sizing, and features of ${product.name}` }))}
               aria-label="Ask AI about this product"
               className="btn-outline !py-3 flex items-center gap-1.5 border-[#087F65]/40 text-[#075E4B] hover:bg-[#EAF4EF] hover:border-[#087F65]"
               title="Ask AI Concierge about this product"
             >
-              <BsStars className="text-[#087F65]" />
+              <IconSparkles size={16} className="text-[#087F65]" />
               <span className="text-xs font-semibold">Ask AI</span>
             </button>
           </div>
 
           {/* Trust badges */}
           <div className="mt-7 grid grid-cols-3 gap-3 border-t border-[#E4EAE6] pt-5 text-center text-xs text-[#65716A]">
-            <div className="flex flex-col items-center gap-1.5"><FiTruck className="text-lg text-[#087F65]" /> Free delivery over ₹999</div>
-            <div className="flex flex-col items-center gap-1.5"><FiRotateCcw className="text-lg text-[#087F65]" /> 7-day easy returns</div>
-            <div className="flex flex-col items-center gap-1.5"><FiShield className="text-lg text-[#087F65]" /> 100% Genuine product</div>
+            <div className="flex flex-col items-center gap-1.5"><IconTruck size={20} className="text-[#087F65]" /> Free delivery over ₹999</div>
+            <div className="flex flex-col items-center gap-1.5"><IconRefreshCw size={20} className="text-[#087F65]" /> 7-day easy returns</div>
+            <div className="flex flex-col items-center gap-1.5"><IconShieldCheck size={20} className="text-[#087F65]" /> 100% Genuine product</div>
           </div>
         </div>
       </div>
@@ -343,11 +357,11 @@ export default function ProductDetails() {
                 <div className="mt-4 flex gap-2">
                   <button
                     onClick={() => { setEditingReview(myReview._id); setReviewForm({ rating: myReview.rating, title: myReview.title, comment: myReview.comment }); }}
-                    className="btn-outline !py-1.5 text-xs"
+                    className="btn-outline !py-1.5 text-xs hover:bg-[#EAF4EF]"
                   >
-                    <FiEdit2 /> Edit
+                    Edit
                   </button>
-                  <button onClick={() => deleteReview(myReview._id)} className="btn-outline !py-1.5 text-xs text-[#B42318]"><FiTrash2 /> Delete</button>
+                  <button onClick={() => deleteReview(myReview._id)} className="btn-outline !py-1.5 text-xs text-[#B42318] hover:bg-red-50 flex items-center gap-1"><IconTrash2 size={14} /> Delete</button>
                 </div>
               </div>
             ) : (
@@ -387,7 +401,7 @@ export default function ProductDetails() {
                 <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#DDEBE3] pb-3">
                   <div className="flex items-center gap-2.5">
                     <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#087F65] text-white shadow-sm">
-                      <BsStars className="text-base" />
+                      <IconSparkles size={18} className="text-white" />
                     </div>
                     <div>
                       <h4 className="font-bold text-[#075E4B] text-sm">AI Customer Sentiment Synthesis</h4>
@@ -400,7 +414,7 @@ export default function ProductDetails() {
                     disabled={aiSummaryLoading}
                     className="flex items-center gap-1.5 rounded-lg bg-[#087F65] hover:bg-[#066B55] px-3.5 py-1.5 text-xs font-semibold text-white transition-colors disabled:opacity-50"
                   >
-                    <BsStars className={aiSummaryLoading ? 'animate-spin' : ''} />
+                    <IconSparkles size={14} className={aiSummaryLoading ? 'animate-spin' : ''} />
                     {aiSummaryLoading ? 'Analyzing...' : aiSummary ? 'Refresh AI Summary' : 'Generate AI Summary'}
                   </button>
                 </div>
@@ -426,7 +440,7 @@ export default function ProductDetails() {
                       {aiSummary.pros?.length > 0 && (
                         <div className="rounded-xl bg-white border border-[#DDEBE3] p-3">
                           <p className="text-xs font-bold text-[#075E4B] mb-1.5 flex items-center gap-1">
-                            <FiCheck className="text-sm text-[#087F65]" /> What Customers Love
+                            <IconCheck size={16} className="text-[#087F65]" /> What Customers Love
                           </p>
                           <ul className="space-y-1 text-xs text-[#202923]">
                             {aiSummary.pros.map((pro, i) => (

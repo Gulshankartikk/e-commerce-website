@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { FiChevronDown } from 'react-icons/fi';
+import { IconChevronDown } from '../../components/ui/icons.jsx';
 import { AnimatePresence, motion } from 'framer-motion';
 import Breadcrumbs from '../../components/ui/Breadcrumbs.jsx';
 
@@ -28,7 +28,7 @@ export default function FAQ() {
           <div key={i} className="card-surface overflow-hidden">
             <button onClick={() => setOpen(open === i ? -1 : i)} className="flex w-full items-center justify-between p-5 text-left font-semibold text-[#202923]" aria-expanded={open === i}>
               {f.q}
-              <FiChevronDown className={`shrink-0 transition-transform ${open === i ? 'rotate-180 text-[#087F65]' : 'text-[#89938D]'}`} />
+              <IconChevronDown size={18} className={`shrink-0 transition-transform ${open === i ? 'rotate-180 text-[#087F65]' : 'text-[#89938D]'}`} />
             </button>
             <AnimatePresence>
               {open === i && (

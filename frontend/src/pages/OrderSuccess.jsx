@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FiCheckCircle, FiPackage, FiDownload } from 'react-icons/fi';
+import { IconCheckCircle2, IconPackage, IconDownload } from '../components/ui/icons.jsx';
 import useFetch from '../hooks/useFetch.js';
 import api from '../api/axios.js';
 import toast from 'react-hot-toast';
@@ -36,9 +36,9 @@ export default function OrderSuccess() {
         className="card-surface w-full max-w-lg p-8 text-center"
       >
         <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.2, type: 'spring' }}>
-          <FiCheckCircle className="mx-auto text-7xl text-[#168764]" />
+          <IconCheckCircle2 size={64} className="mx-auto text-[#168764]" />
         </motion.div>
-        <h1 className="mt-5 text-2xl font-bold text-[#202923]">Order confirmed! 🎉</h1>
+        <h1 className="mt-5 text-2xl font-bold text-[#202923]">Order confirmed!</h1>
         <p className="mt-2 text-sm text-[#65716A]">
           Thanks for shopping with FlashShop. A confirmation email is on its way.
         </p>
@@ -51,8 +51,8 @@ export default function OrderSuccess() {
           </div>
         )}
         <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-          <Link to={`/dashboard/orders/${id}`} className="btn-primary flex-1"><FiPackage /> Track order</Link>
-          <button onClick={downloadInvoice} className="btn-outline flex-1"><FiDownload /> Invoice PDF</button>
+          <Link to={`/dashboard/orders/${id}`} className="btn-primary flex-1 flex items-center justify-center gap-2"><IconPackage size={18} /> Track order</Link>
+          <button onClick={downloadInvoice} className="btn-outline flex-1 flex items-center justify-center gap-2"><IconDownload size={18} /> Invoice PDF</button>
         </div>
         <Link to="/products" className="mt-4 inline-block text-sm text-[#087F65] font-semibold hover:underline">Continue shopping →</Link>
       </motion.div>

@@ -1,5 +1,12 @@
 import { NavLink, Route, Routes } from 'react-router-dom';
-import { FiUser, FiPackage, FiHeart, FiMapPin, FiBell, FiLock } from 'react-icons/fi';
+import {
+  IconUserRound,
+  IconPackage,
+  IconHeart,
+  IconMapPin,
+  IconBell,
+  IconLock,
+} from '../../components/ui/icons.jsx';
 import Profile from './Profile.jsx';
 import MyOrders from './MyOrders.jsx';
 import Addresses from './Addresses.jsx';
@@ -8,12 +15,12 @@ import Notifications from './Notifications.jsx';
 import Wishlist from '../Wishlist.jsx';
 
 const TABS = [
-  { to: '', end: true, icon: FiUser, label: 'Profile' },
-  { to: 'orders', icon: FiPackage, label: 'My Orders' },
-  { to: 'wishlist', icon: FiHeart, label: 'Wishlist' },
-  { to: 'addresses', icon: FiMapPin, label: 'Addresses' },
-  { to: 'notifications', icon: FiBell, label: 'Notifications' },
-  { to: 'password', icon: FiLock, label: 'Password' },
+  { to: '', end: true, icon: IconUserRound, label: 'Profile' },
+  { to: 'orders', icon: IconPackage, label: 'My Orders' },
+  { to: 'wishlist', icon: IconHeart, label: 'Wishlist' },
+  { to: 'addresses', icon: IconMapPin, label: 'Addresses' },
+  { to: 'notifications', icon: IconBell, label: 'Notifications' },
+  { to: 'password', icon: IconLock, label: 'Password' },
 ];
 
 /** User dashboard shell with tab navigation + nested routes. */
@@ -31,7 +38,7 @@ export default function Dashboard() {
               className={({ isActive }) =>
                 `flex items-center gap-2.5 whitespace-nowrap rounded-xl px-4 py-2.5 text-sm font-medium transition-all ${isActive ? 'bg-[#087F65] text-white shadow-sm' : 'text-[#65716A] hover:bg-[#EAF4EF] hover:text-[#075E4B]'}`}
             >
-              <t.icon /> {t.label}
+              <t.icon size={18} /> {t.label}
             </NavLink>
           ))}
         </nav>

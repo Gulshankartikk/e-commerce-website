@@ -2,8 +2,7 @@ import { memo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
-import { FiHeart, FiShoppingCart, FiEye } from 'react-icons/fi';
-import { FaHeart } from 'react-icons/fa';
+import { IconHeart, IconShoppingCart, IconEye } from '../ui/icons.jsx';
 import toast from 'react-hot-toast';
 import Rating from '../ui/Rating.jsx';
 import { addToCart } from '../../features/cartSlice.js';
@@ -77,16 +76,16 @@ function ProductCard({ product }) {
         <button
           onClick={handleWishlist}
           aria-label="Toggle wishlist"
-          className="flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-[#65716A] shadow-sm border border-[#E4EAE6] transition-colors hover:text-[#087F65]"
+          className="flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-[#65716A] shadow-sm border border-[#E4EAE6] transition-colors hover:text-[#087F65] hover:bg-[#EAF4EF]"
         >
-          {inWishlist ? <FaHeart className="text-[#168764]" /> : <FiHeart />}
+          <IconHeart size={16} className={inWishlist ? 'fill-[#168764] text-[#168764]' : ''} />
         </button>
         <button
           onClick={() => dispatch(setQuickView(product))}
           aria-label="Quick view"
-          className="flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-[#65716A] shadow-sm border border-[#E4EAE6] transition-colors hover:text-[#087F65] opacity-0 group-hover:opacity-100 transition-opacity"
+          className="flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-[#65716A] shadow-sm border border-[#E4EAE6] transition-colors hover:text-[#087F65] hover:bg-[#EAF4EF] opacity-0 group-hover:opacity-100 transition-opacity"
         >
-          <FiEye />
+          <IconEye size={16} />
         </button>
       </div>
 
@@ -147,7 +146,7 @@ function ProductCard({ product }) {
             aria-label="Add to cart"
             className="flex items-center gap-1.5 rounded-[8px] bg-[#087F65] px-3.5 py-2 text-xs font-bold text-white shadow-sm transition-all hover:bg-[#066B55] hover:shadow-[0_4px_12px_rgba(8,127,101,0.25)] active:scale-95 disabled:opacity-40"
           >
-            <FiShoppingCart className="text-sm" />
+            <IconShoppingCart size={15} />
             <span>Add</span>
           </button>
         </div>

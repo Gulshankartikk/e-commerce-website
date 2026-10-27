@@ -1,6 +1,19 @@
 import { NavLink, Route, Routes, Link } from 'react-router-dom';
 import { useState } from 'react';
-import { FiGrid, FiBox, FiShoppingBag, FiUsers, FiTag, FiImage, FiStar, FiLayers, FiMenu, FiX, FiArrowLeft, FiActivity } from 'react-icons/fi';
+import {
+  IconLayoutDashboard,
+  IconSparkles,
+  IconPackage,
+  IconShoppingCart,
+  IconUsers,
+  IconLayers,
+  IconTag,
+  IconImage,
+  IconStar,
+  IconX,
+  IconMenu,
+  IconArrowLeft,
+} from '../../components/ui/icons.jsx';
 import AdminDashboard from './AdminDashboard.jsx';
 import AdminProducts from './AdminProducts.jsx';
 import AdminOrders from './AdminOrders.jsx';
@@ -12,15 +25,15 @@ import AdminCatalog from './AdminCatalog.jsx';
 import AdminEvals from './AdminEvals.jsx';
 
 const LINKS = [
-  { to: '', end: true, icon: FiGrid, label: 'Dashboard' },
-  { to: 'evals', icon: FiActivity, label: 'AI RAG & Evals' },
-  { to: 'products', icon: FiBox, label: 'Products' },
-  { to: 'orders', icon: FiShoppingBag, label: 'Orders' },
-  { to: 'users', icon: FiUsers, label: 'Users' },
-  { to: 'catalog', icon: FiLayers, label: 'Categories & Brands' },
-  { to: 'coupons', icon: FiTag, label: 'Coupons' },
-  { to: 'banners', icon: FiImage, label: 'Banners' },
-  { to: 'reviews', icon: FiStar, label: 'Reviews' },
+  { to: '', end: true, icon: IconLayoutDashboard, label: 'Dashboard' },
+  { to: 'evals', icon: IconSparkles, label: 'AI RAG & Evals' },
+  { to: 'products', icon: IconPackage, label: 'Products' },
+  { to: 'orders', icon: IconShoppingCart, label: 'Orders' },
+  { to: 'users', icon: IconUsers, label: 'Users' },
+  { to: 'catalog', icon: IconLayers, label: 'Categories & Brands' },
+  { to: 'coupons', icon: IconTag, label: 'Coupons' },
+  { to: 'banners', icon: IconImage, label: 'Banners' },
+  { to: 'reviews', icon: IconStar, label: 'Reviews' },
 ];
 
 /** Admin panel shell styled in clean white & soft mint with deep emerald navigation. */
@@ -37,7 +50,7 @@ export default function AdminLayout() {
             <span className="text-[#075E4B] font-extrabold text-lg">FLASH<span className="text-[#087F65]">SHOP</span></span>
             <span className="rounded bg-[#EAF4EF] px-1.5 py-0.5 text-[10px] font-bold text-[#075E4B]">Admin</span>
           </Link>
-          <button className="lg:hidden text-[#202923]" onClick={() => setOpen(false)} aria-label="Close sidebar"><FiX /></button>
+          <button className="lg:hidden text-[#202923] p-1.5 rounded-lg hover:bg-[#EAF4EF]" onClick={() => setOpen(false)} aria-label="Close sidebar"><IconX size={20} /></button>
         </div>
         <nav className="space-y-1 p-3">
           {LINKS.map((l) => (
@@ -45,11 +58,11 @@ export default function AdminLayout() {
               key={l.label} to={l.to} end={l.end} onClick={() => setOpen(false)}
               className={({ isActive }) => `flex items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium transition-all ${isActive ? 'bg-[#087F65] text-white font-semibold shadow-sm' : 'text-[#202923] hover:bg-[#F1F7F4] hover:text-[#087F65]'}`}
             >
-              <l.icon /> {l.label}
+              <l.icon size={18} /> {l.label}
             </NavLink>
           ))}
           <Link to="/" className="mt-6 flex items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-semibold text-[#087F65] transition-colors hover:bg-[#EAF4EF]">
-            <FiArrowLeft /> Back to Storefront
+            <IconArrowLeft size={18} /> Back to Storefront
           </Link>
         </nav>
       </aside>
@@ -58,7 +71,7 @@ export default function AdminLayout() {
       {/* Content */}
       <div className="min-w-0 flex-1">
         <header className="sticky top-0 z-20 flex items-center gap-3 border-b border-[#E4EAE6] bg-white px-6 py-3.5 lg:hidden">
-          <button onClick={() => setOpen(true)} aria-label="Open sidebar" className="text-[#202923]"><FiMenu className="text-xl" /></button>
+          <button onClick={() => setOpen(true)} aria-label="Open sidebar" className="text-[#202923] p-1.5 rounded-lg hover:bg-[#EAF4EF]"><IconMenu size={22} /></button>
           <span className="font-display font-bold text-[#202923]">Admin</span>
         </header>
         <main className="p-6">

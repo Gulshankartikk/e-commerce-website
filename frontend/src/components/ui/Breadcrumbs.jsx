@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { FiChevronRight } from 'react-icons/fi';
+import { IconChevronRight } from './icons.jsx';
 
 /** Breadcrumb trail: items = [{ label, to? }] — last item is the current page. */
 export default function Breadcrumbs({ items }) {
@@ -8,7 +8,7 @@ export default function Breadcrumbs({ items }) {
       <Link to="/" className="transition-colors hover:text-[#087F65]">Home</Link>
       {items.map((item, i) => (
         <span key={i} className="flex items-center gap-1.5">
-          <FiChevronRight className="text-xs" />
+          <IconChevronRight size={14} className="text-[#89938D]" />
           {item.to ? (
             <Link to={item.to} className="transition-colors hover:text-[#087F65]">{item.label}</Link>
           ) : (

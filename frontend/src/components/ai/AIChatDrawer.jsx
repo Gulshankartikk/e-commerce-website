@@ -5,17 +5,19 @@ import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import toast from 'react-hot-toast';
 import {
-  FiX,
-  FiTrash2,
-  FiShoppingBag,
-  FiMic,
-  FiMicOff,
-  FiArrowUpRight,
-  FiCheckCircle,
-  FiAlertCircle,
-  FiExternalLink,
-} from 'react-icons/fi';
-import { BsStars } from 'react-icons/bs';
+  IconX,
+  IconTrash2,
+  IconShoppingCart,
+  IconMic,
+  IconMicOff,
+  IconArrowRight,
+  IconCheckCircle2,
+  IconAlertCircle,
+  IconExternalLink,
+  IconSparkles,
+  IconBot,
+  IconSend,
+} from '../ui/icons.jsx';
 
 import api from '../../api/axios.js';
 import { setAiDrawer, clearAiInitialQuery } from '../../features/uiSlice.js';
@@ -219,7 +221,7 @@ export default function AIChatDrawer() {
           className="group relative flex items-center gap-2.5 rounded-full bg-[#087F65] hover:bg-[#066B55] p-3.5 sm:px-5 sm:py-3.5 font-bold text-white shadow-[0_8px_24px_rgba(8,127,101,0.35)] ring-2 ring-white/60 transition-all"
           aria-label="Open Store Shopping Assistant"
         >
-          <BsStars className="text-xl sm:text-lg text-white" />
+          <IconSparkles size={20} className="text-white" />
           <span className="hidden sm:inline font-bold tracking-wide text-sm">Store Shopping Assistant</span>
         </motion.button>
       </div>
@@ -250,7 +252,7 @@ export default function AIChatDrawer() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
                     <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/15 text-white">
-                      <BsStars className="text-xl" />
+                      <IconSparkles size={20} className="text-white" />
                     </div>
                     <div>
                       <h2 className="text-base font-bold leading-tight">Store Shopping Assistant</h2>
@@ -267,16 +269,18 @@ export default function AIChatDrawer() {
                         onClick={clearChat}
                         className="rounded-lg p-2 text-[#DDEBE3] hover:bg-white/15 hover:text-white transition-colors"
                         title="Clear Conversation"
+                        aria-label="Clear Conversation"
                       >
-                        <FiTrash2 className="text-lg" />
+                        <IconTrash2 size={18} />
                       </button>
                     )}
                     <button
                       onClick={() => dispatch(setAiDrawer(false))}
                       className="rounded-lg p-2 text-[#DDEBE3] hover:bg-white/15 hover:text-white transition-colors"
                       title="Close Assistant"
+                      aria-label="Close Assistant"
                     >
-                      <FiX className="text-xl" />
+                      <IconX size={20} />
                     </button>
                   </div>
                 </div>
@@ -287,7 +291,7 @@ export default function AIChatDrawer() {
                 {messages.length === 0 ? (
                   <div className="flex flex-col items-center justify-center py-8 text-center">
                     <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#EAF4EF] text-[#075E4B] mb-4 shadow-sm border border-[#DDEBE3]">
-                      <BsStars className="text-3xl text-[#087F65]" />
+                      <IconBot size={32} className="text-[#087F65]" />
                     </div>
                     <h3 className="text-lg font-bold text-[#202923]">
                       Welcome to FlashShop Copilot
@@ -308,7 +312,7 @@ export default function AIChatDrawer() {
                             className="group flex items-center justify-between rounded-xl border border-[#E4EAE6] bg-white p-3 text-xs font-medium text-[#202923] hover:border-[#087F65] hover:bg-[#EAF4EF] hover:text-[#087F65] shadow-sm transition-all"
                           >
                             <span>{prompt}</span>
-                            <FiArrowUpRight className="opacity-0 group-hover:opacity-100 text-[#087F65] text-sm transition-opacity" />
+                            <IconArrowRight size={14} className="opacity-0 group-hover:opacity-100 text-[#087F65] transition-opacity" />
                           </button>
                         ))}
                       </div>
@@ -361,7 +365,7 @@ export default function AIChatDrawer() {
                         <div className="mt-2.5 max-w-[95%] rounded-xl border border-[#DDEBE3] bg-[#EAF4EF] p-3 shadow-xs space-y-2">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-1.5 text-xs font-bold text-[#075E4B]">
-                              <FiCheckCircle className="text-[#087F65] text-sm" />
+                              <IconCheckCircle2 size={16} className="text-[#087F65]" />
                               <span>Verified Citations ({msg.citations.length})</span>
                             </div>
                             <span className="text-[10px] uppercase font-bold tracking-wider text-[#075E4B] bg-[#DDEBE3] px-2 py-0.5 rounded-full">
@@ -393,7 +397,7 @@ export default function AIChatDrawer() {
                                       title="Open verified source document"
                                     >
                                       <span>Source</span>
-                                      <FiExternalLink className="text-[10px]" />
+                                      <IconExternalLink size={12} />
                                     </button>
                                   )}
                                 </div>
@@ -411,7 +415,7 @@ export default function AIChatDrawer() {
                       {/* Abstention notice when query falls outside curated catalog */}
                       {msg.abstention?.abstained && (
                         <div className="mt-2 max-w-[90%] rounded-xl border border-[#DDEBE3] bg-[#EAF4EF] p-2.5 text-xs text-[#075E4B] flex items-center gap-2">
-                          <FiAlertCircle className="text-[#087F65] flex-shrink-0 text-base" />
+                          <IconAlertCircle size={16} className="text-[#087F65] flex-shrink-0" />
                           <span>Curated catalog notice: FlashShop carries select premium electronics and audio categories only.</span>
                         </div>
                       )}
@@ -454,7 +458,7 @@ export default function AIChatDrawer() {
                                     onClick={() => handleAddToCart(p)}
                                     className="mt-2 w-full rounded-md bg-[#087F65] hover:bg-[#066B55] py-1.5 text-[11px] font-bold text-white transition-colors flex items-center justify-center gap-1.5 shadow-sm"
                                   >
-                                    <FiShoppingBag className="text-xs" /> Add to cart
+                                    <IconShoppingCart size={13} /> Add to cart
                                   </button>
                                 </div>
                               </div>
@@ -470,7 +474,7 @@ export default function AIChatDrawer() {
                 {loading && (
                   <div className="flex items-start gap-2.5">
                     <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#075E4B] text-white shadow-sm">
-                      <BsStars className="text-sm text-white" />
+                      <IconSparkles size={16} className="text-white" />
                     </div>
                     <div className="rounded-2xl rounded-tl-xs bg-white border border-[#E4EAE6] px-4 py-3 text-xs text-[#65716A] flex items-center gap-2 shadow-xs">
                       <span className="h-2 w-2 rounded-full bg-[#087F65] animate-ping" />
@@ -530,8 +534,9 @@ export default function AIChatDrawer() {
                         isListening ? 'text-[#B42318] animate-pulse' : 'text-[#65716A] hover:text-[#087F65]'
                       }`}
                       title={isListening ? 'Stop listening' : 'Voice search'}
+                      aria-label={isListening ? 'Stop listening' : 'Voice search'}
                     >
-                      {isListening ? <FiMicOff /> : <FiMic />}
+                      {isListening ? <IconMicOff size={18} /> : <IconMic size={18} />}
                     </button>
                   </div>
 
@@ -540,8 +545,9 @@ export default function AIChatDrawer() {
                     disabled={!input.trim() || loading}
                     className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-[#087F65] hover:bg-[#066B55] text-white shadow-sm disabled:opacity-40 disabled:cursor-not-allowed transition-all"
                     title="Send query"
+                    aria-label="Send query"
                   >
-                    <FiArrowUpRight className="text-xl" />
+                    <IconSend size={18} />
                   </button>
                 </form>
 
