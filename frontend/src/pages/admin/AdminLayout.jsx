@@ -1,6 +1,6 @@
 import { NavLink, Route, Routes, Link } from 'react-router-dom';
 import { useState } from 'react';
-import { FiGrid, FiBox, FiShoppingBag, FiUsers, FiTag, FiImage, FiStar, FiLayers, FiMenu, FiX, FiArrowLeft } from 'react-icons/fi';
+import { FiGrid, FiBox, FiShoppingBag, FiUsers, FiTag, FiImage, FiStar, FiLayers, FiMenu, FiX, FiArrowLeft, FiActivity } from 'react-icons/fi';
 import AdminDashboard from './AdminDashboard.jsx';
 import AdminProducts from './AdminProducts.jsx';
 import AdminOrders from './AdminOrders.jsx';
@@ -9,9 +9,11 @@ import AdminCoupons from './AdminCoupons.jsx';
 import AdminBanners from './AdminBanners.jsx';
 import AdminReviews from './AdminReviews.jsx';
 import AdminCatalog from './AdminCatalog.jsx';
+import AdminEvals from './AdminEvals.jsx';
 
 const LINKS = [
   { to: '', end: true, icon: FiGrid, label: 'Dashboard' },
+  { to: 'evals', icon: FiActivity, label: 'AI RAG & Evals' },
   { to: 'products', icon: FiBox, label: 'Products' },
   { to: 'orders', icon: FiShoppingBag, label: 'Orders' },
   { to: 'users', icon: FiUsers, label: 'Users' },
@@ -58,6 +60,7 @@ export default function AdminLayout() {
         <main className="p-6">
           <Routes>
             <Route index element={<AdminDashboard />} />
+            <Route path="evals" element={<AdminEvals />} />
             <Route path="products" element={<AdminProducts />} />
             <Route path="orders" element={<AdminOrders />} />
             <Route path="users" element={<AdminUsers />} />

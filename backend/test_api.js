@@ -384,6 +384,61 @@ async function runTests() {
     assert.ok(res.data.sessions.length > 0);
   });
 
+  // 10. Production RAG, Verified Citations & Admin Evals Suite
+  await test('AI RAG: Grounded Policy Query with Verified Citations', async () => {
+    const res = await req('/ai/chat', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${customerToken}` },
+      body: { message: 'What is your return window and do I have to pay return fees for remorse?' },
+    });
+    assert.strictEqual(res.status, 200);
+    assert.strictEqual(res.data.success, true);
+    assert.ok(Array.isArray(res.data.citations), 'citations field must be returned');
+    assert.ok(res.data.citations.length > 0, 'Expected at least 1 verified citation');
+    assert.strictEqual(res.data.citations[0].verified, true, 'Citation must be verified server-side');
+    assert.strictEqual(res.data.citations[0].sourceId, 'doc_returns_policy_v1');
+    assert.ok(res.data.citations[0].snippet && res.data.citations[0].snippet.length > 10);
+  });
+
+  await test('AI RAG: Out-of-Scope Query Honest Abstention', async () => {
+    const res = await req('/ai/chat', {
+      method: 'POST',
+      body: { message: 'Can you sell me prescription heart medication or insulin?' },
+    });
+    assert.strictEqual(res.status, 200);
+    assert.strictEqual(res.data.success, true);
+    assert.strictEqual(res.data.abstention?.abstained, true, 'Must abstain on prescription medication');
+    assert.strictEqual(res.data.intent, 'unsupported');
+    assert.strictEqual(res.data.citations.length, 0, 'Citations must be empty on abstention');
+  });
+
+  await test('Security: Customer cannot access Admin RAG Evals (Expect 403)', async () => {
+    const res = await req('/admin/rag/evals', {
+      headers: { Authorization: `Bearer ${customerToken}` },
+    });
+    assert.strictEqual(res.status, 403);
+  });
+
+  await test('Admin RAG: Admin CAN fetch Knowledge Documents (Expect 200)', async () => {
+    const res = await req('/admin/rag/documents', {
+      headers: { Authorization: `Bearer ${adminToken}` },
+    });
+    assert.strictEqual(res.status, 200);
+    assert.strictEqual(res.data.success, true);
+    assert.ok(Array.isArray(res.data.documents));
+    assert.ok(res.data.totalDocuments > 0);
+    assert.ok(res.data.totalChunks > 0);
+  });
+
+  await test('Admin RAG: Admin CAN fetch Evaluation Runs History (Expect 200)', async () => {
+    const res = await req('/admin/rag/evals', {
+      headers: { Authorization: `Bearer ${adminToken}` },
+    });
+    assert.strictEqual(res.status, 200);
+    assert.strictEqual(res.data.success, true);
+    assert.ok(Array.isArray(res.data.runs));
+  });
+
   console.log('\n----------------------------------------');
   console.log(`🏁 Test Summary: ${passed} Passed, ${failed} Failed`);
   console.log('----------------------------------------\n');

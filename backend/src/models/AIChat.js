@@ -5,9 +5,31 @@ const chatMessageSchema = new mongoose.Schema(
     role: { type: String, enum: ['user', 'assistant'], required: true },
     content: { type: String, required: true },
     products: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }],
+    citations: [
+      {
+        citationId: String,
+        marker: String,
+        chunkId: String,
+        sourceId: String,
+        title: String,
+        url: String,
+        documentType: String,
+        snippet: String,
+        relevanceScore: Number,
+        verified: Boolean,
+      },
+    ],
+    abstention: {
+      abstained: { type: Boolean, default: false },
+      reason: { type: String, default: null },
+    },
     metadata: {
-      intent: { type: String, default: 'chat' }, // 'chat', 'recommendation', 'compare', 'review_summary'
+      intent: { type: String, default: 'chat' }, // 'chat', 'recommendation', 'compare', 'review_summary', 'policy_qa', 'unsupported'
       budget: { type: Number },
+      retrievalLatencyMs: { type: Number },
+      generationLatencyMs: { type: Number },
+      retrievalStrategy: { type: String },
+      modelUsed: { type: String },
     },
   },
   { timestamps: true }

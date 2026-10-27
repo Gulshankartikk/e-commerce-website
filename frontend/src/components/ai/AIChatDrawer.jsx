@@ -15,6 +15,9 @@ import {
   FiArrowUpRight,
   FiCheck,
   FiExternalLink,
+  FiCheckCircle,
+  FiAlertCircle,
+  FiBookOpen,
 } from 'react-icons/fi';
 import { BsStars, BsRobot } from 'react-icons/bs';
 
@@ -24,11 +27,11 @@ import { addToCart } from '../../features/cartSlice.js';
 import { formatPrice, imgUrl } from '../../utils/format.js';
 
 const QUICK_PROMPTS = [
+  'What is your return window and fee?',
   'Show me earbuds under ₹5,000',
-  'Compare running shoes & sneakers',
-  'Summarize customer reviews for Nova Earbuds',
-  'Smartwatches with AMOLED & GPS',
-  'Best memory foam pillows for neck pain',
+  'What warranty covers Pulse & Nova electronics?',
+  'What is the free shipping threshold?',
+  'Compare running shoes vs earbuds',
 ];
 
 export default function AIChatDrawer() {
@@ -160,6 +163,11 @@ export default function AIChatDrawer() {
         products: data.products || [],
         intent: data.intent,
         budgetDetected: data.budgetDetected,
+        citations: data.citations || [],
+        abstention: data.abstention || { abstained: false, reason: null },
+        retrievalLatencyMs: data.retrievalLatencyMs || 0,
+        generationLatencyMs: data.generationLatencyMs || 0,
+        retrievalStrategy: data.retrievalStrategy,
         timestamp: new Date().toISOString(),
       };
 
@@ -347,6 +355,66 @@ export default function AIChatDrawer() {
                           {msg.content}
                         </ReactMarkdown>
                       </div>
+
+                      {/* Verified Citations Drawer Card */}
+                      {msg.citations && msg.citations.length > 0 && (
+                        <div className="mt-2.5 max-w-[95%] rounded-2xl border border-emerald-500/25 bg-emerald-50/60 dark:bg-emerald-950/30 p-3 shadow-xs space-y-2">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-800 dark:text-emerald-300">
+                              <FiCheckCircle className="text-emerald-600 dark:text-emerald-400 text-sm" />
+                              <span>Verified Citations ({msg.citations.length})</span>
+                            </div>
+                            <span className="text-[10px] uppercase font-bold tracking-wider text-emerald-700 dark:text-emerald-300 bg-emerald-200/60 dark:bg-emerald-900/50 px-2 py-0.5 rounded-full">
+                              Verified Grounding
+                            </span>
+                          </div>
+
+                          <div className="space-y-1.5">
+                            {msg.citations.map((cite) => (
+                              <div
+                                key={cite.citationId}
+                                className="rounded-xl border border-slate-200/80 dark:border-slate-700/80 bg-white dark:bg-slate-800/90 p-2.5 text-xs shadow-2xs"
+                              >
+                                <div className="flex items-center justify-between gap-2">
+                                  <span className="font-bold text-[#703080] dark:text-purple-300 flex items-center gap-1.5 line-clamp-1">
+                                    <span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-purple-100 dark:bg-purple-900/60 text-[10px] font-black text-[#703080] dark:text-purple-300 flex-shrink-0">
+                                      {cite.marker?.replace(/[\[\]]/g, '') || '•'}
+                                    </span>
+                                    <span>{cite.title}</span>
+                                  </span>
+                                  {cite.url && (
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        navigate(cite.url);
+                                        dispatch(setAiDrawer(false));
+                                      }}
+                                      className="text-[11px] font-semibold text-[#703080] dark:text-purple-300 hover:underline flex items-center gap-1 flex-shrink-0"
+                                      title="Open verified source document"
+                                    >
+                                      <span>Source</span>
+                                      <FiExternalLink className="text-[10px]" />
+                                    </button>
+                                  )}
+                                </div>
+                                {cite.snippet && (
+                                  <p className="mt-1 text-[11px] leading-relaxed text-slate-600 dark:text-slate-300 border-l-2 border-emerald-500/60 pl-2 italic">
+                                    "{cite.snippet}"
+                                  </p>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Abstention notice when query falls outside curated catalog */}
+                      {msg.abstention?.abstained && (
+                        <div className="mt-2 max-w-[90%] rounded-xl border border-amber-500/30 bg-amber-50/70 dark:bg-amber-950/30 p-2.5 text-xs text-amber-800 dark:text-amber-200 flex items-center gap-2">
+                          <FiAlertCircle className="text-amber-600 dark:text-amber-400 flex-shrink-0 text-base" />
+                          <span>Curated catalog notice: FlashShop carries select premium categories only.</span>
+                        </div>
+                      )}
 
                       {/* Recommended Products Container (matches user screenshot) */}
                       {msg.products && msg.products.length > 0 && (

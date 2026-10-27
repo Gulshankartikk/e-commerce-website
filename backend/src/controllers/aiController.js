@@ -92,9 +92,15 @@ export const chatWithAssistant = catchAsync(async (req, res, next) => {
         role: 'assistant',
         content: aiResult.reply,
         products: recommendedProducts.map((p) => p._id),
+        citations: aiResult.citations || [],
+        abstention: aiResult.abstention || { abstained: false, reason: null },
         metadata: {
           intent: aiResult.intent,
           budget: aiResult.budgetDetected,
+          retrievalLatencyMs: aiResult.retrievalLatencyMs,
+          generationLatencyMs: aiResult.generationLatencyMs,
+          retrievalStrategy: aiResult.retrievalStrategy,
+          modelUsed: aiResult.modelUsed,
         },
       });
 
@@ -116,6 +122,12 @@ export const chatWithAssistant = catchAsync(async (req, res, next) => {
     sessionId,
     intent: aiResult.intent,
     budgetDetected: aiResult.budgetDetected,
+    citations: aiResult.citations || [],
+    abstention: aiResult.abstention || { abstained: false, reason: null },
+    retrievalLatencyMs: aiResult.retrievalLatencyMs || 0,
+    generationLatencyMs: aiResult.generationLatencyMs || 0,
+    retrievalStrategy: aiResult.retrievalStrategy,
+    modelUsed: aiResult.modelUsed,
   });
 });
 

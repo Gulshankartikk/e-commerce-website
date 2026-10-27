@@ -1,8 +1,13 @@
 import User from '../models/User.js';
 import Order from '../models/Order.js';
 import Product from '../models/Product.js';
+import KnowledgeDocument from '../models/KnowledgeDocument.js';
+import KnowledgeChunk from '../models/KnowledgeChunk.js';
+import AIEvalRun from '../models/AIEvalRun.js';
 import AppError from '../utils/AppError.js';
 import catchAsync from '../utils/catchAsync.js';
+import { runEvaluationSuite } from '../services/evalRunnerService.js';
+import { ingestAllKnowledgeDocuments } from '../services/knowledgeIngestionService.js';
 
 /** GET /admin/dashboard — headline stats + sales graph + top sellers + recent orders. */
 export const getDashboardStats = catchAsync(async (req, res) => {
@@ -96,4 +101,83 @@ export const deleteUser = catchAsync(async (req, res, next) => {
   if (String(user._id) === String(req.user._id)) return next(new AppError('You cannot delete yourself', 400));
   await user.deleteOne();
   res.json({ success: true, message: 'User deleted' });
+});
+
+/** GET /admin/rag/documents — List all indexed knowledge documents */
+export const getRagDocuments = catchAsync(async (req, res) => {
+  const [documents, totalChunks] = await Promise.all([
+    KnowledgeDocument.find().sort('-updatedAt').lean(),
+    KnowledgeChunk.countDocuments({ isActive: true }),
+  ]);
+
+  res.json({
+    success: true,
+    totalDocuments: documents.length,
+    totalChunks,
+    documents,
+  });
+});
+
+/** POST /admin/rag/reindex — Re-indexes all canonical documents */
+export const reindexKnowledge = catchAsync(async (req, res) => {
+  const result = await ingestAllKnowledgeDocuments();
+  res.json({
+    success: true,
+    message: `Successfully re-indexed ${result.documentCount} documents with ${result.totalChunks} chunks.`,
+    ...result,
+  });
+});
+
+/** GET /admin/rag/evals — List all evaluation runs */
+export const getEvalRuns = catchAsync(async (req, res) => {
+  const page = Math.max(1, Number(req.query.page) || 1);
+  const limit = 15;
+
+  const [runs, total] = await Promise.all([
+    AIEvalRun.find()
+      .populate('triggeredBy', 'name email role')
+      .select('runId datasetVersion promptVersion modelName embeddingModel triggerType status summaryMetrics qualityGatePassed createdAt')
+      .sort('-createdAt')
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .lean(),
+    AIEvalRun.countDocuments(),
+  ]);
+
+  res.json({
+    success: true,
+    runs,
+    total,
+    pages: Math.ceil(total / limit),
+  });
+});
+
+/** GET /admin/rag/evals/:runId — Detailed single evaluation run */
+export const getEvalRunById = catchAsync(async (req, res, next) => {
+  const run = await AIEvalRun.findOne({ runId: req.params.runId })
+    .populate('triggeredBy', 'name email role')
+    .lean();
+
+  if (!run) {
+    return next(new AppError('Evaluation run not found', 404));
+  }
+
+  res.json({
+    success: true,
+    run,
+  });
+});
+
+/** POST /admin/rag/evals/trigger — Trigger on-demand evaluation */
+export const triggerEvalRun = catchAsync(async (req, res) => {
+  const summary = await runEvaluationSuite({
+    triggeredBy: req.user?._id,
+    triggerType: 'admin_manual',
+  });
+
+  res.json({
+    success: true,
+    message: 'Evaluation completed successfully.',
+    evaluation: summary,
+  });
 });
