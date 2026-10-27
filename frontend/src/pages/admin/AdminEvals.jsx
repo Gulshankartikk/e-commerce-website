@@ -11,13 +11,13 @@ import {
   FiDollarSign,
   FiBookOpen,
   FiShield,
-  FiExternalLink,
   FiFilter,
 } from 'react-icons/fi';
 import api from '../../api/axios.js';
 import { TableSkeleton } from '../../components/ui/Skeletons.jsx';
 import { formatDate } from '../../utils/format.js';
 
+/** Admin AI RAG & Evals Dashboard styled in clean white & soft mint. */
 export default function AdminEvals() {
   const [activeTab, setActiveTab] = useState('overview');
   const [runs, setRuns] = useState([]);
@@ -40,7 +40,6 @@ export default function AdminEvals() {
       setDocuments(docsRes.data.documents || []);
 
       if (evalsRes.data.runs?.length > 0) {
-        // Fetch full details of the latest run
         const detailRes = await api.get(`/admin/rag/evals/${evalsRes.data.runs[0].runId}`);
         setSelectedRun(detailRes.data.run);
       }
@@ -60,21 +59,19 @@ export default function AdminEvals() {
       const res = await api.get(`/admin/rag/evals/${runId}`);
       setSelectedRun(res.data.run);
       setActiveTab('cases');
+      toast.success(`Loaded run ${runId}`);
     } catch (err) {
-      toast.error('Could not load run details');
+      toast.error('Failed to load run details');
     }
   };
 
   const handleTriggerEval = async () => {
     try {
       setTriggering(true);
-      toast('Starting LLM evaluation run...', { icon: '🧪' });
-      const res = await api.post('/admin/rag/evals/trigger');
-      toast.success('Evaluation run completed!');
-      await fetchEvals();
-      if (res.data.evaluation?.runId) {
-        handleSelectRun(res.data.evaluation.runId);
-      }
+      toast('Starting benchmark evaluation...', { icon: '🚀' });
+      const { data } = await api.post('/admin/rag/evals/trigger');
+      toast.success(`Evaluation complete! Pass rate: ${data.run?.summaryMetrics?.passRate}%`);
+      fetchEvals();
     } catch (err) {
       toast.error(err.message || 'Evaluation run failed');
     } finally {
@@ -85,10 +82,10 @@ export default function AdminEvals() {
   const handleReindex = async () => {
     try {
       setReindexing(true);
-      toast('Re-indexing canonical knowledge documents...', { icon: '📚' });
-      const res = await api.post('/admin/rag/reindex');
-      toast.success(res.data.message || 'Knowledge base successfully re-indexed!');
-      await fetchEvals();
+      toast('Ingesting and embedding canonical knowledge documents...', { icon: '⚙️' });
+      const { data } = await api.post('/admin/rag/reindex');
+      toast.success(data.message || 'Knowledge base successfully re-indexed!');
+      fetchEvals();
     } catch (err) {
       toast.error(err.message || 'Re-indexing failed');
     } finally {
@@ -96,7 +93,7 @@ export default function AdminEvals() {
     }
   };
 
-  if (loading && !selectedRun && runs.length === 0) {
+  if (loading) {
     return <TableSkeleton rows={8} />;
   }
 
@@ -108,56 +105,64 @@ export default function AdminEvals() {
       label: 'Quality Gate',
       value: isGatePassed ? 'PASSED' : 'FAILED',
       icon: isGatePassed ? FiCheckCircle : FiXCircle,
-      color: isGatePassed ? 'from-emerald-600 to-emerald-400' : 'from-rose-600 to-rose-400',
+      bg: isGatePassed ? 'bg-[#EAF4EF]' : 'bg-[#B42318]/10',
+      color: isGatePassed ? 'text-[#087F65]' : 'text-[#B42318]',
     },
     {
       label: 'Pass Rate',
       value: `${latestMetrics.passRate ?? 0}%`,
       sub: `${latestMetrics.passedCases ?? 0}/${latestMetrics.totalCases ?? 0} cases`,
       icon: FiActivity,
-      color: 'from-primary to-primary-400',
+      bg: 'bg-[#EAF4EF]',
+      color: 'text-[#087F65]',
     },
     {
       label: 'Mean Recall@k',
       value: (latestMetrics.meanRecallAtK ?? 0).toFixed(2),
       sub: 'Top-k semantic retrieval',
       icon: FiBookOpen,
-      color: 'from-secondary-500 to-secondary-400',
+      bg: 'bg-[#EAF4EF]',
+      color: 'text-[#087F65]',
     },
     {
       label: 'Citation Precision',
       value: (latestMetrics.meanCitationPrecision ?? 0).toFixed(2),
       sub: 'Zero hallucinated links',
       icon: FiShield,
-      color: 'from-amber-500 to-amber-400',
+      bg: 'bg-[#EAF4EF]',
+      color: 'text-[#087F65]',
     },
     {
       label: 'Mean Faithfulness',
       value: (latestMetrics.meanFaithfulness ?? 0).toFixed(2),
       sub: 'Groundedness score',
       icon: FiCheckCircle,
-      color: 'from-purple-600 to-purple-400',
+      bg: 'bg-[#EAF4EF]',
+      color: 'text-[#087F65]',
     },
     {
       label: 'Abstention Accuracy',
       value: `${((latestMetrics.abstentionAccuracy ?? 0) * 100).toFixed(0)}%`,
       sub: 'Out-of-scope discipline',
       icon: FiShield,
-      color: 'from-teal-600 to-teal-400',
+      bg: 'bg-[#EAF4EF]',
+      color: 'text-[#087F65]',
     },
     {
       label: 'Avg Latency',
       value: `${latestMetrics.averageLatencyMs ?? 0}ms`,
       sub: 'End-to-end response',
       icon: FiClock,
-      color: 'from-blue-600 to-blue-400',
+      bg: 'bg-[#EAF4EF]',
+      color: 'text-[#087F65]',
     },
     {
       label: 'Total Cost',
       value: `$${(latestMetrics.totalCostUsd ?? 0).toFixed(4)}`,
       sub: `${latestMetrics.totalTokens ?? 0} tokens`,
       icon: FiDollarSign,
-      color: 'from-emerald-600 to-emerald-400',
+      bg: 'bg-[#EAF4EF]',
+      color: 'text-[#087F65]',
     },
   ];
 
@@ -173,14 +178,14 @@ export default function AdminEvals() {
 
   return (
     <div className="space-y-6">
-      {/* Header bar */}
+      {/* Header Bar */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold flex items-center gap-2.5">
-            <FiActivity className="text-primary-400" />
+          <h1 className="text-2xl font-bold flex items-center gap-2.5 text-[#202923]">
+            <FiActivity className="text-[#087F65]" />
             <span>AI RAG & Automated Evaluation Dashboard</span>
           </h1>
-          <p className="mt-1 text-xs text-slate-400">
+          <p className="mt-1 text-xs text-[#65716A]">
             Ground-truth dataset evaluations, verified citation audit, latency & faithfulness metrics.
           </p>
         </div>
@@ -189,7 +194,7 @@ export default function AdminEvals() {
           <button
             onClick={handleReindex}
             disabled={reindexing}
-            className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 px-4 py-2.5 text-xs font-semibold text-slate-200 transition-colors disabled:opacity-50"
+            className="btn-outline !py-2 text-xs font-semibold disabled:opacity-50"
           >
             <FiRefreshCw className={reindexing ? 'animate-spin' : ''} />
             <span>{reindexing ? 'Re-indexing...' : 'Re-index Knowledge'}</span>
@@ -198,7 +203,7 @@ export default function AdminEvals() {
           <button
             onClick={handleTriggerEval}
             disabled={triggering}
-            className="flex items-center gap-2 rounded-xl bg-primary hover:bg-primary-600 px-4 py-2.5 text-xs font-bold text-white shadow-glow transition-all disabled:opacity-50"
+            className="btn-primary !py-2 text-xs font-semibold disabled:opacity-50"
           >
             <FiPlay className={triggering ? 'animate-pulse' : ''} />
             <span>{triggering ? 'Running Evals...' : 'Run Evaluation Suite'}</span>
@@ -209,29 +214,29 @@ export default function AdminEvals() {
       {/* KPI Cards Grid */}
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {kpis.map((k) => (
-          <div key={k.label} className="card-surface flex items-center gap-3.5 p-4">
+          <div key={k.label} className="rounded-xl border border-[#E4EAE6] bg-white p-4 shadow-sm flex items-center gap-3.5">
             <span
-              className={`flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${k.color} text-lg text-white shadow-sm`}
+              className={`flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl ${k.bg} text-lg ${k.color} border border-[#DDEBE3]`}
             >
               <k.icon />
             </span>
             <div className="min-w-0 flex-1">
-              <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">{k.label}</p>
-              <p className="text-lg font-black leading-tight text-white">{k.value}</p>
-              {k.sub && <p className="text-[10px] text-slate-400 mt-0.5">{k.sub}</p>}
+              <p className="text-[11px] font-bold uppercase tracking-wider text-[#65716A]">{k.label}</p>
+              <p className="text-xl font-extrabold leading-tight text-[#202923] mt-0.5">{k.value}</p>
+              {k.sub && <p className="text-[10px] text-[#89938D] mt-0.5">{k.sub}</p>}
             </div>
           </div>
         ))}
       </div>
 
       {/* Navigation Tabs */}
-      <div className="flex border-b border-white/10 text-xs font-semibold">
+      <div className="flex border-b border-[#E4EAE6] text-xs font-semibold">
         <button
           onClick={() => setActiveTab('overview')}
           className={`px-5 py-3 border-b-2 transition-colors ${
             activeTab === 'overview'
-              ? 'border-primary text-white font-bold'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              ? 'border-[#087F65] text-[#087F65] font-bold'
+              : 'border-transparent text-[#65716A] hover:text-[#202923]'
           }`}
         >
           Active Run Summary & Historical Runs
@@ -240,8 +245,8 @@ export default function AdminEvals() {
           onClick={() => setActiveTab('cases')}
           className={`px-5 py-3 border-b-2 transition-colors ${
             activeTab === 'cases'
-              ? 'border-primary text-white font-bold'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              ? 'border-[#087F65] text-[#087F65] font-bold'
+              : 'border-transparent text-[#65716A] hover:text-[#202923]'
           }`}
         >
           Test Case Analysis ({selectedRun?.cases?.length || 0})
@@ -250,8 +255,8 @@ export default function AdminEvals() {
           onClick={() => setActiveTab('documents')}
           className={`px-5 py-3 border-b-2 transition-colors ${
             activeTab === 'documents'
-              ? 'border-primary text-white font-bold'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              ? 'border-[#087F65] text-[#087F65] font-bold'
+              : 'border-transparent text-[#65716A] hover:text-[#202923]'
           }`}
         >
           Indexed Knowledge Documents ({documents.length})
@@ -263,76 +268,76 @@ export default function AdminEvals() {
         <div className="space-y-6">
           {/* Active run meta box */}
           {selectedRun && (
-            <div className="card-surface p-5 space-y-4">
-              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-3">
+            <div className="rounded-xl border border-[#E4EAE6] bg-white p-5 shadow-sm space-y-4">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#E4EAE6] pb-3">
                 <div>
                   <div className="flex items-center gap-2">
-                    <h2 className="font-bold text-base text-white">{selectedRun.runId}</h2>
+                    <h2 className="font-bold text-base text-[#202923]">{selectedRun.runId}</h2>
                     <span
                       className={`text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full ${
                         selectedRun.qualityGatePassed
-                          ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
-                          : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
+                          ? 'bg-[#EAF4EF] text-[#075E4B] border border-[#DDEBE3]'
+                          : 'bg-[#B42318]/10 text-[#B42318] border border-[#B42318]/20'
                       }`}
                     >
-                      {selectedRun.qualityGatePassed ? 'Gate Passed' : 'Gate Failed'}
+                      {selectedRun.qualityGatePassed ? 'Quality Gate Passed' : 'Quality Gate Failed'}
                     </span>
                   </div>
-                  <p className="text-xs text-slate-400 mt-1">
+                  <p className="text-xs text-[#65716A] mt-1">
                     Executed on {formatDate(selectedRun.createdAt)} • Dataset {selectedRun.datasetVersion} • Model{' '}
-                    <span className="font-mono text-purple-300">{selectedRun.modelName}</span>
+                    <span className="font-mono text-[#087F65] font-bold">{selectedRun.modelName}</span>
                   </p>
                 </div>
 
                 <div className="text-right">
-                  <p className="text-xs text-slate-400">Trigger Type</p>
-                  <p className="text-xs font-semibold uppercase text-slate-200">{selectedRun.triggerType}</p>
+                  <p className="text-xs text-[#65716A]">Trigger Type</p>
+                  <p className="text-xs font-semibold uppercase text-[#202923]">{selectedRun.triggerType}</p>
                 </div>
               </div>
 
               {/* Quality Thresholds vs Actuals */}
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5 text-xs">
-                <div className="rounded-xl border border-white/5 bg-white/5 p-3">
-                  <p className="text-slate-400">Pass Rate</p>
-                  <p className="text-base font-bold text-white mt-1">{selectedRun.summaryMetrics?.passRate}%</p>
-                  <p className="text-[10px] text-slate-500">Min {selectedRun.qualityThresholds?.minPassRate}%</p>
+                <div className="rounded-lg border border-[#E4EAE6] bg-[#F1F7F4] p-3">
+                  <p className="text-[#65716A]">Pass Rate</p>
+                  <p className="text-base font-bold text-[#202923] mt-1">{selectedRun.summaryMetrics?.passRate}%</p>
+                  <p className="text-[10px] text-[#89938D]">Min {selectedRun.qualityThresholds?.minPassRate}%</p>
                 </div>
-                <div className="rounded-xl border border-white/5 bg-white/5 p-3">
-                  <p className="text-slate-400">Recall@k</p>
-                  <p className="text-base font-bold text-white mt-1">{selectedRun.summaryMetrics?.meanRecallAtK}</p>
-                  <p className="text-[10px] text-slate-500">Min {selectedRun.qualityThresholds?.minRecallAtK}</p>
+                <div className="rounded-lg border border-[#E4EAE6] bg-[#F1F7F4] p-3">
+                  <p className="text-[#65716A]">Recall@k</p>
+                  <p className="text-base font-bold text-[#202923] mt-1">{selectedRun.summaryMetrics?.meanRecallAtK}</p>
+                  <p className="text-[10px] text-[#89938D]">Min {selectedRun.qualityThresholds?.minRecallAtK}</p>
                 </div>
-                <div className="rounded-xl border border-white/5 bg-white/5 p-3">
-                  <p className="text-slate-400">Citation Precision</p>
-                  <p className="text-base font-bold text-white mt-1">{selectedRun.summaryMetrics?.meanCitationPrecision}</p>
-                  <p className="text-[10px] text-slate-500">Min {selectedRun.qualityThresholds?.minCitationPrecision}</p>
+                <div className="rounded-lg border border-[#E4EAE6] bg-[#F1F7F4] p-3">
+                  <p className="text-[#65716A]">Citation Precision</p>
+                  <p className="text-base font-bold text-[#202923] mt-1">{selectedRun.summaryMetrics?.meanCitationPrecision}</p>
+                  <p className="text-[10px] text-[#89938D]">Min {selectedRun.qualityThresholds?.minCitationPrecision}</p>
                 </div>
-                <div className="rounded-xl border border-white/5 bg-white/5 p-3">
-                  <p className="text-slate-400">Faithfulness</p>
-                  <p className="text-base font-bold text-white mt-1">{selectedRun.summaryMetrics?.meanFaithfulness}</p>
-                  <p className="text-[10px] text-slate-500">Min {selectedRun.qualityThresholds?.minFaithfulness}</p>
+                <div className="rounded-lg border border-[#E4EAE6] bg-[#F1F7F4] p-3">
+                  <p className="text-[#65716A]">Faithfulness</p>
+                  <p className="text-base font-bold text-[#202923] mt-1">{selectedRun.summaryMetrics?.meanFaithfulness}</p>
+                  <p className="text-[10px] text-[#89938D]">Min {selectedRun.qualityThresholds?.minFaithfulness}</p>
                 </div>
-                <div className="rounded-xl border border-white/5 bg-white/5 p-3">
-                  <p className="text-slate-400">Abstention Accuracy</p>
-                  <p className="text-base font-bold text-white mt-1">
+                <div className="rounded-lg border border-[#E4EAE6] bg-[#F1F7F4] p-3">
+                  <p className="text-[#65716A]">Abstention Accuracy</p>
+                  <p className="text-base font-bold text-[#202923] mt-1">
                     {((selectedRun.summaryMetrics?.abstentionAccuracy ?? 0) * 100).toFixed(0)}%
                   </p>
-                  <p className="text-[10px] text-slate-500">Min {selectedRun.qualityThresholds?.minAbstentionAccuracy * 100}%</p>
+                  <p className="text-[10px] text-[#89938D]">Min {selectedRun.qualityThresholds?.minAbstentionAccuracy * 100}%</p>
                 </div>
               </div>
             </div>
           )}
 
           {/* Historical Runs Table */}
-          <div className="card-surface overflow-hidden">
-            <div className="p-4 border-b border-white/10 flex items-center justify-between">
-              <h3 className="font-bold text-sm text-white">Evaluation Runs History</h3>
-              <span className="text-xs text-slate-400">{runs.length} recorded runs</span>
+          <div className="rounded-xl border border-[#E4EAE6] bg-white overflow-hidden shadow-sm">
+            <div className="p-4 border-b border-[#E4EAE6] flex items-center justify-between bg-[#F1F7F4]/50">
+              <h3 className="font-bold text-sm text-[#202923]">Evaluation Runs History</h3>
+              <span className="text-xs text-[#65716A]">{runs.length} recorded runs</span>
             </div>
 
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-white/5 uppercase tracking-wider text-slate-400">
+                <thead className="bg-[#F1F7F4] uppercase tracking-wider text-[#65716A] border-b border-[#E4EAE6]">
                   <tr>
                     <th className="p-3.5">Run ID</th>
                     <th className="p-3.5">Date</th>
@@ -346,22 +351,22 @@ export default function AdminEvals() {
                     <th className="p-3.5 text-right">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-white/5 text-slate-300">
+                <tbody className="divide-y divide-[#E4EAE6] text-[#202923]">
                   {runs.map((r) => (
                     <tr
                       key={r.runId}
-                      className={`hover:bg-white/5 transition-colors ${
-                        selectedRun?.runId === r.runId ? 'bg-primary/10' : ''
+                      className={`hover:bg-[#F1F7F4] transition-colors ${
+                        selectedRun?.runId === r.runId ? 'bg-[#EAF4EF]/50' : ''
                       }`}
                     >
-                      <td className="p-3.5 font-mono font-bold text-white">{r.runId}</td>
-                      <td className="p-3.5 text-slate-400">{formatDate(r.createdAt)}</td>
+                      <td className="p-3.5 font-mono font-bold text-[#202923]">{r.runId}</td>
+                      <td className="p-3.5 text-[#65716A]">{formatDate(r.createdAt)}</td>
                       <td className="p-3.5">{r.datasetVersion}</td>
-                      <td className="p-3.5 font-mono text-purple-300">{r.modelName}</td>
+                      <td className="p-3.5 font-mono text-[#087F65]">{r.modelName}</td>
                       <td className="p-3.5 font-bold">
                         <span
                           className={
-                            r.summaryMetrics?.passRate >= 80 ? 'text-emerald-400' : 'text-rose-400'
+                            r.summaryMetrics?.passRate >= 80 ? 'text-[#168764]' : 'text-[#B42318]'
                           }
                         >
                           {r.summaryMetrics?.passRate}%
@@ -374,8 +379,8 @@ export default function AdminEvals() {
                         <span
                           className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${
                             r.qualityGatePassed
-                              ? 'bg-emerald-500/20 text-emerald-400'
-                              : 'bg-rose-500/20 text-rose-400'
+                              ? 'bg-[#EAF4EF] text-[#075E4B] border border-[#DDEBE3]'
+                              : 'bg-[#B42318]/10 text-[#B42318]'
                           }`}
                         >
                           {r.qualityGatePassed ? 'Passed' : 'Failed'}
@@ -384,7 +389,7 @@ export default function AdminEvals() {
                       <td className="p-3.5 text-right">
                         <button
                           onClick={() => handleSelectRun(r.runId)}
-                          className="rounded-lg bg-white/10 hover:bg-white/20 px-2.5 py-1 text-slate-200 transition-colors"
+                          className="btn-outline !py-1 !px-2.5 text-xs font-semibold"
                         >
                           View Details
                         </button>
@@ -401,17 +406,17 @@ export default function AdminEvals() {
       {/* TAB 2: DETAILED TEST CASES */}
       {activeTab === 'cases' && (
         <div className="space-y-4">
-          <div className="flex flex-wrap items-center justify-between gap-3 card-surface p-3.5">
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#E4EAE6] bg-white p-3.5 shadow-sm">
             <div className="flex items-center gap-2">
-              <FiFilter className="text-slate-400 text-sm" />
-              <span className="text-xs font-semibold text-slate-300">Filter cases:</span>
+              <FiFilter className="text-[#65716A] text-sm" />
+              <span className="text-xs font-bold text-[#202923]">Filter cases:</span>
               <div className="flex flex-wrap gap-1">
                 {['all', 'passed', 'failed', 'policy', 'specs', 'adversarial', 'unsupported'].map((f) => (
                   <button
                     key={f}
                     onClick={() => setCaseFilter(f)}
                     className={`rounded-lg px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider transition-colors ${
-                      caseFilter === f ? 'bg-primary text-white' : 'bg-white/5 text-slate-400 hover:bg-white/10'
+                      caseFilter === f ? 'bg-[#087F65] text-white' : 'bg-[#F1F7F4] text-[#65716A] hover:bg-[#EAF4EF]'
                     }`}
                   >
                     {f}
@@ -420,40 +425,40 @@ export default function AdminEvals() {
               </div>
             </div>
 
-            <span className="text-xs text-slate-400">
+            <span className="text-xs text-[#65716A]">
               Showing {filteredCases.length} of {selectedRun?.cases?.length || 0} cases
             </span>
           </div>
 
           <div className="space-y-3">
-            {filteredCases.map((c, i) => (
+            {filteredCases.map((c) => (
               <div
                 key={c.caseId}
-                className={`card-surface p-4 border-l-4 transition-all ${
-                  c.passed ? 'border-l-emerald-500' : 'border-l-rose-500'
+                className={`rounded-xl border border-[#E4EAE6] bg-white p-4 shadow-sm border-l-4 transition-all ${
+                  c.passed ? 'border-l-[#168764]' : 'border-l-[#B42318]'
                 }`}
               >
-                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/5 pb-2.5">
+                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#E4EAE6] pb-2.5">
                   <div className="flex items-center gap-2">
                     <span
                       className={`flex h-5 w-5 items-center justify-center rounded-full text-xs font-bold text-white ${
-                        c.passed ? 'bg-emerald-600' : 'bg-rose-600'
+                        c.passed ? 'bg-[#168764]' : 'bg-[#B42318]'
                       }`}
                     >
                       {c.passed ? '✓' : '✕'}
                     </span>
-                    <span className="font-mono font-bold text-sm text-white">{c.caseId}</span>
-                    <span className="rounded-md bg-white/5 px-2 py-0.5 text-[10px] font-semibold uppercase text-slate-300">
+                    <span className="font-mono font-bold text-sm text-[#202923]">{c.caseId}</span>
+                    <span className="rounded-md bg-[#F1F7F4] border border-[#E4EAE6] px-2 py-0.5 text-[10px] font-bold uppercase text-[#65716A]">
                       {c.category}
                     </span>
                   </div>
 
-                  <div className="flex items-center gap-3 text-xs text-slate-400">
+                  <div className="flex items-center gap-3 text-xs text-[#65716A]">
                     <span>Latency: {c.latencyMs}ms</span>
                     <span>Cost: ${c.costUsd?.toFixed(5)}</span>
                     <span
                       className={`font-bold uppercase text-[10px] px-2 py-0.5 rounded-full ${
-                        c.passed ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'
+                        c.passed ? 'bg-[#EAF4EF] text-[#075E4B]' : 'bg-[#B42318]/10 text-[#B42318]'
                       }`}
                     >
                       {c.passed ? 'PASS' : 'FAIL'}
@@ -463,56 +468,56 @@ export default function AdminEvals() {
 
                 <div className="mt-3 space-y-2 text-xs">
                   <div>
-                    <span className="font-bold text-slate-400">Question: </span>
-                    <span className="text-slate-100 font-medium">{c.question}</span>
+                    <span className="font-bold text-[#65716A]">Question: </span>
+                    <span className="text-[#202923] font-semibold">{c.question}</span>
                   </div>
 
-                  <div className="rounded-xl bg-white/5 p-3 text-slate-300">
-                    <p className="font-bold text-slate-400 text-[11px] mb-1">Generated Assistant Reply:</p>
+                  <div className="rounded-lg bg-[#F1F7F4] p-3 text-[#202923] border border-[#E4EAE6]">
+                    <p className="font-bold text-[#65716A] text-[11px] mb-1">Generated Assistant Reply:</p>
                     <p className="leading-relaxed">{c.actualAnswer}</p>
                   </div>
 
                   {c.failureReason && (
-                    <div className="rounded-xl border border-rose-500/30 bg-rose-500/10 p-2.5 text-rose-300 flex items-center gap-2">
+                    <div className="rounded-lg border border-[#B42318]/30 bg-[#B42318]/10 p-2.5 text-[#B42318] flex items-center gap-2">
                       <FiAlertTriangle className="flex-shrink-0" />
                       <span>Failure Reason: {c.failureReason}</span>
                     </div>
                   )}
 
-                  {/* Metrics bar */}
+                  {/* Metrics Bar */}
                   <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 pt-1 text-[11px]">
-                    <div className="rounded-lg bg-white/5 p-2 text-center">
-                      <p className="text-slate-400">Recall@k</p>
-                      <p className="font-bold text-white">{c.metrics?.recallAtK}</p>
+                    <div className="rounded-lg bg-[#F1F7F4] p-2 text-center border border-[#E4EAE6]">
+                      <p className="text-[#65716A]">Recall@k</p>
+                      <p className="font-bold text-[#202923]">{c.metrics?.recallAtK}</p>
                     </div>
-                    <div className="rounded-lg bg-white/5 p-2 text-center">
-                      <p className="text-slate-400">MRR</p>
-                      <p className="font-bold text-white">{c.metrics?.mrr}</p>
+                    <div className="rounded-lg bg-[#F1F7F4] p-2 text-center border border-[#E4EAE6]">
+                      <p className="text-[#65716A]">MRR</p>
+                      <p className="font-bold text-[#202923]">{c.metrics?.mrr}</p>
                     </div>
-                    <div className="rounded-lg bg-white/5 p-2 text-center">
-                      <p className="text-slate-400">Precision</p>
-                      <p className="font-bold text-white">{c.metrics?.citationPrecision}</p>
+                    <div className="rounded-lg bg-[#F1F7F4] p-2 text-center border border-[#E4EAE6]">
+                      <p className="text-[#65716A]">Precision</p>
+                      <p className="font-bold text-[#202923]">{c.metrics?.citationPrecision}</p>
                     </div>
-                    <div className="rounded-lg bg-white/5 p-2 text-center">
-                      <p className="text-slate-400">Faithfulness</p>
-                      <p className="font-bold text-white">{c.metrics?.faithfulness}</p>
+                    <div className="rounded-lg bg-[#F1F7F4] p-2 text-center border border-[#E4EAE6]">
+                      <p className="text-[#65716A]">Faithfulness</p>
+                      <p className="font-bold text-[#202923]">{c.metrics?.faithfulness}</p>
                     </div>
-                    <div className="rounded-lg bg-white/5 p-2 text-center">
-                      <p className="text-slate-400">Correctness</p>
-                      <p className="font-bold text-white">{c.metrics?.answerCorrectness}</p>
+                    <div className="rounded-lg bg-[#F1F7F4] p-2 text-center border border-[#E4EAE6]">
+                      <p className="text-[#65716A]">Correctness</p>
+                      <p className="font-bold text-[#202923]">{c.metrics?.answerCorrectness}</p>
                     </div>
                   </div>
 
                   {/* Citations Attached */}
                   {c.citations && c.citations.length > 0 && (
                     <div className="pt-1 flex flex-wrap items-center gap-1.5">
-                      <span className="text-slate-400 text-[11px] font-semibold">Verified Sources:</span>
+                      <span className="text-[#65716A] text-[11px] font-semibold">Verified Sources:</span>
                       {c.citations.map((cite, ci) => (
                         <span
                           key={ci}
-                          className="inline-flex items-center gap-1 rounded-md bg-emerald-500/20 border border-emerald-500/30 px-2 py-0.5 text-[10px] font-bold text-emerald-300"
+                          className="inline-flex items-center gap-1 rounded-md bg-[#EAF4EF] border border-[#DDEBE3] px-2 py-0.5 text-[10px] font-bold text-[#075E4B]"
                         >
-                          <FiCheckCircle className="text-[9px]" />
+                          <FiCheckCircle className="text-[9px] text-[#087F65]" />
                           {cite.sourceId} ({cite.chunkId})
                         </span>
                       ))}
@@ -527,15 +532,15 @@ export default function AdminEvals() {
 
       {/* TAB 3: INDEXED DOCUMENTS */}
       {activeTab === 'documents' && (
-        <div className="card-surface overflow-hidden">
-          <div className="p-4 border-b border-white/10 flex items-center justify-between">
-            <h3 className="font-bold text-sm text-white">Indexed Knowledge Base Documents</h3>
-            <span className="text-xs text-slate-400">Total {documents.length} canonical documents</span>
+        <div className="rounded-xl border border-[#E4EAE6] bg-white overflow-hidden shadow-sm">
+          <div className="p-4 border-b border-[#E4EAE6] flex items-center justify-between bg-[#F1F7F4]/50">
+            <h3 className="font-bold text-sm text-[#202923]">Indexed Knowledge Base Documents</h3>
+            <span className="text-xs text-[#65716A]">Total {documents.length} canonical documents</span>
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-white/5 uppercase tracking-wider text-slate-400">
+              <thead className="bg-[#F1F7F4] uppercase tracking-wider text-[#65716A] border-b border-[#E4EAE6]">
                 <tr>
                   <th className="p-3.5">Source ID</th>
                   <th className="p-3.5">Title</th>
@@ -546,21 +551,21 @@ export default function AdminEvals() {
                   <th className="p-3.5">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5 text-slate-300">
+              <tbody className="divide-y divide-[#E4EAE6] text-[#202923]">
                 {documents.map((doc) => (
-                  <tr key={doc.sourceId} className="hover:bg-white/5 transition-colors">
-                    <td className="p-3.5 font-mono font-bold text-white">{doc.sourceId}</td>
-                    <td className="p-3.5 font-medium">{doc.title}</td>
+                  <tr key={doc.sourceId} className="hover:bg-[#F1F7F4] transition-colors">
+                    <td className="p-3.5 font-mono font-bold text-[#202923]">{doc.sourceId}</td>
+                    <td className="p-3.5 font-semibold">{doc.title}</td>
                     <td className="p-3.5">
-                      <span className="rounded-md bg-white/10 px-2 py-0.5 text-[10px] font-semibold uppercase text-slate-200">
+                      <span className="rounded-md bg-[#EAF4EF] border border-[#DDEBE3] px-2 py-0.5 text-[10px] font-bold uppercase text-[#075E4B]">
                         {doc.documentType}
                       </span>
                     </td>
-                    <td className="p-3.5 font-bold text-primary-400">{doc.chunkCount} chunks</td>
+                    <td className="p-3.5 font-bold text-[#087F65]">{doc.chunkCount} chunks</td>
                     <td className="p-3.5 font-mono">{doc.version}</td>
-                    <td className="p-3.5 font-mono text-slate-400">{doc.url}</td>
+                    <td className="p-3.5 font-mono text-[#65716A]">{doc.url}</td>
                     <td className="p-3.5">
-                      <span className="rounded-full bg-emerald-500/20 text-emerald-400 px-2 py-0.5 text-[10px] font-bold">
+                      <span className="rounded-full bg-[#EAF4EF] text-[#075E4B] border border-[#DDEBE3] px-2.5 py-0.5 text-[10px] font-bold">
                         ACTIVE
                       </span>
                     </td>

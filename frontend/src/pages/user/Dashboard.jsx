@@ -29,7 +29,7 @@ export default function Dashboard() {
               to={t.to}
               end={t.end}
               className={({ isActive }) =>
-                `flex items-center gap-2.5 whitespace-nowrap rounded-xl px-4 py-2.5 text-sm font-medium transition-all ${isActive ? 'bg-primary text-white shadow-glow' : 'text-slate-300 hover:bg-white/5'}`}
+                `flex items-center gap-2.5 whitespace-nowrap rounded-xl px-4 py-2.5 text-sm font-medium transition-all ${isActive ? 'bg-[#087F65] text-white shadow-sm' : 'text-[#65716A] hover:bg-[#EAF4EF] hover:text-[#075E4B]'}`}
             >
               <t.icon /> {t.label}
             </NavLink>

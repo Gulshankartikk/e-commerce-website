@@ -93,7 +93,7 @@ export default function Checkout() {
           description: 'Order payment',
           order_id: data.razorpayOrderId,
           prefill: { name: user.name, email: user.email },
-          theme: { color: '#4F46E5' },
+          theme: { color: '#087F65' },
           handler: async (resp) => {
             try {
               await api.post('/payments/razorpay/verify', { orderId: data.orderId, ...resp });
@@ -127,35 +127,35 @@ export default function Checkout() {
     { id: 'stripe', label: 'Stripe', desc: 'International credit & debit cards', icon: FiCreditCard, enabled: payConfig?.stripe },
   ];
 
-  const inputCls = (err) => `input-field ${err ? '!border-red-500' : ''}`;
+  const inputCls = (err) => `input-field ${err ? '!border-[#B42318]' : ''}`;
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8">
+    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
       <Breadcrumbs items={[{ label: 'Cart', to: '/cart' }, { label: 'Checkout' }]} />
-      <h1 className="section-title mb-8">Checkout</h1>
+      <h1 className="section-title mb-8 text-[#202923]">Checkout</h1>
 
       <div className="grid gap-8 lg:grid-cols-3">
         <div className="space-y-8 lg:col-span-2">
           {/* 1 — Address */}
-          <section className="card-surface p-6">
+          <section className="rounded-xl border border-[#E4EAE6] bg-white p-6 shadow-sm">
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="flex items-center gap-2 text-lg font-bold"><FiMapPin className="text-primary-300" /> Delivery address</h2>
-              <button onClick={() => setAddressModal(true)} className="btn-outline !py-1.5 text-xs"><FiPlus /> Add new</button>
+              <h2 className="flex items-center gap-2 text-lg font-bold text-[#202923]"><FiMapPin className="text-[#087F65]" /> Delivery Address</h2>
+              <button onClick={() => setAddressModal(true)} className="btn-outline !py-1.5 text-xs font-semibold"><FiPlus /> Add new</button>
             </div>
             {addresses.length === 0 ? (
-              <p className="text-sm text-slate-400">No saved addresses yet. Add one to continue.</p>
+              <p className="text-sm text-[#65716A]">No saved addresses yet. Add one to continue.</p>
             ) : (
               <div className="grid gap-3 sm:grid-cols-2">
                 {addresses.map((a) => (
                   <button
                     key={a._id}
                     onClick={() => setSelectedAddress(a._id)}
-                    className={`rounded-xl border p-4 text-left text-sm transition-all ${selectedAddress === a._id ? 'border-primary bg-primary/10 shadow-glow' : 'border-slate-600 hover:border-slate-400'}`}
+                    className={`rounded-xl border p-4 text-left text-sm transition-all ${selectedAddress === a._id ? 'border-[#087F65] bg-[#EAF4EF] shadow-xs' : 'border-[#E4EAE6] bg-white hover:border-[#087F65]'}`}
                   >
-                    <p className="font-semibold">{a.fullName} {a.isDefault && <span className="chip ml-1 bg-secondary-500/20 text-[10px] text-secondary-400">Default</span>}</p>
-                    <p className="mt-1 text-slate-400">{a.line1}{a.line2 && `, ${a.line2}`}</p>
-                    <p className="text-slate-400">{a.city}, {a.state} — {a.pincode}</p>
-                    <p className="mt-1 text-slate-400">📞 {a.phone}</p>
+                    <p className="font-semibold text-[#202923]">{a.fullName} {a.isDefault && <span className="chip ml-1 bg-[#DDEBE3] text-[10px] text-[#075E4B]">Default</span>}</p>
+                    <p className="mt-1 text-[#65716A]">{a.line1}{a.line2 && `, ${a.line2}`}</p>
+                    <p className="text-[#65716A]">{a.city}, {a.state} — {a.pincode}</p>
+                    <p className="mt-1 text-[#65716A]">📞 {a.phone}</p>
                   </button>
                 ))}
               </div>
@@ -163,46 +163,46 @@ export default function Checkout() {
           </section>
 
           {/* 2 — Delivery */}
-          <section className="card-surface p-6">
-            <h2 className="mb-4 flex items-center gap-2 text-lg font-bold"><FiTruck className="text-primary-300" /> Delivery option</h2>
+          <section className="rounded-xl border border-[#E4EAE6] bg-white p-6 shadow-sm">
+            <h2 className="mb-4 flex items-center gap-2 text-lg font-bold text-[#202923]"><FiTruck className="text-[#087F65]" /> Delivery Option</h2>
             <div className="grid gap-3 sm:grid-cols-2">
               {[
-                { id: 'standard', label: 'Standard', desc: '4–6 business days', extra: 'FREE over ₹999', icon: FiTruck },
-                { id: 'express', label: 'Express', desc: '1–2 business days', extra: '+ ₹99', icon: FiZap },
+                { id: 'standard', label: 'Standard Delivery', desc: '4–6 business days', extra: 'FREE over ₹999', icon: FiTruck },
+                { id: 'express', label: 'Express Delivery', desc: '1–2 business days', extra: '+ ₹99', icon: FiZap },
               ].map((opt) => (
                 <button
                   key={opt.id}
                   onClick={() => setDelivery(opt.id)}
-                  className={`flex items-center gap-3 rounded-xl border p-4 text-left transition-all ${delivery === opt.id ? 'border-primary bg-primary/10' : 'border-slate-600 hover:border-slate-400'}`}
+                  className={`flex items-center gap-3 rounded-xl border p-4 text-left transition-all ${delivery === opt.id ? 'border-[#087F65] bg-[#EAF4EF]' : 'border-[#E4EAE6] bg-white hover:border-[#087F65]'}`}
                 >
-                  <opt.icon className="text-xl text-secondary-400" />
+                  <opt.icon className="text-xl text-[#087F65]" />
                   <div className="flex-1">
-                    <p className="text-sm font-semibold">{opt.label}</p>
-                    <p className="text-xs text-slate-400">{opt.desc}</p>
+                    <p className="text-sm font-semibold text-[#202923]">{opt.label}</p>
+                    <p className="text-xs text-[#65716A]">{opt.desc}</p>
                   </div>
-                  <span className="text-xs font-semibold text-accent">{opt.extra}</span>
+                  <span className="text-xs font-bold text-[#168764]">{opt.extra}</span>
                 </button>
               ))}
             </div>
           </section>
 
           {/* 3 — Payment */}
-          <section className="card-surface p-6">
-            <h2 className="mb-4 flex items-center gap-2 text-lg font-bold"><FiCreditCard className="text-primary-300" /> Payment method</h2>
+          <section className="rounded-xl border border-[#E4EAE6] bg-white p-6 shadow-sm">
+            <h2 className="mb-4 flex items-center gap-2 text-lg font-bold text-[#202923]"><FiCreditCard className="text-[#087F65]" /> Payment Method</h2>
             <div className="space-y-3">
               {paymentOptions.map((opt) => (
                 <button
                   key={opt.id}
                   onClick={() => opt.enabled && setPayment(opt.id)}
                   disabled={!opt.enabled}
-                  className={`flex w-full items-center gap-3 rounded-xl border p-4 text-left transition-all disabled:opacity-40 ${payment === opt.id ? 'border-primary bg-primary/10' : 'border-slate-600 hover:border-slate-400'}`}
+                  className={`flex w-full items-center gap-3 rounded-xl border p-4 text-left transition-all disabled:opacity-40 ${payment === opt.id ? 'border-[#087F65] bg-[#EAF4EF]' : 'border-[#E4EAE6] bg-white hover:border-[#087F65]'}`}
                 >
-                  <opt.icon className="text-xl text-secondary-400" />
+                  <opt.icon className="text-xl text-[#087F65]" />
                   <div className="flex-1">
-                    <p className="text-sm font-semibold">{opt.label}</p>
-                    <p className="text-xs text-slate-400">{opt.enabled ? opt.desc : 'Not configured on this server'}</p>
+                    <p className="text-sm font-semibold text-[#202923]">{opt.label}</p>
+                    <p className="text-xs text-[#65716A]">{opt.enabled ? opt.desc : 'Not configured on this server'}</p>
                   </div>
-                  <span className={`h-4 w-4 rounded-full border-2 ${payment === opt.id ? 'border-primary bg-primary' : 'border-slate-500'}`} />
+                  <span className={`h-4 w-4 rounded-full border-2 ${payment === opt.id ? 'border-[#087F65] bg-[#087F65]' : 'border-[#E4EAE6]'}`} />
                 </button>
               ))}
             </div>
@@ -211,27 +211,27 @@ export default function Checkout() {
 
         {/* Summary */}
         {deliveryTotals && (
-          <aside className="card-surface sticky top-24 h-fit p-6">
-            <h2 className="mb-4 text-lg font-bold">Order summary</h2>
-            <ul className="mb-4 max-h-56 space-y-3 overflow-y-auto pr-1 text-sm">
+          <aside className="sticky top-24 h-fit rounded-xl border border-[#E4EAE6] bg-white p-6 shadow-sm">
+            <h2 className="mb-4 text-lg font-bold text-[#202923]">Order Summary</h2>
+            <ul className="mb-4 max-h-56 space-y-3 overflow-y-auto pr-1 text-sm text-[#202923]">
               {activeItems.map((i) => (
                 <li key={i._id} className="flex justify-between gap-2">
-                  <span className="truncate text-slate-300">{i.product.name} <span className="text-slate-500">×{i.quantity}</span></span>
+                  <span className="truncate text-[#202923]">{i.product.name} <span className="text-[#65716A]">×{i.quantity}</span></span>
                   <span className="shrink-0 font-semibold">{formatPrice(i.product.price * i.quantity)}</span>
                 </li>
               ))}
             </ul>
-            <dl className="space-y-2.5 border-t border-white/10 pt-4 text-sm">
-              <div className="flex justify-between"><dt className="text-slate-400">Subtotal</dt><dd>{formatPrice(deliveryTotals.itemsPrice)}</dd></div>
-              {deliveryTotals.discount > 0 && <div className="flex justify-between text-secondary-400"><dt>Discount</dt><dd>− {formatPrice(deliveryTotals.discount)}</dd></div>}
-              <div className="flex justify-between"><dt className="text-slate-400">Shipping</dt><dd>{deliveryTotals.shippingPrice === 0 ? <span className="text-green-400">FREE</span> : formatPrice(deliveryTotals.shippingPrice)}</dd></div>
-              <div className="flex justify-between"><dt className="text-slate-400">GST (18%)</dt><dd>{formatPrice(deliveryTotals.taxPrice)}</dd></div>
-              <div className="flex justify-between border-t border-white/10 pt-3 text-base font-bold"><dt>Total</dt><dd className="text-secondary-400">{formatPrice(deliveryTotals.totalPrice)}</dd></div>
+            <dl className="space-y-2.5 border-t border-[#E4EAE6] pt-4 text-sm text-[#202923]">
+              <div className="flex justify-between"><dt className="text-[#65716A]">Subtotal</dt><dd className="font-semibold">{formatPrice(deliveryTotals.itemsPrice)}</dd></div>
+              {deliveryTotals.discount > 0 && <div className="flex justify-between text-[#087F65] font-semibold"><dt>Discount</dt><dd>− {formatPrice(deliveryTotals.discount)}</dd></div>}
+              <div className="flex justify-between"><dt className="text-[#65716A]">Shipping</dt><dd>{deliveryTotals.shippingPrice === 0 ? <span className="font-bold text-[#168764]">FREE</span> : formatPrice(deliveryTotals.shippingPrice)}</dd></div>
+              <div className="flex justify-between"><dt className="text-[#65716A]">GST (18%)</dt><dd>{formatPrice(deliveryTotals.taxPrice)}</dd></div>
+              <div className="flex justify-between border-t border-[#E4EAE6] pt-3 text-base font-bold text-[#202923]"><dt>Grand Total</dt><dd className="text-xl text-[#087F65]">{formatPrice(deliveryTotals.totalPrice)}</dd></div>
             </dl>
-            <button onClick={placeOrder} disabled={placing || !activeItems.length} className="btn-accent mt-5 w-full !py-3">
+            <button onClick={placeOrder} disabled={placing || !activeItems.length} className="btn-primary mt-5 w-full !py-3.5 font-semibold shadow-sm">
               {placing ? 'Placing order…' : `Place order · ${formatPrice(deliveryTotals.totalPrice)}`}
             </button>
-            <p className="mt-3 text-center text-xs text-slate-500">🔒 Payments are encrypted and secure</p>
+            <p className="mt-3 text-center text-xs text-[#65716A]">🔒 Payments are encrypted and secure</p>
           </aside>
         )}
       </div>
@@ -264,8 +264,8 @@ export default function Checkout() {
             <input placeholder="Pincode" className={inputCls(errors.pincode)} {...register('pincode', { required: true, pattern: /^\d{6}$/ })} />
             {errors.pincode && <p className="mt-1 text-xs text-red-400">Enter a valid 6-digit pincode</p>}
           </div>
-          <label className="flex items-center gap-2 text-sm text-slate-300">
-            <input type="checkbox" className="h-4 w-4 accent-indigo-600" {...register('isDefault')} /> Set as default
+          <label className="flex items-center gap-2 text-sm text-[#202923]">
+            <input type="checkbox" className="h-4 w-4 accent-[#087F65]" {...register('isDefault')} /> Set as default
           </label>
           <button type="submit" className="btn-primary sm:col-span-2">Save address</button>
         </form>

@@ -30,19 +30,19 @@ export default function Contact() {
       <div className="grid gap-8 md:grid-cols-2">
         <div className="space-y-4">
           {channels.map((c) => (
-            <div key={c.label} className="card-surface flex items-center gap-4 p-5">
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/15 text-xl text-primary-300"><c.icon /></span>
+            <div key={c.label} className="card-surface flex items-center gap-4 p-5 bg-white border border-[#E4EAE6] rounded-2xl">
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#EAF4EF] text-xl text-[#075E4B] border border-[#DDEBE3]"><c.icon /></span>
               <div>
-                <p className="text-xs uppercase tracking-wide text-slate-400">{c.label}</p>
-                <p className="font-semibold">{c.value}</p>
-                <p className="text-xs text-slate-400">{c.sub}</p>
+                <p className="text-xs uppercase tracking-wide text-[#65716A]">{c.label}</p>
+                <p className="font-semibold text-[#202923]">{c.value}</p>
+                <p className="text-xs text-[#65716A]">{c.sub}</p>
               </div>
             </div>
           ))}
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="card-surface space-y-4 p-6">
-          <h2 className="text-lg font-bold">Send us a message</h2>
+        <form onSubmit={handleSubmit(onSubmit)} className="card-surface space-y-4 p-6 bg-white border border-[#E4EAE6] rounded-2xl">
+          <h2 className="text-lg font-bold text-[#202923]">Send us a message</h2>
           <div>
             <input placeholder="Your name" className="input-field" {...register('name', { required: 'Name is required' })} />
             {errors.name && <p className="mt-1 text-xs text-red-400">{errors.name.message}</p>}

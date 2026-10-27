@@ -9,10 +9,10 @@ import { TableSkeleton } from '../../components/ui/Skeletons.jsx';
 import { formatDate } from '../../utils/format.js';
 
 const ROLE_BADGES = {
-  admin: 'bg-amber-500/20 text-amber-300 border border-amber-500/30',
-  seller: 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30',
-  manager: 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30',
-  user: 'bg-primary/20 text-primary-300 border border-primary/30',
+  admin: 'bg-[#075E4B] text-white border border-[#075E4B]',
+  seller: 'bg-[#EAF4EF] text-[#087F65] border border-[#DDEBE3]',
+  manager: 'bg-[#F1F7F4] text-[#202923] border border-[#E4EAE6]',
+  user: 'bg-[#EAF4EF] text-[#075E4B] border border-[#DDEBE3]',
 };
 
 /** Admin user management: search, block, assign role, delete. */
@@ -62,13 +62,13 @@ export default function AdminUsers() {
                     <select
                       value={u.role}
                       onChange={(e) => handleRoleChange(u._id, e.target.value)}
-                      className={`rounded-lg px-2.5 py-1 text-xs font-semibold capitalize outline-none ${ROLE_BADGES[u.role] || 'bg-white/5 text-slate-300'}`}
-                      style={{ background: 'rgba(255,255,255,0.06)' }}
+                      className={`rounded-lg px-2.5 py-1 text-xs font-semibold capitalize outline-none ${ROLE_BADGES[u.role] || 'bg-[#F1F7F4] text-[#202923]'}`}
+                      style={{ background: '#F1F7F4' }}
                     >
-                      <option value="user" className="bg-card text-frost">🛍️ User / Customer</option>
-                      <option value="seller" className="bg-card text-frost">🏪 Seller / Vendor</option>
-                      <option value="manager" className="bg-card text-frost">👔 Manager</option>
-                      <option value="admin" className="bg-card text-frost">👑 Admin</option>
+                      <option value="user" className="bg-white text-[#202923]">🛍️ User / Customer</option>
+                      <option value="seller" className="bg-white text-[#202923]">🏪 Seller / Vendor</option>
+                      <option value="manager" className="bg-white text-[#202923]">👔 Manager</option>
+                      <option value="admin" className="bg-white text-[#202923]">👑 Admin</option>
                     </select>
                   </td>
                   <td className="p-4">{u.isVerified ? <span className="text-green-400">✓</span> : <span className="text-slate-500">—</span>}</td>
@@ -77,7 +77,7 @@ export default function AdminUsers() {
                   <td className="p-4 text-right">
                     <button
                       onClick={() => act(() => api.put(`/admin/users/${u._id}/block`), u.isBlocked ? 'User unblocked' : 'User blocked')}
-                      title={u.isBlocked ? 'Unblock' : 'Block'} className="p-2 text-slate-400 hover:text-amber-400"
+                      title={u.isBlocked ? 'Unblock' : 'Block'} className="p-2 text-slate-400 hover:text-[#087F65]"
                     >
                       <FiSlash />
                     </button>

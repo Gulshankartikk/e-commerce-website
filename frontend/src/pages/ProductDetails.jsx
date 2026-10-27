@@ -196,17 +196,17 @@ export default function ProductDetails() {
         <div>
           <div
             ref={imgRef}
-            className="relative aspect-square cursor-crosshair overflow-hidden rounded-2xl border border-white/10"
+            className="relative aspect-square cursor-crosshair overflow-hidden rounded-2xl border border-[#E4EAE6] bg-[#F1F7F4] p-4 shadow-sm"
             onMouseMove={handleZoom}
             onMouseLeave={() => setZoom({ ...zoom, show: false })}
           >
             <img
               src={imgUrl(product.images?.[activeImage]?.url)}
               alt={product.name}
-              className="h-full w-full object-cover transition-transform duration-200"
+              className="h-full w-full object-contain transition-transform duration-200"
               style={zoom.show ? { transform: 'scale(2)', transformOrigin: `${zoom.x}% ${zoom.y}%` } : {}}
             />
-            {discount > 0 && <span className="chip absolute left-4 top-4 bg-accent text-white">-{discount}%</span>}
+            {discount > 0 && <span className="chip absolute left-4 top-4 bg-[#168764] text-white font-bold">-{discount}%</span>}
           </div>
           {product.images?.length > 1 && (
             <div className="mt-3 flex gap-3 overflow-x-auto pb-1">
@@ -214,10 +214,10 @@ export default function ProductDetails() {
                 <button
                   key={i}
                   onClick={() => setActiveImage(i)}
-                  className={`h-20 w-20 shrink-0 overflow-hidden rounded-xl border-2 transition-all ${i === activeImage ? 'border-primary shadow-glow' : 'border-transparent opacity-60 hover:opacity-100'}`}
+                  className={`h-20 w-20 shrink-0 overflow-hidden rounded-xl border-2 transition-all bg-[#F1F7F4] p-1 ${i === activeImage ? 'border-[#087F65] shadow-sm' : 'border-[#E4EAE6] opacity-70 hover:opacity-100'}`}
                   aria-label={`View image ${i + 1}`}
                 >
-                  <img src={imgUrl(img.url)} alt="" className="h-full w-full object-cover" />
+                  <img src={imgUrl(img.url)} alt="" className="h-full w-full object-contain" />
                 </button>
               ))}
             </div>
@@ -226,29 +226,29 @@ export default function ProductDetails() {
 
         {/* ---------- Info ---------- */}
         <div>
-          <p className="text-sm font-semibold uppercase tracking-wider text-secondary-400">{product.brand?.name}</p>
-          <h1 className="mt-1 text-2xl font-bold leading-tight md:text-3xl">{product.name}</h1>
+          <p className="text-xs font-bold uppercase tracking-wider text-[#65716A]">{product.brand?.name || 'Electronics'}</p>
+          <h1 className="mt-1 text-2xl font-bold leading-tight text-[#202923] md:text-3xl">{product.name}</h1>
           <div className="mt-3 flex items-center gap-3">
             <Rating value={product.ratingsAverage} count={product.ratingsCount} />
-            {product.sold > 0 && <span className="text-xs text-slate-400">{product.sold} sold</span>}
+            {product.sold > 0 && <span className="text-xs text-[#65716A]">· {product.sold} sold</span>}
           </div>
 
           <div className="mt-5 flex items-baseline gap-3">
-            <span className="text-4xl font-bold text-secondary-400">{formatPrice(product.price)}</span>
+            <span className="text-3xl font-extrabold text-[#202923]">{formatPrice(product.price)}</span>
             {product.mrp > product.price && (
               <>
-                <span className="text-lg text-slate-500 line-through">{formatPrice(product.mrp)}</span>
-                <span className="chip bg-accent/20 text-accent">Save {formatPrice(product.mrp - product.price)}</span>
+                <span className="text-base text-[#89938D] line-through">{formatPrice(product.mrp)}</span>
+                <span className="chip bg-[#EAF4EF] text-[#075E4B] border border-[#DDEBE3]">Save {formatPrice(product.mrp - product.price)}</span>
               </>
             )}
           </div>
-          <p className="mt-1 text-xs text-slate-400">Inclusive of all taxes</p>
+          <p className="mt-1 text-xs text-[#65716A]">Inclusive of all taxes</p>
 
           {/* Highlights */}
           {product.highlights?.length > 0 && (
-            <ul className="mt-5 space-y-1.5">
+            <ul className="mt-5 space-y-2">
               {product.highlights.map((h, i) => (
-                <li key={i} className="flex items-center gap-2 text-sm text-slate-300"><FiCheck className="shrink-0 text-secondary-400" /> {h}</li>
+                <li key={i} className="flex items-center gap-2 text-sm text-[#202923]"><FiCheck className="shrink-0 text-[#087F65] text-base" /> {h}</li>
               ))}
             </ul>
           )}
@@ -256,10 +256,10 @@ export default function ProductDetails() {
           {/* Variants */}
           {product.colors?.length > 0 && (
             <div className="mt-6">
-              <p className="mb-2 text-sm font-semibold">Color: <span className="text-slate-400">{color}</span></p>
+              <p className="mb-2 text-sm font-semibold text-[#202923]">Color: <span className="text-[#65716A] font-normal">{color}</span></p>
               <div className="flex flex-wrap gap-2">
                 {product.colors.map((c) => (
-                  <button key={c} onClick={() => setColor(c)} className={`chip border px-4 py-1.5 transition-all ${color === c ? 'border-primary bg-primary/20 text-primary-300' : 'border-slate-600 hover:border-slate-400'}`}>
+                  <button key={c} onClick={() => setColor(c)} className={`rounded-lg px-3.5 py-1.5 text-xs font-semibold transition-all ${color === c ? 'border border-[#087F65] bg-[#EAF4EF] text-[#075E4B]' : 'border border-[#E4EAE6] bg-white text-[#202923] hover:border-[#087F65]'}`}>
                     {c}
                   </button>
                 ))}
@@ -268,10 +268,10 @@ export default function ProductDetails() {
           )}
           {needsSize && (
             <div className="mt-4">
-              <p className="mb-2 text-sm font-semibold">Size: <span className="text-slate-400">{size || 'Select a size'}</span></p>
+              <p className="mb-2 text-sm font-semibold text-[#202923]">Size: <span className="text-[#65716A] font-normal">{size || 'Select a size'}</span></p>
               <div className="flex flex-wrap gap-2">
                 {product.sizes.map((s) => (
-                  <button key={s} onClick={() => setSize(s)} className={`chip border px-4 py-1.5 transition-all ${size === s ? 'border-primary bg-primary/20 text-primary-300' : 'border-slate-600 hover:border-slate-400'}`}>
+                  <button key={s} onClick={() => setSize(s)} className={`rounded-lg px-3.5 py-1.5 text-xs font-semibold transition-all ${size === s ? 'border border-[#087F65] bg-[#EAF4EF] text-[#075E4B]' : 'border border-[#E4EAE6] bg-white text-[#202923] hover:border-[#087F65]'}`}>
                     {s}
                   </button>
                 ))}
@@ -280,15 +280,15 @@ export default function ProductDetails() {
           )}
 
           {/* Stock + quantity */}
-          <p className={`mt-5 text-sm font-semibold ${variantStock > 0 ? (variantStock <= 5 ? 'text-amber-400' : 'text-green-400') : 'text-red-400'}`}>
-            {variantStock > 0 ? (variantStock <= 5 ? `Only ${variantStock} left — order soon` : 'In stock') : 'Out of stock'}
+          <p className={`mt-5 text-sm font-semibold ${variantStock > 0 ? 'text-[#168764]' : 'text-[#B42318]'}`}>
+            {variantStock > 0 ? (variantStock <= 5 ? `● Only ${variantStock} left — order soon` : '● In stock, ready to ship') : '● Out of stock'}
           </p>
 
           <div className="mt-5 flex flex-wrap items-center gap-3">
-            <div className="flex items-center rounded-xl border border-slate-600">
-              <button onClick={() => setQty(Math.max(1, qty - 1))} className="px-4 py-2.5 transition-colors hover:text-primary-300" aria-label="Decrease quantity">−</button>
-              <span className="w-10 text-center font-semibold">{qty}</span>
-              <button onClick={() => setQty(Math.min(10, variantStock, qty + 1))} className="px-4 py-2.5 transition-colors hover:text-primary-300" aria-label="Increase quantity">+</button>
+            <div className="flex items-center rounded-lg border border-[#E4EAE6] bg-white">
+              <button onClick={() => setQty(Math.max(1, qty - 1))} className="px-3.5 py-2 text-[#202923] transition-colors hover:text-[#087F65]" aria-label="Decrease quantity">−</button>
+              <span className="w-8 text-center text-sm font-semibold text-[#202923]">{qty}</span>
+              <button onClick={() => setQty(Math.min(10, variantStock, qty + 1))} className="px-3.5 py-2 text-[#202923] transition-colors hover:text-[#087F65]" aria-label="Increase quantity">+</button>
             </div>
             <button onClick={handleAddToCart} disabled={variantStock === 0} className="btn-primary flex-1 !py-3 sm:flex-none sm:px-8">
               <FiShoppingCart /> Add to cart
@@ -299,47 +299,47 @@ export default function ProductDetails() {
               aria-label="Toggle wishlist"
               className="btn-outline !px-3.5 !py-3"
             >
-              {inWishlist ? <FaHeart className="text-accent" /> : <FiHeart />}
+              {inWishlist ? <FaHeart className="text-[#168764]" /> : <FiHeart />}
             </button>
             <button onClick={handleShare} aria-label="Share product" className="btn-outline !px-3.5 !py-3"><FiShare2 /></button>
             <button
               onClick={() => dispatch(setAiDrawer({ open: true, query: `Tell me about the highlights, sizing, and features of ${product.name}` }))}
               aria-label="Ask AI about this product"
-              className="btn-outline !py-3 flex items-center gap-1.5 border-rose-500/40 text-rose-300 hover:bg-rose-500/10 hover:border-rose-400"
+              className="btn-outline !py-3 flex items-center gap-1.5 border-[#087F65]/40 text-[#075E4B] hover:bg-[#EAF4EF] hover:border-[#087F65]"
               title="Ask AI Concierge about this product"
             >
-              <BsStars className="text-amber-400" />
+              <BsStars className="text-[#087F65]" />
               <span className="text-xs font-semibold">Ask AI</span>
             </button>
           </div>
 
           {/* Trust badges */}
-          <div className="mt-7 grid grid-cols-3 gap-3 border-t border-white/10 pt-5 text-center text-xs text-slate-400">
-            <div className="flex flex-col items-center gap-1.5"><FiTruck className="text-lg text-secondary-400" /> Free delivery over ₹999</div>
-            <div className="flex flex-col items-center gap-1.5"><FiRotateCcw className="text-lg text-secondary-400" /> 7-day easy returns</div>
-            <div className="flex flex-col items-center gap-1.5"><FiShield className="text-lg text-secondary-400" /> Secure payments</div>
+          <div className="mt-7 grid grid-cols-3 gap-3 border-t border-[#E4EAE6] pt-5 text-center text-xs text-[#65716A]">
+            <div className="flex flex-col items-center gap-1.5"><FiTruck className="text-lg text-[#087F65]" /> Free delivery over ₹999</div>
+            <div className="flex flex-col items-center gap-1.5"><FiRotateCcw className="text-lg text-[#087F65]" /> 7-day easy returns</div>
+            <div className="flex flex-col items-center gap-1.5"><FiShield className="text-lg text-[#087F65]" /> 100% Genuine product</div>
           </div>
         </div>
       </div>
 
       {/* ---------- Description ---------- */}
-      <section className="card-surface mt-12 p-6">
-        <h2 className="mb-3 text-lg font-bold">About this item</h2>
-        <p className="whitespace-pre-line text-sm leading-relaxed text-slate-300">{product.description}</p>
+      <section className="mt-12 rounded-xl border border-[#E4EAE6] bg-white p-6 shadow-sm">
+        <h2 className="mb-3 text-lg font-bold text-[#202923]">About this item</h2>
+        <p className="whitespace-pre-line text-sm leading-relaxed text-[#65716A]">{product.description}</p>
       </section>
 
       {/* ---------- Reviews ---------- */}
       <section className="mt-12">
-        <h2 className="section-title mb-6">Ratings & reviews</h2>
+        <h2 className="section-title mb-6 text-[#202923]">Ratings & Reviews</h2>
         <div className="grid gap-8 lg:grid-cols-3">
           {/* Write / edit review */}
-          <div className="card-surface h-fit p-6">
-            <h3 className="mb-3 font-bold">{editingReview ? 'Edit your review' : myReview ? 'Your review' : 'Write a review'}</h3>
+          <div className="rounded-xl border border-[#E4EAE6] bg-white h-fit p-6 shadow-sm">
+            <h3 className="mb-3 font-bold text-[#202923]">{editingReview ? 'Edit your review' : myReview ? 'Your review' : 'Write a review'}</h3>
             {myReview && !editingReview ? (
               <div>
                 <Rating value={myReview.rating} />
-                {myReview.title && <p className="mt-2 text-sm font-semibold">{myReview.title}</p>}
-                <p className="mt-1 text-sm text-slate-400">{myReview.comment}</p>
+                {myReview.title && <p className="mt-2 text-sm font-semibold text-[#202923]">{myReview.title}</p>}
+                <p className="mt-1 text-sm text-[#65716A]">{myReview.comment}</p>
                 <div className="mt-4 flex gap-2">
                   <button
                     onClick={() => { setEditingReview(myReview._id); setReviewForm({ rating: myReview.rating, title: myReview.title, comment: myReview.comment }); }}
@@ -347,7 +347,7 @@ export default function ProductDetails() {
                   >
                     <FiEdit2 /> Edit
                   </button>
-                  <button onClick={() => deleteReview(myReview._id)} className="btn-outline !py-1.5 text-xs text-red-400"><FiTrash2 /> Delete</button>
+                  <button onClick={() => deleteReview(myReview._id)} className="btn-outline !py-1.5 text-xs text-[#B42318]"><FiTrash2 /> Delete</button>
                 </div>
               </div>
             ) : (
@@ -361,14 +361,14 @@ export default function ProductDetails() {
                 <textarea
                   value={reviewForm.comment}
                   onChange={(e) => setReviewForm({ ...reviewForm, comment: e.target.value })}
-                  placeholder="What did you like or dislike?" rows="4" className="input-field resize-none"
+                  placeholder="What did you like or dislike about this product?" rows="4" className="input-field resize-none"
                 />
                 <div>
-                  <label className="text-xs text-slate-400">Add photos (up to 4)</label>
+                  <label className="text-xs text-[#65716A]">Add photos (up to 4)</label>
                   <input
                     type="file" accept="image/*" multiple
                     onChange={(e) => setReviewImages([...e.target.files].slice(0, 4))}
-                    className="mt-1 block w-full text-xs text-slate-400 file:mr-3 file:rounded-lg file:border-0 file:bg-primary file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-white"
+                    className="mt-1 block w-full text-xs text-[#65716A] file:mr-3 file:rounded-lg file:border-0 file:bg-[#087F65] file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-white"
                   />
                 </div>
                 <div className="flex gap-2">
@@ -383,22 +383,22 @@ export default function ProductDetails() {
           <div className="space-y-4 lg:col-span-2">
             {/* AI Review Summary Box */}
             {data?.reviews?.length > 0 && (
-              <div className="rounded-2xl border border-rose-500/30 bg-gradient-to-br from-slate-900/90 via-slate-850 to-slate-900 p-5 shadow-lg">
-                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-750 pb-3">
+              <div className="rounded-xl border border-[#DDEBE3] bg-[#EAF4EF] p-5 shadow-sm">
+                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#DDEBE3] pb-3">
                   <div className="flex items-center gap-2.5">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-tr from-amber-400 to-rose-500 text-white shadow-sm">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#087F65] text-white shadow-sm">
                       <BsStars className="text-base" />
                     </div>
                     <div>
-                      <h4 className="font-bold text-white text-sm">✨ AI Customer Sentiment Synthesis</h4>
-                      <p className="text-[11px] text-slate-400">Distilled from verified buyer reviews with Google Gemini</p>
+                      <h4 className="font-bold text-[#075E4B] text-sm">AI Customer Sentiment Synthesis</h4>
+                      <p className="text-[11px] text-[#65716A]">Distilled from verified buyer reviews with Google Gemini</p>
                     </div>
                   </div>
 
                   <button
                     onClick={fetchAiReviewSummary}
                     disabled={aiSummaryLoading}
-                    className="flex items-center gap-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 px-3 py-1.5 text-xs font-semibold text-white transition-colors disabled:opacity-50"
+                    className="flex items-center gap-1.5 rounded-lg bg-[#087F65] hover:bg-[#066B55] px-3.5 py-1.5 text-xs font-semibold text-white transition-colors disabled:opacity-50"
                   >
                     <BsStars className={aiSummaryLoading ? 'animate-spin' : ''} />
                     {aiSummaryLoading ? 'Analyzing...' : aiSummary ? 'Refresh AI Summary' : 'Generate AI Summary'}
@@ -407,31 +407,31 @@ export default function ProductDetails() {
 
                 {aiSummary ? (
                   <div className="mt-4 space-y-3.5 text-sm">
-                    <div className="flex items-center justify-between rounded-xl bg-slate-800/60 p-3 border border-slate-700/50">
+                    <div className="flex items-center justify-between rounded-xl bg-white p-3 border border-[#E4EAE6]">
                       <div>
-                        <span className="text-xs text-slate-400">Buyer Sentiment:</span>
-                        <p className="font-bold text-amber-300">{aiSummary.sentiment}</p>
+                        <span className="text-xs text-[#65716A]">Buyer Sentiment:</span>
+                        <p className="font-bold text-[#075E4B]">{aiSummary.sentiment}</p>
                       </div>
                       <div className="text-right">
-                        <span className="text-xs text-slate-400">Positive Consensus</span>
-                        <p className="font-bold text-emerald-400">{aiSummary.sentimentScore}%</p>
+                        <span className="text-xs text-[#65716A]">Positive Consensus</span>
+                        <p className="font-bold text-[#168764]">{aiSummary.sentimentScore}%</p>
                       </div>
                     </div>
 
-                    <p className="text-slate-300 italic leading-relaxed bg-slate-950/40 p-3 rounded-lg border-l-2 border-rose-500 text-xs">
+                    <p className="text-[#202923] italic leading-relaxed bg-white p-3 rounded-lg border-l-2 border-[#087F65] text-xs">
                       "{aiSummary.verdict}"
                     </p>
 
                     <div className="grid sm:grid-cols-2 gap-3 pt-1">
                       {aiSummary.pros?.length > 0 && (
-                        <div className="rounded-xl bg-emerald-950/20 border border-emerald-500/20 p-3">
-                          <p className="text-xs font-bold text-emerald-400 mb-1.5 flex items-center gap-1">
-                            <FiCheck className="text-sm" /> What Customers Love
+                        <div className="rounded-xl bg-white border border-[#DDEBE3] p-3">
+                          <p className="text-xs font-bold text-[#075E4B] mb-1.5 flex items-center gap-1">
+                            <FiCheck className="text-sm text-[#087F65]" /> What Customers Love
                           </p>
-                          <ul className="space-y-1 text-xs text-slate-300">
+                          <ul className="space-y-1 text-xs text-[#202923]">
                             {aiSummary.pros.map((pro, i) => (
                               <li key={i} className="flex items-start gap-1.5">
-                                <span className="text-emerald-400 mt-0.5">•</span>
+                                <span className="text-[#087F65] mt-0.5">•</span>
                                 <span>{pro}</span>
                               </li>
                             ))}
@@ -440,14 +440,14 @@ export default function ProductDetails() {
                       )}
 
                       {aiSummary.cons?.length > 0 && (
-                        <div className="rounded-xl bg-amber-950/20 border border-amber-500/20 p-3">
-                          <p className="text-xs font-bold text-amber-400 mb-1.5 flex items-center gap-1">
+                        <div className="rounded-xl bg-white border border-[#E4EAE6] p-3">
+                          <p className="text-xs font-bold text-[#B42318] mb-1.5 flex items-center gap-1">
                             ⚠️ Things to Note
                           </p>
-                          <ul className="space-y-1 text-xs text-slate-300">
+                          <ul className="space-y-1 text-xs text-[#65716A]">
                             {aiSummary.cons.map((con, i) => (
                               <li key={i} className="flex items-start gap-1.5">
-                                <span className="text-amber-400 mt-0.5">•</span>
+                                <span className="text-[#B42318] mt-0.5">•</span>
                                 <span>{con}</span>
                               </li>
                             ))}
@@ -457,7 +457,7 @@ export default function ProductDetails() {
                     </div>
                   </div>
                 ) : (
-                  <p className="mt-3 text-xs text-slate-400">
+                  <p className="mt-3 text-xs text-[#65716A]">
                     Click "Generate AI Summary" to let Gemini analyze all customer reviews and extract top pros, cons, and buyer satisfaction consensus.
                   </p>
                 )}
@@ -465,21 +465,21 @@ export default function ProductDetails() {
             )}
             {data?.reviews?.length ? (
               data.reviews.map((r) => (
-                <article key={r._id} className="card-surface p-5">
+                <article key={r._id} className="rounded-xl border border-[#E4EAE6] bg-white p-5 shadow-sm">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-primary to-secondary-500 font-bold text-white">
+                      <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#EAF4EF] font-bold text-[#075E4B] border border-[#DDEBE3]">
                         {r.user?.name?.[0]?.toUpperCase() || '?'}
                       </span>
                       <div>
-                        <p className="text-sm font-semibold">{r.user?.name || 'Anonymous'}</p>
-                        <p className="text-xs text-slate-400">{formatDate(r.createdAt)}</p>
+                        <p className="text-sm font-semibold text-[#202923]">{r.user?.name || 'Anonymous'}</p>
+                        <p className="text-xs text-[#65716A]">{formatDate(r.createdAt)}</p>
                       </div>
                     </div>
                     <Rating value={r.rating} />
                   </div>
-                  {r.title && <h4 className="mt-3 text-sm font-semibold">{r.title}</h4>}
-                  <p className="mt-1 text-sm leading-relaxed text-slate-300">{r.comment}</p>
+                  {r.title && <h4 className="mt-3 text-sm font-semibold text-[#202923]">{r.title}</h4>}
+                  <p className="mt-1 text-sm leading-relaxed text-[#65716A]">{r.comment}</p>
                   {r.images?.length > 0 && (
                     <div className="mt-3 flex gap-2">
                       {r.images.map((img, i) => (
@@ -490,7 +490,7 @@ export default function ProductDetails() {
                 </article>
               ))
             ) : (
-              <p className="py-10 text-center text-sm text-slate-400">No reviews yet — be the first to share your experience.</p>
+              <p className="py-10 text-center text-sm text-[#65716A]">No reviews yet — be the first to share your experience.</p>
             )}
           </div>
         </div>

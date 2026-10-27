@@ -75,23 +75,23 @@ export default function OrderDetails() {
               return (
                 <div key={step} className="flex flex-1 items-center last:flex-none">
                   <div className="flex flex-col items-center">
-                    <span className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold transition-all ${done ? 'bg-primary text-white shadow-glow' : 'bg-slate-700 text-slate-400'}`}>
+                    <span className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold transition-all ${done ? 'bg-[#087F65] text-white shadow-sm' : 'bg-[#E4EAE6] text-[#89938D]'}`}>
                       {done ? <FiCheck /> : i + 1}
                     </span>
-                    <span className={`mt-1.5 hidden text-[10px] capitalize sm:block ${done ? 'text-primary-300' : 'text-slate-500'}`}>{step.replace(/-/g, ' ')}</span>
+                    <span className={`mt-1.5 hidden text-[10px] capitalize sm:block ${done ? 'text-[#075E4B] font-semibold' : 'text-[#89938D]'}`}>{step.replace(/-/g, ' ')}</span>
                   </div>
-                  {i < ORDER_STATUS_STEPS.length - 1 && <div className={`mx-1 h-0.5 flex-1 rounded ${i < currentStep ? 'bg-primary' : 'bg-slate-700'}`} />}
+                  {i < ORDER_STATUS_STEPS.length - 1 && <div className={`mx-1 h-0.5 flex-1 rounded ${i < currentStep ? 'bg-[#087F65]' : 'bg-[#E4EAE6]'}`} />}
                 </div>
               );
             })}
           </div>
         )}
         {/* History log */}
-        <div className="mt-5 space-y-2 border-t border-white/10 pt-4">
+        <div className="mt-5 space-y-2 border-t border-[#E4EAE6] pt-4">
           {[...order.statusHistory].reverse().map((h, i) => (
             <div key={i} className="flex items-center justify-between text-xs">
-              <span className="capitalize text-slate-300">{h.note || h.status.replace(/-/g, ' ')}</span>
-              <span className="text-slate-500">{formatDateTime(h.at)}</span>
+              <span className="capitalize text-[#202923]">{h.note || h.status.replace(/-/g, ' ')}</span>
+              <span className="text-[#65716A]">{formatDateTime(h.at)}</span>
             </div>
           ))}
         </div>

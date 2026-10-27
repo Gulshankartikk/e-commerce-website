@@ -36,25 +36,25 @@ export default function OrderSuccess() {
         className="card-surface w-full max-w-lg p-8 text-center"
       >
         <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.2, type: 'spring' }}>
-          <FiCheckCircle className="mx-auto text-7xl text-green-400" />
+          <FiCheckCircle className="mx-auto text-7xl text-[#168764]" />
         </motion.div>
-        <h1 className="mt-5 text-2xl font-bold">Order confirmed! 🎉</h1>
-        <p className="mt-2 text-sm text-slate-400">
+        <h1 className="mt-5 text-2xl font-bold text-[#202923]">Order confirmed! 🎉</h1>
+        <p className="mt-2 text-sm text-[#65716A]">
           Thanks for shopping with FlashShop. A confirmation email is on its way.
         </p>
         {order && (
-          <div className="mt-6 rounded-xl bg-night/60 p-4 text-left text-sm">
-            <div className="flex justify-between"><span className="text-slate-400">Order number</span><span className="font-mono font-semibold">{order.orderNumber}</span></div>
-            <div className="mt-2 flex justify-between"><span className="text-slate-400">Items</span><span>{order.items.length}</span></div>
-            <div className="mt-2 flex justify-between"><span className="text-slate-400">Payment</span><span className="uppercase">{order.paymentMethod} · {order.paymentStatus}</span></div>
-            <div className="mt-2 flex justify-between border-t border-white/10 pt-2 font-bold"><span>Total</span><span className="text-secondary-400">{formatPrice(order.totalPrice)}</span></div>
+          <div className="mt-6 rounded-xl bg-[#F1F7F4] border border-[#E4EAE6] p-4 text-left text-sm">
+            <div className="flex justify-between"><span className="text-[#65716A]">Order number</span><span className="font-mono font-semibold text-[#202923]">{order.orderNumber}</span></div>
+            <div className="mt-2 flex justify-between"><span className="text-[#65716A]">Items</span><span className="text-[#202923]">{order.items.length}</span></div>
+            <div className="mt-2 flex justify-between"><span className="text-[#65716A]">Payment</span><span className="uppercase text-[#202923]">{order.paymentMethod} · {order.paymentStatus}</span></div>
+            <div className="mt-2 flex justify-between border-t border-[#E4EAE6] pt-2 font-bold text-[#202923]"><span>Total</span><span className="text-[#087F65]">{formatPrice(order.totalPrice)}</span></div>
           </div>
         )}
         <div className="mt-6 flex flex-col gap-3 sm:flex-row">
           <Link to={`/dashboard/orders/${id}`} className="btn-primary flex-1"><FiPackage /> Track order</Link>
           <button onClick={downloadInvoice} className="btn-outline flex-1"><FiDownload /> Invoice PDF</button>
         </div>
-        <Link to="/products" className="mt-4 inline-block text-sm text-primary-300 hover:underline">Continue shopping →</Link>
+        <Link to="/products" className="mt-4 inline-block text-sm text-[#087F65] font-semibold hover:underline">Continue shopping →</Link>
       </motion.div>
     </div>
   );

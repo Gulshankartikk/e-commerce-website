@@ -39,7 +39,7 @@ export default function AdminReviews() {
                 <div className="min-w-0">
                   <div className="flex items-center gap-3">
                     <Rating value={r.rating} />
-                    {!r.isApproved && <span className="chip bg-amber-500/15 text-amber-400">Hidden</span>}
+                    {!r.isApproved && <span className="chip bg-stone-100 text-[#65716A] border border-[#E4EAE6]">Hidden</span>}
                   </div>
                   {r.title && <p className="mt-1.5 text-sm font-semibold">{r.title}</p>}
                   <p className="mt-1 text-sm text-slate-300">{r.comment}</p>
@@ -49,7 +49,7 @@ export default function AdminReviews() {
                   </p>
                 </div>
                 <div className="flex shrink-0">
-                  <button onClick={() => toggle(r)} title={r.isApproved ? 'Hide review' : 'Approve review'} className="p-2 text-slate-400 hover:text-amber-400">
+                  <button onClick={() => toggle(r)} title={r.isApproved ? 'Hide review' : 'Approve review'} className="p-2 text-slate-400 hover:text-[#087F65]">
                     {r.isApproved ? <FiEyeOff /> : <FiEye />}
                   </button>
                   <button onClick={() => remove(r)} title="Delete" className="p-2 text-slate-400 hover:text-red-400"><FiTrash2 /></button>

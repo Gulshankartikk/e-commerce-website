@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-/* Theme persists in localStorage; <html> class drives Tailwind dark/light. */
-const savedTheme = localStorage.getItem('lx_theme') || 'dark';
-document.documentElement.classList.toggle('light', savedTheme === 'light');
+/* Theme persists in localStorage; default is clean light theme. */
+const savedTheme = localStorage.getItem('lx_theme') || 'light';
+document.documentElement.classList.toggle('light', savedTheme !== 'dark');
 document.documentElement.classList.toggle('dark', savedTheme === 'dark');
 
 const uiSlice = createSlice({

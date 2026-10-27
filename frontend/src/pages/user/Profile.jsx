@@ -52,10 +52,10 @@ export default function Profile() {
           <label className="mb-1.5 block text-sm font-medium">Email</label>
           <input value={user?.email || ''} disabled className="input-field opacity-60" />
           {user?.isVerified ? (
-            <p className="mt-1.5 text-xs text-green-400">✓ Email verified</p>
+            <p className="mt-1.5 text-xs text-[#168764] font-medium">✓ Email verified</p>
           ) : (
-            <p className="mt-1.5 text-xs text-amber-400">
-              Email not verified — <button type="button" onClick={resendVerification} className="underline">resend link</button>
+            <p className="mt-1.5 text-xs text-[#65716A]">
+              Email not verified — <button type="button" onClick={resendVerification} className="underline text-[#087F65] font-medium">resend link</button>
             </p>
           )}
         </div>

@@ -97,8 +97,8 @@ export default function Addresses() {
             <input placeholder="Pincode" className={inputCls(errors.pincode)} {...register('pincode', { required: true, pattern: /^\d{6}$/ })} />
             {errors.pincode && <p className="mt-1 text-xs text-red-400">Valid 6-digit pincode required</p>}
           </div>
-          <label className="flex items-center gap-2 text-sm text-slate-300">
-            <input type="checkbox" className="h-4 w-4 accent-indigo-600" {...register('isDefault')} /> Set as default
+          <label className="flex items-center gap-2 text-sm text-[#202923]">
+            <input type="checkbox" className="h-4 w-4 accent-[#087F65]" {...register('isDefault')} /> Set as default
           </label>
           <button type="submit" disabled={isSubmitting} className="btn-primary sm:col-span-2">{isSubmitting ? 'Saving…' : 'Save address'}</button>
         </form>

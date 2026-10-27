@@ -2,35 +2,44 @@ import { memo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
-import { FiHeart, FiShoppingCart, FiEye, FiBarChart2 } from 'react-icons/fi';
+import { FiHeart, FiShoppingCart, FiEye } from 'react-icons/fi';
 import { FaHeart } from 'react-icons/fa';
 import toast from 'react-hot-toast';
 import Rating from '../ui/Rating.jsx';
 import { addToCart } from '../../features/cartSlice.js';
 import { toggleWishlist, selectWishlistIds } from '../../features/wishlistSlice.js';
-import { setQuickView, toggleCompare } from '../../features/uiSlice.js';
+import { setQuickView } from '../../features/uiSlice.js';
 import { formatPrice, imgUrl } from '../../utils/format.js';
 
-/** Product card with hover actions: wishlist, quick view, compare, add to cart. */
+/**
+ * Clean white ProductCard with pale-mint image surface, green buttons,
+ * verified live prices, stock indicators, and wishlist toggle.
+ */
 function ProductCard({ product }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((s) => s.auth.user);
   const wishlistIds = useSelector(selectWishlistIds);
-  const compareItems = useSelector((s) => s.ui.compareItems);
   const inWishlist = wishlistIds.has(String(product._id));
-  const inCompare = compareItems.includes(product.slug);
-  const discount = product.discountPercent || (product.mrp > product.price ? Math.round(((product.mrp - product.price) / product.mrp) * 100) : 0);
+  const discount =
+    product.discountPercent ||
+    (product.mrp > product.price ? Math.round(((product.mrp - product.price) / product.mrp) * 100) : 0);
 
   const requireAuth = () => {
-    if (!user) { toast('Sign in to continue', { icon: '🔐' }); navigate('/login'); return false; }
+    if (!user) {
+      toast('Sign in to continue', { icon: '🔐' });
+      navigate('/login');
+      return false;
+    }
     return true;
   };
 
   const handleAddToCart = async () => {
     if (!requireAuth()) return;
-    // Products with variants need a selection first
-    if (product.colors?.length > 1 || product.sizes?.length) { navigate(`/product/${product.slug}`); return; }
+    if (product.colors?.length > 1 || product.sizes?.length) {
+      navigate(`/product/${product.slug}`);
+      return;
+    }
     const res = await dispatch(addToCart({ productId: product._id, quantity: 1 }));
     if (res.error) toast.error(res.payload);
     else toast.success('Added to cart');
@@ -45,62 +54,101 @@ function ProductCard({ product }) {
   return (
     <motion.div
       layout
-      initial={{ opacity: 0, y: 16 }}
+      initial={{ opacity: 0, y: 14 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-40px' }}
-      className="card-surface group relative overflow-hidden transition-shadow duration-300 hover:shadow-glow"
+      viewport={{ once: true, margin: '-20px' }}
+      className="group relative flex h-full flex-col overflow-hidden rounded-[12px] border border-[#E4EAE6] bg-white shadow-[0_4px_18px_rgba(21,61,43,0.06)] transition-all duration-200 hover:border-[#087F65]/50 hover:shadow-[0_8px_24px_rgba(21,61,43,0.12)]"
     >
-      {/* Badges */}
-      <div className="absolute left-3 top-3 z-10 flex flex-col gap-1.5">
-        {discount > 0 && <span className="chip bg-accent text-white">-{discount}%</span>}
-        {product.isFlashSale && <span className="chip bg-primary text-white">⚡ Flash</span>}
-        {product.stock === 0 && <span className="chip bg-slate-700 text-slate-300">Out of stock</span>}
+      {/* Top Badges & Actions */}
+      <div className="absolute left-3 top-3 z-10 flex flex-col gap-1">
+        {discount > 0 && (
+          <span className="rounded bg-[#168764] px-2 py-0.5 text-[11px] font-bold text-white shadow-sm">
+            -{discount}%
+          </span>
+        )}
+        {product.isFlashSale && (
+          <span className="rounded bg-[#075E4B] px-2 py-0.5 text-[10px] font-bold text-white uppercase tracking-wider">
+            ⚡ Flash
+          </span>
+        )}
       </div>
 
-      {/* Hover actions */}
-      <div className="absolute right-3 top-3 z-10 flex flex-col gap-2 opacity-100 transition-all duration-300 md:translate-x-12 md:opacity-0 md:group-hover:translate-x-0 md:group-hover:opacity-100">
-        <button onClick={handleWishlist} aria-label="Toggle wishlist" className="glass flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:text-accent">
-          {inWishlist ? <FaHeart className="text-accent" /> : <FiHeart />}
-        </button>
-        <button onClick={() => dispatch(setQuickView(product))} aria-label="Quick view" className="glass flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:text-secondary-400">
-          <FiEye />
+      <div className="absolute right-3 top-3 z-10 flex flex-col gap-1.5">
+        <button
+          onClick={handleWishlist}
+          aria-label="Toggle wishlist"
+          className="flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-[#65716A] shadow-sm border border-[#E4EAE6] transition-colors hover:text-[#087F65]"
+        >
+          {inWishlist ? <FaHeart className="text-[#168764]" /> : <FiHeart />}
         </button>
         <button
-          onClick={() => { dispatch(toggleCompare(product.slug)); toast.success(inCompare ? 'Removed from compare' : 'Added to compare'); }}
-          aria-label="Compare" className={`glass flex h-9 w-9 items-center justify-center rounded-full transition-colors ${inCompare ? 'text-primary-300' : 'hover:text-primary-300'}`}
+          onClick={() => dispatch(setQuickView(product))}
+          aria-label="Quick view"
+          className="flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-[#65716A] shadow-sm border border-[#E4EAE6] transition-colors hover:text-[#087F65] opacity-0 group-hover:opacity-100 transition-opacity"
         >
-          <FiBarChart2 />
+          <FiEye />
         </button>
       </div>
 
-      {/* Image */}
-      <Link to={`/product/${product.slug}`} className="block overflow-hidden">
+      {/* Pale-Mint Image Container with Consistent Dimensions */}
+      <Link to={`/product/${product.slug}`} className="block overflow-hidden bg-[#F1F7F4] p-4">
         <img
           src={imgUrl(product.images?.[0]?.url)}
           alt={product.name}
           loading="lazy"
-          className="aspect-square w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          className="aspect-square w-full object-contain transition-transform duration-300 group-hover:scale-105"
         />
       </Link>
 
-      {/* Info */}
-      <div className="p-4">
-        <Link to={`/product/${product.slug}`}>
-          <h3 className="truncate text-sm font-semibold transition-colors group-hover:text-primary-300">{product.name}</h3>
+      {/* Card Details with Consistent Spacing */}
+      <div className="flex flex-1 flex-col p-4">
+        {/* Brand / Category */}
+        <p className="text-[11px] font-semibold uppercase tracking-wider text-[#65716A]">
+          {product.brand?.name || product.category?.name || 'Electronics'}
+        </p>
+
+        {/* Product Name */}
+        <Link to={`/product/${product.slug}`} className="mt-1 flex-1">
+          <h3 className="line-clamp-2 text-sm font-semibold text-[#202923] transition-colors hover:text-[#087F65]">
+            {product.name}
+          </h3>
         </Link>
-        <div className="mt-1.5"><Rating value={product.ratingsAverage} count={product.ratingsCount} /></div>
-        <div className="mt-2 flex items-center justify-between gap-2">
-          <div className="flex items-baseline gap-2">
-            <span className="text-lg font-bold text-secondary-400">{formatPrice(product.price)}</span>
-            {product.mrp > product.price && <span className="text-xs text-slate-500 line-through">{formatPrice(product.mrp)}</span>}
+
+        {/* Star Rating with Emerald Stars */}
+        <div className="mt-2 flex items-center gap-1.5">
+          <Rating value={product.ratingsAverage} count={product.ratingsCount} size="text-xs" />
+        </div>
+
+        {/* Stock Status Indicator */}
+        <div className="mt-2 text-[11px] font-medium">
+          {product.stock > 0 ? (
+            <span className="text-[#168764]">● In Stock ({product.stock})</span>
+          ) : (
+            <span className="text-[#B42318]">● Out of Stock</span>
+          )}
+        </div>
+
+        {/* Price & Green Add to Cart Button */}
+        <div className="mt-3 flex items-center justify-between gap-2 pt-2 border-t border-[#E4EAE6]/60">
+          <div>
+            <div className="text-base font-bold text-[#202923]">
+              {formatPrice(product.price)}
+            </div>
+            {product.mrp > product.price && (
+              <div className="text-xs text-[#89938D] line-through">
+                {formatPrice(product.mrp)}
+              </div>
+            )}
           </div>
+
           <button
             onClick={handleAddToCart}
             disabled={product.stock === 0}
             aria-label="Add to cart"
-            className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-white transition-all hover:bg-primary-500 hover:shadow-glow active:scale-95 disabled:opacity-40"
+            className="flex items-center gap-1.5 rounded-[8px] bg-[#087F65] px-3.5 py-2 text-xs font-bold text-white shadow-sm transition-all hover:bg-[#066B55] hover:shadow-[0_4px_12px_rgba(8,127,101,0.25)] active:scale-95 disabled:opacity-40"
           >
             <FiShoppingCart className="text-sm" />
+            <span>Add</span>
           </button>
         </div>
       </div>

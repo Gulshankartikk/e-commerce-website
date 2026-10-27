@@ -10,8 +10,8 @@ export default function Rating({ value = 0, count, size = 'text-sm' }) {
   }
   return (
     <span className={`flex items-center gap-1 ${size}`}>
-      <span className="flex text-amber-400">{stars}</span>
-      {count !== undefined && <span className="text-xs text-slate-400">({count})</span>}
+      <span className="flex text-[#168764]">{stars}</span>
+      {count !== undefined && <span className="text-xs text-[#89938D]">({count})</span>}
     </span>
   );
 }

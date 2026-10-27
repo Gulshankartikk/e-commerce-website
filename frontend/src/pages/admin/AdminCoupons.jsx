@@ -112,7 +112,7 @@ export default function AdminCoupons() {
             <input type="date" value={form.expiresAt} onChange={set('expiresAt')} className="input-field" />
           </div>
           <input placeholder="Description (shown to admins)" value={form.description} onChange={set('description')} className="input-field sm:col-span-2" />
-          <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={form.isActive} onChange={set('isActive')} className="h-4 w-4 accent-indigo-600" /> Active</label>
+          <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={form.isActive} onChange={set('isActive')} className="h-4 w-4 accent-[#087F65]" /> Active</label>
           <button type="submit" disabled={saving} className="btn-primary sm:col-span-2">{saving ? 'Saving…' : 'Save coupon'}</button>
         </form>
       </Modal>

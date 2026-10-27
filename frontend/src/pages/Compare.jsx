@@ -56,7 +56,7 @@ export default function Compare() {
   }
 
   const rows = [
-    { label: 'Price', render: (p) => <span className="font-bold text-secondary-400">{formatPrice(p.price)}</span> },
+    { label: 'Price', render: (p) => <span className="font-bold text-[#087F65]">{formatPrice(p.price)}</span> },
     { label: 'MRP', render: (p) => (p.mrp ? formatPrice(p.mrp) : '—') },
     { label: 'Rating', render: (p) => <Rating value={p.ratingsAverage} count={p.ratingsCount} /> },
     { label: 'Brand', render: (p) => p.brand?.name || '—' },
@@ -76,7 +76,7 @@ export default function Compare() {
           <button
             onClick={requestAiComparison}
             disabled={aiLoading}
-            className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-amber-500 via-rose-600 to-purple-600 px-4 py-2.5 text-xs font-bold text-white shadow-lg shadow-rose-900/30 hover:shadow-rose-600/20 disabled:opacity-50 transition-all"
+            className="flex items-center gap-2 rounded-xl bg-[#087F65] hover:bg-[#066B55] px-4 py-2.5 text-xs font-bold text-white shadow-sm disabled:opacity-50 transition-all"
           >
             <BsStars className={aiLoading ? 'animate-spin' : ''} />
             {aiLoading ? 'Analyzing Specifications...' : '✨ Ask AI for Recommendation'}
@@ -86,46 +86,46 @@ export default function Compare() {
 
       {/* AI Comparison Analysis Result Card */}
       {aiAnalysis && (
-        <div className="mb-8 rounded-2xl border border-rose-500/30 bg-gradient-to-br from-slate-900 via-slate-850 to-slate-900 p-6 shadow-xl">
-          <div className="flex items-center gap-3 border-b border-slate-750 pb-4">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-amber-400 to-rose-600 text-white shadow-md">
+        <div className="mb-8 rounded-2xl border border-[#E4EAE6] bg-[#F1F7F4] p-6 shadow-sm">
+          <div className="flex items-center gap-3 border-b border-[#E4EAE6] pb-4">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#EAF4EF] text-[#075E4B] border border-[#DDEBE3] shadow-sm">
               <BsStars className="text-lg" />
             </div>
             <div>
-              <h3 className="font-bold text-white text-base">Gemini AI Executive Comparison Verdict</h3>
-              <p className="text-xs text-slate-400">Personalized purchasing decision based on catalog specs</p>
+              <h3 className="font-bold text-[#202923] text-base">Gemini AI Executive Comparison Verdict</h3>
+              <p className="text-xs text-[#65716A]">Personalized purchasing decision based on catalog specs</p>
             </div>
           </div>
 
           <div className="mt-4 space-y-4">
-            <p className="text-sm text-slate-200 leading-relaxed">
+            <p className="text-sm text-[#202923] leading-relaxed">
               {aiAnalysis.summary}
             </p>
 
-            <div className="rounded-xl bg-slate-950/50 p-4 border-l-4 border-amber-400">
-              <p className="text-xs uppercase font-bold tracking-wider text-amber-400 mb-1">Expert Verdict</p>
-              <p className="text-sm font-medium text-slate-100">{aiAnalysis.verdict}</p>
+            <div className="rounded-xl bg-[#EAF4EF] p-4 border-l-4 border-[#087F65]">
+              <p className="text-xs uppercase font-bold tracking-wider text-[#075E4B] mb-1">Expert Verdict</p>
+              <p className="text-sm font-medium text-[#202923]">{aiAnalysis.verdict}</p>
             </div>
 
             {aiAnalysis.dimensions?.length > 0 && (
-              <div className="mt-4 overflow-hidden rounded-xl border border-slate-800">
+              <div className="mt-4 overflow-hidden rounded-xl border border-[#E4EAE6]">
                 <table className="w-full text-xs">
-                  <thead className="bg-slate-950/80 text-slate-400">
+                  <thead className="bg-[#EAF4EF] text-[#202923]">
                     <tr>
                       <th className="p-2.5 text-left font-semibold">Evaluation Factor</th>
                       {products.map((p) => (
-                        <th key={p._id} className="p-2.5 text-left font-semibold text-rose-300">
+                        <th key={p._id} className="p-2.5 text-left font-semibold text-[#087F65]">
                           {p.name.slice(0, 25)}...
                         </th>
                       ))}
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-800 bg-slate-900/60">
+                  <tbody className="divide-y divide-[#E4EAE6] bg-white">
                     {aiAnalysis.dimensions.map((dim, i) => (
-                      <tr key={i} className="hover:bg-slate-800/40">
-                        <td className="p-2.5 font-medium text-slate-300">{dim.feature}</td>
+                      <tr key={i} className="hover:bg-[#F1F7F4]">
+                        <td className="p-2.5 font-medium text-[#202923]">{dim.feature}</td>
                         {dim.values?.map((val, idx) => (
-                          <td key={idx} className="p-2.5 text-slate-400">{val}</td>
+                          <td key={idx} className="p-2.5 text-[#65716A]">{val}</td>
                         ))}
                       </tr>
                     ))}
@@ -144,7 +144,7 @@ export default function Compare() {
                     })
                   )
                 }
-                className="flex items-center gap-1.5 text-xs font-semibold text-rose-400 hover:text-rose-300"
+                className="flex items-center gap-1.5 text-xs font-semibold text-[#087F65] hover:text-[#066B55]"
               >
                 Discuss further with AI Concierge <BsStars />
               </button>
@@ -156,13 +156,13 @@ export default function Compare() {
         <table className="w-full min-w-[640px] border-collapse text-sm">
           <thead>
             <tr>
-              <th className="w-32 p-3 text-left text-slate-400">Product</th>
+              <th className="w-32 p-3 text-left text-[#65716A]">Product</th>
               {products.map((p) => (
-                <th key={p._id} className="card-surface p-4 text-center align-top">
-                  <button onClick={() => dispatch(toggleCompare(p.slug))} aria-label="Remove from compare" className="ml-auto block text-slate-400 hover:text-red-400"><FiX /></button>
+                <th key={p._id} className="card-surface p-4 text-center align-top bg-white border border-[#E4EAE6] rounded-xl">
+                  <button onClick={() => dispatch(toggleCompare(p.slug))} aria-label="Remove from compare" className="ml-auto block text-[#89938D] hover:text-red-500"><FiX /></button>
                   <Link to={`/product/${p.slug}`}>
-                    <img src={imgUrl(p.images?.[0]?.url)} alt={p.name} className="mx-auto h-32 w-32 rounded-xl object-cover" />
-                    <p className="mt-2 font-semibold transition-colors hover:text-primary-300">{p.name}</p>
+                    <img src={imgUrl(p.images?.[0]?.url)} alt={p.name} className="mx-auto h-32 w-32 rounded-xl object-cover bg-[#F1F7F4] p-2" />
+                    <p className="mt-2 font-semibold text-[#202923] transition-colors hover:text-[#087F65]">{p.name}</p>
                   </Link>
                 </th>
               ))}
@@ -170,9 +170,9 @@ export default function Compare() {
           </thead>
           <tbody>
             {rows.map((row) => (
-              <tr key={row.label} className="border-t border-white/10">
-                <td className="p-3 font-semibold text-slate-400">{row.label}</td>
-                {products.map((p) => <td key={p._id} className="p-3 text-center">{row.render(p)}</td>)}
+              <tr key={row.label} className="border-t border-[#E4EAE6]">
+                <td className="p-3 font-semibold text-[#65716A]">{row.label}</td>
+                {products.map((p) => <td key={p._id} className="p-3 text-center text-[#202923]">{row.render(p)}</td>)}
               </tr>
             ))}
           </tbody>

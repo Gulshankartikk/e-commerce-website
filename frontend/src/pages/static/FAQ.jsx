@@ -26,14 +26,14 @@ export default function FAQ() {
       <div className="space-y-3">
         {FAQS.map((f, i) => (
           <div key={i} className="card-surface overflow-hidden">
-            <button onClick={() => setOpen(open === i ? -1 : i)} className="flex w-full items-center justify-between p-5 text-left font-semibold" aria-expanded={open === i}>
+            <button onClick={() => setOpen(open === i ? -1 : i)} className="flex w-full items-center justify-between p-5 text-left font-semibold text-[#202923]" aria-expanded={open === i}>
               {f.q}
-              <FiChevronDown className={`shrink-0 transition-transform ${open === i ? 'rotate-180 text-primary-300' : ''}`} />
+              <FiChevronDown className={`shrink-0 transition-transform ${open === i ? 'rotate-180 text-[#087F65]' : 'text-[#89938D]'}`} />
             </button>
             <AnimatePresence>
               {open === i && (
                 <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className="overflow-hidden">
-                  <p className="px-5 pb-5 text-sm leading-relaxed text-slate-400">{f.a}</p>
+                  <p className="px-5 pb-5 text-sm leading-relaxed text-[#65716A]">{f.a}</p>
                 </motion.div>
               )}
             </AnimatePresence>

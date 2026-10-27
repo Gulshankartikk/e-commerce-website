@@ -95,7 +95,7 @@ export default function AdminBanners() {
             <input type="file" accept="image/*" onChange={(e) => setFile(e.target.files[0])}
               className="mt-1 block w-full text-xs text-slate-400 file:mr-3 file:rounded-lg file:border-0 file:bg-primary file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-white" />
           </div>
-          <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={form.isActive} onChange={set('isActive')} className="h-4 w-4 accent-indigo-600" /> Active</label>
+          <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={form.isActive} onChange={set('isActive')} className="h-4 w-4 accent-[#087F65]" /> Active</label>
           <button type="submit" disabled={saving} className="btn-primary sm:col-span-2">{saving ? 'Saving…' : 'Save banner'}</button>
         </form>
       </Modal>

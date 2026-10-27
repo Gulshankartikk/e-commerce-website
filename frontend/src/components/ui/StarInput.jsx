@@ -14,7 +14,7 @@ export default function StarInput({ value, onChange }) {
           onMouseEnter={() => setHover(i)}
           onMouseLeave={() => setHover(0)}
           onClick={() => onChange(i)}
-          className={`transition-transform hover:scale-110 ${(hover || value) >= i ? 'text-amber-400' : 'text-slate-600'}`}
+          className={`transition-transform hover:scale-110 ${(hover || value) >= i ? 'text-[#168764]' : 'text-[#E4EAE6]'}`}
         >
           <FaStar />
         </button>

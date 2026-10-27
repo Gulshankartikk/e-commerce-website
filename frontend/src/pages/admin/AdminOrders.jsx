@@ -68,10 +68,10 @@ export default function AdminOrders() {
                         value={o.status}
                         onChange={(e) => updateStatus(o, e.target.value)}
                         className={`rounded-lg border-0 px-2.5 py-1.5 text-xs font-semibold capitalize outline-none ${STATUS_COLORS[o.status]} bg-transparent`}
-                        style={{ background: 'rgba(255,255,255,0.05)' }}
+                        style={{ background: '#F1F7F4' }}
                         aria-label="Update status"
                       >
-                        {STATUSES.map((s) => <option key={s} value={s} className="bg-card capitalize text-frost">{s}</option>)}
+                        {STATUSES.map((s) => <option key={s} value={s} className="bg-white capitalize text-[#202923]">{s}</option>)}
                       </select>
                     )}
                   </td>

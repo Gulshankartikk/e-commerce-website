@@ -52,8 +52,8 @@ export default function StaticPage({ page }) {
       <div className="space-y-8">
         {content.sections.map((s) => (
           <section key={s.h} className="card-surface p-6">
-            <h2 className="mb-2 text-lg font-bold">{s.h}</h2>
-            <p className="text-sm leading-relaxed text-slate-300">{s.p}</p>
+            <h2 className="mb-2 text-lg font-bold text-[#202923]">{s.h}</h2>
+            <p className="text-sm leading-relaxed text-[#65716A]">{s.p}</p>
           </section>
         ))}
       </div>

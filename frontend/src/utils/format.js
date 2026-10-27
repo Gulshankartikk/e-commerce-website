@@ -17,12 +17,12 @@ export const imgUrl = (url) => {
 export const ORDER_STATUS_STEPS = ['confirmed', 'processing', 'shipped', 'out-for-delivery', 'delivered'];
 
 export const STATUS_COLORS = {
-  pending: 'bg-yellow-500/15 text-yellow-400',
-  confirmed: 'bg-blue-500/15 text-blue-400',
-  processing: 'bg-indigo-500/15 text-indigo-400',
-  shipped: 'bg-cyan-500/15 text-cyan-400',
-  'out-for-delivery': 'bg-teal-500/15 text-teal-400',
-  delivered: 'bg-green-500/15 text-green-400',
-  cancelled: 'bg-red-500/15 text-red-400',
-  refunded: 'bg-purple-500/15 text-purple-400',
+  pending: 'bg-[#F1F7F4] text-[#65716A] border border-[#E4EAE6]',
+  confirmed: 'bg-[#EAF4EF] text-[#075E4B] border border-[#DDEBE3]',
+  processing: 'bg-[#EAF4EF] text-[#087F65] border border-[#DDEBE3]',
+  shipped: 'bg-[#EAF4EF] text-[#168764] border border-[#DDEBE3]',
+  'out-for-delivery': 'bg-[#EAF4EF] text-[#075E4B] border border-[#DDEBE3]',
+  delivered: 'bg-[#EAF4EF] text-[#168764] border border-[#DDEBE3] font-semibold',
+  cancelled: 'bg-red-50 text-[#B42318] border border-red-200',
+  refunded: 'bg-stone-100 text-[#65716A] border border-[#E4EAE6]',
 };

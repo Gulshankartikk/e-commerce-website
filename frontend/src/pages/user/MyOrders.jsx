@@ -20,23 +20,23 @@ export default function MyOrders() {
   return (
     <div className="space-y-4">
       {data.orders.map((order) => (
-        <Link key={order._id} to={`/dashboard/orders/${order._id}`} className="card-surface block p-5 transition-shadow hover:shadow-glow">
+        <Link key={order._id} to={`/dashboard/orders/${order._id}`} className="card-surface block p-5 transition-all hover:border-[#087F65] hover:shadow-sm">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <p className="font-mono text-sm font-semibold">{order.orderNumber}</p>
-              <p className="text-xs text-slate-400">{formatDate(order.createdAt)} · {order.items.length} item{order.items.length > 1 ? 's' : ''}</p>
+              <p className="font-mono text-sm font-semibold text-[#202923]">{order.orderNumber}</p>
+              <p className="text-xs text-[#65716A]">{formatDate(order.createdAt)} · {order.items.length} item{order.items.length > 1 ? 's' : ''}</p>
             </div>
             <div className="flex items-center gap-3">
               <span className={`chip capitalize ${STATUS_COLORS[order.status]}`}>{order.status.replace(/-/g, ' ')}</span>
-              <span className="font-bold text-secondary-400">{formatPrice(order.totalPrice)}</span>
+              <span className="font-bold text-[#087F65]">{formatPrice(order.totalPrice)}</span>
             </div>
           </div>
           <div className="mt-3 flex gap-2">
             {order.items.slice(0, 4).map((item, i) => (
-              <img key={i} src={imgUrl(item.image)} alt={item.name} className="h-14 w-14 rounded-lg object-cover" loading="lazy" />
+              <img key={i} src={imgUrl(item.image)} alt={item.name} className="h-14 w-14 rounded-lg object-cover bg-[#F1F7F4] p-1 border border-[#E4EAE6]" loading="lazy" />
             ))}
             {order.items.length > 4 && (
-              <span className="flex h-14 w-14 items-center justify-center rounded-lg bg-white/5 text-xs text-slate-400">+{order.items.length - 4}</span>
+              <span className="flex h-14 w-14 items-center justify-center rounded-lg bg-[#F1F7F4] text-xs font-semibold text-[#65716A] border border-[#E4EAE6]">+{order.items.length - 4}</span>
             )}
           </div>
         </Link>
