@@ -149,6 +149,10 @@ app.use(errorHandler);
 /* ---------- Boot ---------- */
 const PORT = process.env.PORT || 5000;
 
+// Prevent keep-alive timeout mismatch ECONNRESET between proxies (Vite/Render) and Node
+server.keepAliveTimeout = 65000;
+server.headersTimeout = 66000;
+
 // Handle port busy gracefully during hot-reloads / watch restarts
 server.on('error', (err) => {
   if (err.code === 'EADDRINUSE') {
@@ -164,6 +168,11 @@ server.on('error', (err) => {
   }
 });
 
+// Bind port immediately so incoming Vite proxy requests never encounter ECONNREFUSED during startup
+if (!process.env.VERCEL) {
+  server.listen(PORT, '0.0.0.0', () => console.log(`🚀 FlashShop API running on port ${PORT} (${process.env.NODE_ENV || 'development'})`));
+}
+
 const start = async () => {
   configureCloudinary();
   await connectDB();
@@ -175,9 +184,6 @@ const start = async () => {
     }
   } catch (seedErr) {
     console.warn('⚠️ Auto-seed check warning:', seedErr.message);
-  }
-  if (!process.env.VERCEL) {
-    server.listen(PORT, '0.0.0.0', () => console.log(`🚀 FlashShop API running on port ${PORT} (${process.env.NODE_ENV || 'development'})`));
   }
 };
 start();
