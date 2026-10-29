@@ -148,6 +148,22 @@ app.use(errorHandler);
 
 /* ---------- Boot ---------- */
 const PORT = process.env.PORT || 5000;
+
+// Handle port busy gracefully during hot-reloads / watch restarts
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.warn(`⚠️ Port ${PORT} is temporarily busy. Retrying in 1.5 seconds...`);
+    setTimeout(() => {
+      try {
+        server.close();
+      } catch (_) {}
+      server.listen(PORT, '0.0.0.0', () => console.log(`🚀 FlashShop API running on port ${PORT} (${process.env.NODE_ENV || 'development'})`));
+    }, 1500);
+  } else {
+    console.error('Server error:', err);
+  }
+});
+
 const start = async () => {
   configureCloudinary();
   await connectDB();
@@ -161,10 +177,21 @@ const start = async () => {
     console.warn('⚠️ Auto-seed check warning:', seedErr.message);
   }
   if (!process.env.VERCEL) {
-    server.listen(PORT, () => console.log(`🚀 FlashShop API running on port ${PORT} (${process.env.NODE_ENV || 'development'})`));
+    server.listen(PORT, '0.0.0.0', () => console.log(`🚀 FlashShop API running on port ${PORT} (${process.env.NODE_ENV || 'development'})`));
   }
 };
 start();
+
+// Graceful cleanup on shutdown
+const shutdown = () => {
+  try {
+    server.close(() => process.exit(0));
+  } catch (_) {
+    process.exit(0);
+  }
+};
+process.on('SIGINT', shutdown);
+process.on('SIGTERM', shutdown);
 
 // Crash safety
 process.on('unhandledRejection', (err) => {
